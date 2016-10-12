@@ -24,13 +24,32 @@ public class MyHibernateUtil {
     Session session = sessionFactory.getCurrentSession();
     session.beginTransaction();
 
-    List<FantasyTeam> teams = session.createCriteria(FantasyTeam.class).list();
-    if (teams != null) {
-      // (prints 0)
-      System.out.println("Number of fantasy teams: " + teams.size());
+    // List<Object> tables = session.createQuery("from
+    // java.lang.Object").list();
+    // (prints 0)
+    // System.out.println("Number of tables in db: " + tables.size());
+    // for (Object table : tables) {
+    // System.out.println("table: " + table.toString());
+    // }
 
-      // System.out.println(teams.get(2).getMascot());
-    }
+    // List<FantasyTeam> teams =
+    // session.createCriteria(FantasyTeam.class).list();
+    // if (teams != null) {
+      // (prints 0)
+    // System.out.println("Number of fantasy teams: " + teams.size());
+    //
+    // for (FantasyTeam team : teams) {
+    // System.out.println("team's mascot: " + team.getMascot());
+    // }
+    // }
+
+    // ("org.hibernate.hql.internal.ast.QuerySyntaxException: fantasyTeams is
+    // not mapped [from fantasyTeams]")
+    // Query query = session.createQuery("from fantasyTeams");
+    // List<?> list = query.list();
+    // if (list != null) {
+    // System.out.println("Query - Number of fantasy teams: " + list.size());
+    // }
 
     Query myQuery = session.createNativeQuery("SELECT USERNAME FROM fantasyTeams");
     List<Object> usernames = myQuery.getResultList();
@@ -42,6 +61,13 @@ public class MyHibernateUtil {
         System.out.println("username: " + username.toString());
       }
     }
+
+    // (ERROR 42X01: Syntax error: Encountered "SHOW")
+    // System.out.println(session.createSQLQuery("SHOW TABLES").list());
+
+    // (prints addresses of objects)
+    // System.out.println("SYS.SYSTABLES: " + session.createSQLQuery("SELECT *
+    // FROM SYS.SYSTABLES").list());
 
     session.close();
 
