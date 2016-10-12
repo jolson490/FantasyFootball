@@ -1,8 +1,9 @@
 # FantasyFootball
 
-## Synopsis
+## Reference Info
 
-For more info, see: TODO
+This FantasyFootball application is hosted in the following repository: https://github.com/ILMServices/FantasyFootball
+More info about ILM can be found at: http://ilmservice.com
 
 ## Info about this FantasyFootball eclipse project
 

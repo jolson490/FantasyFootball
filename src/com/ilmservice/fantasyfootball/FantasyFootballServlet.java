@@ -24,11 +24,12 @@ public class FantasyFootballServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    System.out.println("(begin doPost)");
 		String currentWeek = req.getParameter("currentWeek");
     System.out.println("doPost: The Current Week is " + currentWeek);
-		System.out.println("before config");
+    System.out.println("doPost: before config");
 		MyHibernateUtil.getFactory();
-		System.out.println("after config");
+    System.out.println("doPost: after config");
 //		SessionFactory sessionFactory = null;
 //		configuration.configure("hibernate.cfg.xml");
 //		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
@@ -36,6 +37,7 @@ public class FantasyFootballServlet extends HttpServlet {
 //		System.out.println(configuration);
 		req.getSession().setAttribute("currentWeek", currentWeek);
 		getServletContext().getRequestDispatcher("/HelloWorld.jsp").forward(req, resp);
+    System.out.println("(end doPost)");
 	}
 
 	@Override

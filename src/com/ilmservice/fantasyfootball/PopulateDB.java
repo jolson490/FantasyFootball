@@ -19,8 +19,7 @@ import java.util.Properties;
 
 // Note that Apache Derby is a relational database - more info can be found at: https://db.apache.org/derby/ 
 
-// NOTE THAT YOU DO NOT NEED TO MODIFY THIS CODE FILE FOR THE CODE AUDITION. 
-// But you do need to run the "main" method in this class to create & populate the "nflDB" Java/Derby database.
+// NOTE: run the "main" method in this class to create & populate the "nflDB" Java/Derby database.
 
 public class PopulateDB {
 
@@ -51,8 +50,10 @@ public class PopulateDB {
 	private static Connection conn = null;
 	private static Statement stmt = null;
 
-  // The default value of the "derby.system.home" System Property is the
-  // current project directory (i.e. the "user.dir" Property).
+  // This method allows the value of the "derby.system.home" System Property to
+  // be changed.
+  // (The default value of this System Property is the current project directory
+  // - i.e. the "user.dir" Property).
   public static void setDerbyHome() {
     FileInputStream fis = getFISInClassPath("javaProperties.xml");
     java.util.Properties props = new Properties();
@@ -65,12 +66,15 @@ public class PopulateDB {
     } catch (IOException e1) {
       e1.printStackTrace();
     }
-    System.out.println("derby.system.home (from properties file): " + props.getProperty("derby.system.home"));
+    // System.out.println("derby.system.home (from properties file): " +
+    // props.getProperty("derby.system.home"));
 
     Properties p = System.getProperties();
-    System.out.println("derby.system.home from System.Property - before: " + System.getProperty("derby.system.home"));
+    // System.out.println("derby.system.home from System.Property - before: " +
+    // System.getProperty("derby.system.home"));
     p.setProperty("derby.system.home", props.getProperty("derby.system.home"));
-    System.out.println("derby.system.home from System.Property - after: " + System.getProperty("derby.system.home"));
+    // System.out.println("derby.system.home from System.Property - after: " +
+    // System.getProperty("derby.system.home"));
   }
 
   public static void main(String[] args) {
@@ -148,7 +152,7 @@ public class PopulateDB {
     // so that when you run this program, the following txt file will be
     // found).
     URL url = PopulateDB.class.getClassLoader().getResource(filename);
-    System.out.println("getFISInClassPath: url=" + url.getPath());
+    // System.out.println("getFISInClassPath: url=" + url.getPath());
 
     URI uri = null;
     try {
@@ -156,7 +160,7 @@ public class PopulateDB {
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
-    // System.out.println("getFISInClassPath: URI is: " + uri.toString());
+    /// System.out.println("getFISInClassPath: URI is: " + uri.toString());
 
     FileInputStream fis = null;
     try {
