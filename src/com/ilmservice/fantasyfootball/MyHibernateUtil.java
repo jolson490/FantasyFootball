@@ -1,15 +1,11 @@
 package com.ilmservice.fantasyfootball;
 
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-//import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.persister.entity.AbstractEntityPersister;
 import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
@@ -35,7 +31,7 @@ public class MyHibernateUtil {
     // List<FantasyTeam> teams =
     // session.createCriteria(FantasyTeam.class).list();
     // if (teams != null) {
-      // (prints 0)
+    // (prints 0)
     // System.out.println("Number of fantasy teams: " + teams.size());
     //
     // for (FantasyTeam team : teams) {
@@ -85,7 +81,7 @@ public class MyHibernateUtil {
     Configuration configuration = new Configuration();
     configuration.configure("hibernate.cfg.xml");
     System.out.println("Configuration: " + configuration.toString());
-    
+
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties())
         .build();
     sessionFactory = configuration.buildSessionFactory(serviceRegistry);
