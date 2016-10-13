@@ -32,7 +32,7 @@ Setup in Eclipse:
     * Java EE perspective, Servers, click "No servers are available. Click this link to create a new server...", Server name "Apache\_Tomcat\_v*.0\_at\_localhost". 
 * Git stuff:
     * Window, Preferences, Team, Git, Configuration, create/specify the "user.email" and "user.name" Git settings in eclipse. (Reference info: https://wiki.eclipse.org/EGit/User_Guide)
-    * Git Perspective, "Clone a Git repository", enter https://github.com/TODO/FantasyFootball.git as URI.
+    * Git Perspective, "Clone a Git repository", enter https://github.com/ILMServices/FantasyFootball.git as URI.
     * Git Repositories, right-click FantasyFootball, Import Projects, "Import existing Eclipse projects".
 * One more Tomcat thing: Java EE perspective, Servers, double-click "Apache\_Tomcat\_v*.0\_at\_localhost", Modules, Add Web Module, click FantasyFootball, Ctrl+S (to save changes).
 * In javaProperties.xml, set the value of derby.system.home.
