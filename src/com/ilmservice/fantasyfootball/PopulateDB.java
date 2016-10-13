@@ -23,32 +23,32 @@ import java.util.Properties;
 
 public class PopulateDB {
 
-	// Note that 'ij' is an interactive SQL scripting tool that comes with Derby
-	// - more info can be found at:
-	// http://db.apache.org/derby/papers/DerbyTut/ij_intro.html
-	// (And note that Derby is included in the JDK.)
+  // Note that 'ij' is an interactive SQL scripting tool that comes with Derby
+  // - more info can be found at:
+  // http://db.apache.org/derby/papers/DerbyTut/ij_intro.html
+  // (And note that Derby is included in the JDK.)
 
-	// OPTIONAL PREREQUISITE (in order to run 'ij' from Cygwin command line):
-	// * Make sure you include %JAVA_HOME%\db\bin in your PATH; so that 'ij' is
-	// found:
+  // OPTIONAL PREREQUISITE (in order to run 'ij' from Cygwin command line):
+  // * Make sure you include %JAVA_HOME%\db\bin in your PATH; so that 'ij' is
+  // found:
   // Joshua@JoshuaOlson /cygdrive/c/Users/Joshua/git/FantasyFootball
-	// $ which ij
-	// /cygdrive/c/Program Files/Java/jdk1.8.0_65/db/bin/ij
-	//
+  // $ which ij
+  // /cygdrive/c/Program Files/Java/jdk1.8.0_65/db/bin/ij
+  //
   // e.g. of how to run 'ij' from a Cygwin terminal (the following 'connect'
   // command assumes the 'nflDB' folder/database exists within the current
   // directory):
   // Joshua@JoshuaOlson /cygdrive/c/Users/Joshua/git/FantasyFootball
-	// $ ij
-	// ij version 10.11
-	// ij> connect 'jdbc:derby:nflDB';
+  // $ ij
+  // ij version 10.11
+  // ij> connect 'jdbc:derby:nflDB';
 
   // (Note that https://db.apache.org/derby/integrate/derby_plugin_info.html
   // says between Derby versions "10.3 and 10.8.2" that Derby distributions
   // included plugins for Eclipse.)
 
-	private static Connection conn = null;
-	private static Statement stmt = null;
+  private static Connection conn = null;
+  private static Statement stmt = null;
 
   // This method allows the value of the "derby.system.home" System Property to
   // be changed.
@@ -80,28 +80,28 @@ public class PopulateDB {
   public static void main(String[] args) {
     System.out.println("begin PopulateDB main");
 
-		createConnection();
+    createConnection();
 
-		runMultiLineSqlCommands();
+    runMultiLineSqlCommands();
 
-		try {
-			readAndExecuteFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    try {
+      readAndExecuteFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
     System.out.println("end PopulateDB main - SUCCESSFULLY COMPLETED PROCESSING (unless any errors noted above)");
-	}
+  }
 
-	private static void createConnection() {
+  private static void createConnection() {
     setDerbyHome();
 
-		try {
-			// Get a connection. (Regarding "create=true", per the Derby
-			// Reference Manual, if the specified db already exists, a
-			// SQLWarning is issued.)
+    try {
+      // Get a connection. (Regarding "create=true", per the Derby
+      // Reference Manual, if the specified db already exists, a
+      // SQLWarning is issued.)
       final String dbURL = "jdbc:derby:nflDB;create=true;";
-			conn = DriverManager.getConnection(dbURL);
+      conn = DriverManager.getConnection(dbURL);
 
       // (Ideally we should check for more than 1 warning & print them all.)
       // e.g. of warning that can occur: PopulateDB assumes the database doesn't
@@ -109,42 +109,53 @@ public class PopulateDB {
       // already exists (don't let the user run PopulateDB if the db already
       // exists).
       SQLWarning connectionWarning = conn.getWarnings();
-			if (connectionWarning != null) {
-				System.err.println("createConnection: terminating due to SQLWarning: " + connectionWarning);
-				System.exit(1);
-			}
-		} catch (Exception except) {
-			except.printStackTrace();
-		}
-	}
+      if (connectionWarning != null) {
+        System.err.println("createConnection: terminating due to SQLWarning: " + connectionWarning);
+        System.exit(1);
+      }
+    } catch (Exception except) {
+      except.printStackTrace();
+    }
+  }
 
-	private static void runMultiLineSqlCommands() {
-		System.out.println("begin PopulateDB runMultiLineSqlCommands");
-		try {
-			stmt = conn.createStatement();
-			stmt.execute("CREATE TABLE players (" + "ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"+ "fname VARCHAR(50) NOT NULL," + "lname VARCHAR(50) NOT NULL,"
-					+ "position VARCHAR(10) NOT NULL," + "positionRanking INT NOT NULL  CHECK (positionRanking >= 0),"
-					+ "nflTeam VARCHAR(50) NOT NULL," + "PRIMARY KEY (ID)" + ")");
-			stmt.close();
+  private static void runMultiLineSqlCommands() {
+    System.out.println("begin PopulateDB runMultiLineSqlCommands");
+    try {
+      stmt = conn.createStatement();
+      stmt.execute(
+          "CREATE TABLE players (" 
+              + "ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+              + "fname VARCHAR(50) NOT NULL," 
+              + "lname VARCHAR(50) NOT NULL," 
+              + "position VARCHAR(10) NOT NULL,"
+              + "positionRanking INT NOT NULL CHECK (positionRanking >= 0)," 
+              + "nflTeam VARCHAR(50) NOT NULL,"
+              + "PRIMARY KEY (ID)" + ")");
+      stmt.close();
 
-			stmt = conn.createStatement();
-			stmt.execute("CREATE TABLE fantasyTeams (" + "ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"+ "username VARCHAR(50) NOT NULL ,"
-					+ "fantasyMascot VARCHAR(100) NOT NULL," + "PRIMARY KEY (ID)" + ")");
-			stmt.close();
+      stmt = conn.createStatement();
+      stmt.execute(
+          "CREATE TABLE fantasyTeams (" 
+              + "ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+              + "username VARCHAR(50) NOT NULL," 
+              + "fantasyMascot VARCHAR(100) NOT NULL," 
+              + "PRIMARY KEY (ID)" + ")");
+      stmt.close();
 
-			stmt = conn.createStatement();
-			stmt.execute("CREATE TABLE weeklyTeams (" + "playerID int NOT NULL,"
-					+ "fantasyTeamID INT NOT NULL,"
-					+ "week INT NOT NULL  CHECK (week >= 1 AND week <= 5),"
-					+ "PRIMARY KEY (playerID, fantasyTeamID, week),"
-					+ "FOREIGN KEY (playerID) REFERENCES players(ID),"
-					+ "FOREIGN KEY (fantasyTeamID) REFERENCES fantasyTeams(ID)" + ")");
-			stmt.close();
-		} catch (SQLException sqlExcept) {
-			sqlExcept.printStackTrace();
-		}
-		System.out.println("end PopulateDB runMultiLineSqlCommands");
-	}
+      stmt = conn.createStatement();
+      stmt.execute("CREATE TABLE weeklyTeams (" 
+          + "playerID int NOT NULL," 
+          + "fantasyTeamID INT NOT NULL,"
+          + "week INT NOT NULL  CHECK (week >= 1 AND week <= 5)," 
+          + "PRIMARY KEY (playerID, fantasyTeamID, week),"
+          + "FOREIGN KEY (playerID) REFERENCES players(ID)," 
+          + "FOREIGN KEY (fantasyTeamID) REFERENCES fantasyTeams(ID)" + ")");
+      stmt.close();
+    } catch (SQLException sqlExcept) {
+      sqlExcept.printStackTrace();
+    }
+    System.out.println("end PopulateDB runMultiLineSqlCommands");
+  }
 
   public static FileInputStream getFISInClassPath(String filename) {
     // Note that the .classpath file (in this eclipse project) is set up
@@ -172,28 +183,28 @@ public class PopulateDB {
     return fis;
   }
 
-	private static void readAndExecuteFile() throws IOException {
-		System.out.println("begin PopulateDB readAndExecuteFile");
+  private static void readAndExecuteFile() throws IOException {
+    System.out.println("begin PopulateDB readAndExecuteFile");
 
     FileInputStream fis = getFISInClassPath("nflSqlCommands.txt");
-		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+    BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
-		String line = null;
-		while ((line = br.readLine()) != null) {
-			System.out.println("readAndExecuteFile: line=" + line);
-			if (line != null && !line.equals("")) {
-				try {
-					stmt = conn.createStatement();
-					stmt.execute(line);
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+    String line = null;
+    while ((line = br.readLine()) != null) {
+      System.out.println("readAndExecuteFile: line=" + line);
+      if (line != null && !line.equals("")) {
+        try {
+          stmt = conn.createStatement();
+          stmt.execute(line);
+          stmt.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+    }
 
-		br.close();
-		System.out.println("end PopulateDB readAndExecuteFile");
-	}
+    br.close();
+    System.out.println("end PopulateDB readAndExecuteFile");
+  }
 
 }
