@@ -30,7 +30,7 @@ public class FantasyFootballServlet extends HttpServlet {
     // sessionFactory = configuration.buildSessionFactory(serviceRegistry);
     // System.out.println(configuration);
     req.getSession().setAttribute("currentWeek", currentWeek);
-    getServletContext().getRequestDispatcher("/HelloWorld.jsp").forward(req, resp);
+    getServletContext().getRequestDispatcher("/jsp/HelloWorld.jsp").forward(req, resp);
     logger.debug("end doPost");
   }
 

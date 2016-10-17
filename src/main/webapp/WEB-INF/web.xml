@@ -19,13 +19,24 @@
    </servlet-mapping>
    -->
 
+    <!-- Instead of: http://localhost:8080/FantasyFootball/jsp/HelloWorld.jsp 
+         also provide option of accessing this page in browser via: http://localhost:8080/FantasyFootball/ChooseWeek -->
+    <servlet>
+        <servlet-name>ffball</servlet-name>
+        <jsp-file>/jsp/HelloWorld.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ffball</servlet-name>
+        <url-pattern>/ChooseWeek</url-pattern>
+    </servlet-mapping>
+
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
+    <!-- <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-    <welcome-file>HelloWorld.jsp</welcome-file>
+    <welcome-file>default.jsp</welcome-file> -->
+    <!-- <welcome-file>HelloWorld.jsp</welcome-file> -->
   </welcome-file-list>
 </web-app>

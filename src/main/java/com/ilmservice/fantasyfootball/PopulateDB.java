@@ -170,10 +170,8 @@ public class PopulateDB {
   public static FileInputStream getFISInClassPath(String filename) {
     logger.debug("begin getFISInClassPath(filename={})", filename);
 
-    // Note that the .classpath file (in this eclipse project) is set up
-    // such that the "inputFiles" folder is on the classpath (this is needed
-    // so that when you run this program, the following txt file will be
-    // found).
+    // Note that Maven by default includes files in src/main/resources into the
+    // classpath.
     URL url = PopulateDB.class.getClassLoader().getResource(filename);
     logger.trace("url: {}", url.getPath());
 
