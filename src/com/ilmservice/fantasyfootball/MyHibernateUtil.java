@@ -8,11 +8,16 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MyHibernateUtil {
+  private static final Logger logger = LoggerFactory.getLogger(MyHibernateUtil.class);
+
   private static SessionFactory sessionFactory;
 
   public static SessionFactory getFactory() {
+    logger.debug("begin getFactory()");
     if (sessionFactory == null) {
       initializeSession();
     }
@@ -51,10 +56,10 @@ public class MyHibernateUtil {
     List<Object> usernames = myQuery.getResultList();
     if (usernames != null) {
       // (prints 8)
-      System.out.println("Number of usernames (fantasy teams): " + usernames.size());
+      logger.debug("number of usernames (fantasy teams): {}", usernames.size());
       for (Object username : usernames) {
         // (prints the 8 usernames)
-        System.out.println("username: " + username.toString());
+        logger.debug("username: {}", username.toString());
       }
     }
 
@@ -67,11 +72,12 @@ public class MyHibernateUtil {
 
     session.close();
 
+    logger.debug("end getFactory - sessionFactory: {}", sessionFactory);
     return sessionFactory;
   }
 
   private static void initializeSession() {
-    System.out.println("begin initializeSession...");
+    logger.debug("begin initializeSession()");
 
     // Make sure the same derby home is used for MyHibernateUtil as was for
     // PopulateDB - otherwise MyHibernateUtil might not find the database
@@ -80,13 +86,13 @@ public class MyHibernateUtil {
 
     Configuration configuration = new Configuration();
     configuration.configure("hibernate.cfg.xml");
-    System.out.println("Configuration: " + configuration.toString());
+    logger.debug("configuration: {}", configuration);
 
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties())
         .build();
     sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-    System.out.println("...end initializeSession");
+    logger.debug("end initializeSession");
   }
 
   public static void main(String[] args) {

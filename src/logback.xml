@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+  <!-- Define an appender. -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <!-- "-5" means "left justified to a width of five characters".
+           And "{0}" outputs the un-qualified logger name (the rightmost segment only - without any packages/dots to the left). -->
+      <pattern>%date{HH:mm:ss.SSS} %-5level [%thread] %logger{0}: %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <!-- Choices for level: 'ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', and 'OFF'. -->
+
+  <!-- Set the level for this package. -->
+  <logger name="com.ilmservice.fantasyfootball" level="TRACE" additivity="true"/>
+
+  <!-- Set the root/default level. -->
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>

@@ -8,22 +8,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @WebServlet("/Fantasy")
 public class FantasyFootballServlet extends HttpServlet {
+  private static final Logger logger = LoggerFactory.getLogger(FantasyFootballServlet.class);
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    System.out.println("(begin doPost)");
+    logger.debug("begin doPost()");
     String currentWeek = req.getParameter("currentWeek");
-    System.out.println("doPost: The Current Week is " + currentWeek);
-    System.out.println("doPost: before config");
+    logger.debug("currentWeek: {}", currentWeek);
     MyHibernateUtil.getFactory();
-    System.out.println("doPost: after config");
     // SessionFactory sessionFactory = null;
     // configuration.configure("hibernate.cfg.xml");
     // ServiceRegistry serviceRegistry = new
@@ -32,12 +31,12 @@ public class FantasyFootballServlet extends HttpServlet {
     // System.out.println(configuration);
     req.getSession().setAttribute("currentWeek", currentWeek);
     getServletContext().getRequestDispatcher("/HelloWorld.jsp").forward(req, resp);
-    System.out.println("(end doPost)");
+    logger.debug("end doPost");
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    System.out.println("in doGet");
+    logger.debug("in doGet");
 
     // SessionFactory factory = MyHibernateUtil.getFactory();
     // System.out.println("Made it factory");

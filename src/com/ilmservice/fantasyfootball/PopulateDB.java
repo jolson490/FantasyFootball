@@ -17,17 +17,21 @@ import java.sql.Statement;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // Note that Apache Derby is a relational database - more info can be found at: https://db.apache.org/derby/ 
 
 // NOTE: run the "main" method in this class to create & populate the "nflDB" Java/Derby database.
 
 public class PopulateDB {
+  private static final Logger logger = LoggerFactory.getLogger(PopulateDB.class);
 
   // Note that 'ij' is an interactive SQL scripting tool that comes with Derby
   // - more info can be found at:
   // http://db.apache.org/derby/papers/DerbyTut/ij_intro.html
   // (And note that Derby is included in the JDK.)
-
+  //
   // OPTIONAL PREREQUISITE (in order to run 'ij' from Cygwin command line):
   // * Make sure you include %JAVA_HOME%\db\bin in your PATH; so that 'ij' is
   // found:
@@ -42,7 +46,7 @@ public class PopulateDB {
   // $ ij
   // ij version 10.11
   // ij> connect 'jdbc:derby:nflDB';
-
+  //
   // (Note that https://db.apache.org/derby/integrate/derby_plugin_info.html
   // says between Derby versions "10.3 and 10.8.2" that Derby distributions
   // included plugins for Eclipse.)
@@ -55,47 +59,46 @@ public class PopulateDB {
   // (The default value of this System Property is the current project directory
   // - i.e. the "user.dir" Property).
   public static void setDerbyHome() {
-    FileInputStream fis = getFISInClassPath("javaProperties.xml");
-    java.util.Properties props = new Properties();
-    try {
-      props.loadFromXML(fis);
-    } catch (InvalidPropertiesFormatException e1) {
-      e1.printStackTrace();
-    } catch (FileNotFoundException e1) {
-      e1.printStackTrace();
-    } catch (IOException e1) {
-      e1.printStackTrace();
-    }
-    // System.out.println("derby.system.home (from properties file): " +
-    // props.getProperty("derby.system.home"));
+    logger.debug("begin setDerbyHome()");
 
-    Properties p = System.getProperties();
-    // System.out.println("derby.system.home from System.Property - before: " +
-    // System.getProperty("derby.system.home"));
-    p.setProperty("derby.system.home", props.getProperty("derby.system.home"));
-    // System.out.println("derby.system.home from System.Property - after: " +
-    // System.getProperty("derby.system.home"));
+    FileInputStream fis = getFISInClassPath("javaProperties.xml");
+    java.util.Properties fileProps = new Properties();
+    try {
+      fileProps.loadFromXML(fis);
+    } catch (InvalidPropertiesFormatException e1) {
+      logger.error("Error reading properties file", e1);
+      System.exit(1);
+    } catch (IOException e1) {
+      logger.error("Error reading properties file", e1);
+      System.exit(1);
+    }
+    logger.trace("derby.system.home (from properties file): {}", fileProps.getProperty("derby.system.home"));
+
+    Properties systemProps = System.getProperties();
+    logger.trace("derby.system.home from System.Property - before setting from properties file: {}",
+        System.getProperty("derby.system.home"));
+    systemProps.setProperty("derby.system.home", fileProps.getProperty("derby.system.home"));
+    logger.debug("derby.system.home from System.Property - after setting from properties file: {}",
+        System.getProperty("derby.system.home"));
+
+    logger.debug("end setDerbyHome");
   }
 
   public static void main(String[] args) {
-    System.out.println("begin PopulateDB main");
-
+    logger.info("begin main()");
     createConnection();
-
     runMultiLineSqlCommands();
-
-    try {
-      readAndExecuteFile();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    System.out.println("end PopulateDB main - SUCCESSFULLY COMPLETED PROCESSING (unless any errors noted above)");
+    readAndExecuteFile();
+    logger.info("end main - SUCCESSFULLY COMPLETED PROCESSING (unless any errors noted above)");
+    System.exit(0);
   }
 
   private static void createConnection() {
+    logger.debug("begin createConnection()");
+
     setDerbyHome();
 
+    SQLWarning connectionWarning = null;
     try {
       // Get a connection. (Regarding "create=true", per the Derby
       // Reference Manual, if the specified db already exists, a
@@ -103,23 +106,29 @@ public class PopulateDB {
       final String dbURL = "jdbc:derby:nflDB;create=true;";
       conn = DriverManager.getConnection(dbURL);
 
-      // (Ideally we should check for more than 1 warning & print them all.)
-      // e.g. of warning that can occur: PopulateDB assumes the database doesn't
-      // already exist - so check if user tried to run PopulateDB when database
-      // already exists (don't let the user run PopulateDB if the db already
-      // exists).
-      SQLWarning connectionWarning = conn.getWarnings();
-      if (connectionWarning != null) {
-        System.err.println("createConnection: terminating due to SQLWarning: " + connectionWarning);
-        System.exit(1);
-      }
-    } catch (Exception except) {
-      except.printStackTrace();
+      connectionWarning = conn.getWarnings();
+
+    } catch (SQLException except) {
+      logger.error("Error connecting to database", except);
+      System.exit(1);
     }
+
+    // (Note that ideally here a check for more than 1 warning should be made, &
+    // print them all.)
+    // Here's an e.g. of a warning that can occur: this PopulateDB class assumes
+    // the database doesn't already exist - so here check for if the user tried
+    // to run PopulateDB when the db already exists (don't let the user run
+    // PopulateDB if the db already exists).
+    if (connectionWarning != null) {
+      System.err.println("terminating due to SQLWarning: " + connectionWarning);
+      System.exit(1);
+    }
+
+    logger.debug("end createConnection");
   }
 
   private static void runMultiLineSqlCommands() {
-    System.out.println("begin PopulateDB runMultiLineSqlCommands");
+    logger.debug("begin runMultiLineSqlCommands()");
     try {
       stmt = conn.createStatement();
       stmt.execute(
@@ -152,59 +161,64 @@ public class PopulateDB {
           + "FOREIGN KEY (fantasyTeamID) REFERENCES fantasyTeams(ID)" + ")");
       stmt.close();
     } catch (SQLException sqlExcept) {
-      sqlExcept.printStackTrace();
+      logger.error("Error running SQL commands", sqlExcept);
+      System.exit(1);
     }
-    System.out.println("end PopulateDB runMultiLineSqlCommands");
+    logger.debug("end runMultiLineSqlCommands");
   }
 
   public static FileInputStream getFISInClassPath(String filename) {
+    logger.debug("begin getFISInClassPath(filename={})", filename);
+
     // Note that the .classpath file (in this eclipse project) is set up
     // such that the "inputFiles" folder is on the classpath (this is needed
     // so that when you run this program, the following txt file will be
     // found).
     URL url = PopulateDB.class.getClassLoader().getResource(filename);
-    // System.out.println("getFISInClassPath: url=" + url.getPath());
-
-    URI uri = null;
-    try {
-      uri = url.toURI();
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-    /// System.out.println("getFISInClassPath: URI is: " + uri.toString());
+    logger.trace("url: {}", url.getPath());
 
     FileInputStream fis = null;
     try {
+      URI uri = url.toURI();
+      logger.debug("URI is: {}", uri.toString());
+
       fis = new FileInputStream(new File(uri));
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
+    } catch (URISyntaxException | FileNotFoundException e) {
+      logger.error("Error with FileInputStream", e);
+      System.exit(1);
     }
 
+    logger.debug("end getFISInClassPath - FileInputStream: {}", fis);
     return fis;
   }
 
-  private static void readAndExecuteFile() throws IOException {
-    System.out.println("begin PopulateDB readAndExecuteFile");
+  private static void readAndExecuteFile() {
+    logger.debug("begin readAndExecuteFile()");
 
     FileInputStream fis = getFISInClassPath("nflSqlCommands.txt");
     BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-
     String line = null;
-    while ((line = br.readLine()) != null) {
-      System.out.println("readAndExecuteFile: line=" + line);
-      if (line != null && !line.equals("")) {
-        try {
-          stmt = conn.createStatement();
-          stmt.execute(line);
-          stmt.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
+    try {
+      while ((line = br.readLine()) != null) {
+        logger.trace("line: {}", line);
+        if (line != null && !line.isEmpty()) {
+          try {
+            stmt = conn.createStatement();
+            stmt.execute(line);
+            stmt.close();
+          } catch (SQLException e) {
+            logger.error("Error running SQL commands", e);
+            System.exit(1);
+          }
         }
       }
+      br.close();
+    } catch (IOException e) {
+      logger.error("Error reading file", e);
+      System.exit(1);
     }
 
-    br.close();
-    System.out.println("end PopulateDB readAndExecuteFile");
+    logger.debug("end readAndExecuteFile");
   }
 
-}
+} // end class PopulateDB
