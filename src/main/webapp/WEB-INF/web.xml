@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xmlns="http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/" 
-         xsi:schemaLocation="http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-app_3_1.xsd" 
+<!DOCTYPE xml>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
   <display-name>FantasyFootball</display-name>
@@ -19,8 +20,8 @@
    </servlet-mapping>
    -->
 
-    <!-- Instead of: http://localhost:8080/FantasyFootball/jsp/HelloWorld.jsp 
-         also provide option of accessing this page in browser via: http://localhost:8080/FantasyFootball/ChooseWeek -->
+    <!-- Instead of...: http://localhost:8080/FantasyFootball/jsp/HelloWorld.jsp 
+         ...also provide option of accessing this page in browser via: http://localhost:8080/FantasyFootball/ChooseWeek -->
     <servlet>
         <servlet-name>ffball</servlet-name>
         <jsp-file>/jsp/HelloWorld.jsp</jsp-file>
@@ -32,11 +33,5 @@
 
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
-    <!-- <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file> -->
-    <!-- <welcome-file>HelloWorld.jsp</welcome-file> -->
   </welcome-file-list>
 </web-app>
