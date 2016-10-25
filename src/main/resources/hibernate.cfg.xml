@@ -4,14 +4,18 @@
 	"http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
+    <!-- General Configuration -->
+    <property name="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    
+    <!-- Database connection properties -->
     <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
     <property name="hibernate.connection.url">jdbc:derby:nflDB;</property>
     <property name="hibernate.connection.username" />
     <property name="hibernate.connection.password" />
-    <property name="hibernate.dialect">org.hibernate.dialect.DerbyDialect</property>
     
-    <property name="hibernate.current_session_context_class">thread</property>
-    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+    <!-- Cache Properties -->
+    <!-- The default value of hibernate.cache.use_second_level_cache is true, although the default 'RegionFactory' (hibernate.cache.region.factory_class) is 'NoCachingRegionFactory'. -->
     
     <mapping class="com.ilmservice.fantasyfootball.Player" />
     <mapping class="com.ilmservice.fantasyfootball.FantasyTeam" />
