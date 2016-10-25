@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC 
-	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-	"http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
     <!-- General Configuration -->
@@ -13,6 +13,10 @@
     <property name="hibernate.connection.url">jdbc:derby:nflDB;</property>
     <property name="hibernate.connection.username" />
     <property name="hibernate.connection.password" />
+    
+    <!-- c3p0 properties -->
+    <property name="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</property>
+    <!-- (Simply use the default values for the hibernate.c3p0.* properties.) -->
     
     <!-- Cache Properties -->
     <!-- The default value of hibernate.cache.use_second_level_cache is true, although the default 'RegionFactory' (hibernate.cache.region.factory_class) is 'NoCachingRegionFactory'. -->

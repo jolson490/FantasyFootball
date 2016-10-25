@@ -9,6 +9,8 @@
   
   <properties>
   	<jdk.version>1.8</jdk.version>
+  	<org.hibernate.version>5.2.3.Final</org.hibernate.version>
+  	<org.hibernate.commons.version>5.0.1.Final</org.hibernate.commons.version>
   </properties>
   
  <build>    
@@ -34,18 +36,23 @@
   	<dependency>
   		<groupId>org.hibernate</groupId>
   		<artifactId>hibernate-core</artifactId>
-  		<version>5.2.3.Final</version>
+  		<version>${org.hibernate.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.hibernate.common</groupId>
   		<artifactId>hibernate-commons-annotations</artifactId>
-  		<version>5.0.1.Final</version>
+  		<version>${org.hibernate.commons.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.hibernate.javax.persistence</groupId>
   		<artifactId>hibernate-jpa-2.1-api</artifactId>
   		<version>1.0.0.Final</version>
   	</dependency>  	
+  	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-c3p0</artifactId>
+	    <version>${org.hibernate.version}</version>
+  	</dependency>
   	
   	<dependency>
   		<groupId>org.apache.derby</groupId>
