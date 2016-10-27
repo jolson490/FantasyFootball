@@ -1,4 +1,4 @@
-package com.ilmservice.fantasyfootball;
+package com.ilmservice.fantasyfootball.db;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import javax.persistence.Persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ilmservice.fantasyfootball.db.entities.FantasyTeam;
 
 public class MyHibernateUtil {
   private static final Logger logger = LoggerFactory.getLogger(MyHibernateUtil.class);
@@ -19,6 +21,13 @@ public class MyHibernateUtil {
       initializeSession();
     }
 
+    showData();
+
+    logger.debug("end createFactory - sessionFactory: {}", sessionFactory);
+  }
+
+  private static void showData() {
+    logger.debug("begin showData()");
     EntityManager entityManager = sessionFactory.createEntityManager();
     entityManager.getTransaction().begin();
 
@@ -40,8 +49,7 @@ public class MyHibernateUtil {
 
     entityManager.getTransaction().commit();
     entityManager.close();
-
-    logger.debug("end createFactory - sessionFactory: {}", sessionFactory);
+    logger.debug("end showData");
   }
 
   private static void initializeSession() {

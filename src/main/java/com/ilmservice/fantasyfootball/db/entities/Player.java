@@ -1,4 +1,4 @@
-package com.ilmservice.fantasyfootball;
+package com.ilmservice.fantasyfootball.db.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

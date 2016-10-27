@@ -1,4 +1,4 @@
-package com.ilmservice.fantasyfootball;
+package com.ilmservice.fantasyfootball.db;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,33 +98,48 @@ public class PopulateDB {
 
     setDerbyHome();
 
-    SQLWarning connectionWarning = null;
     try {
-      // Get a connection. (Regarding "create=true", per the Derby
-      // Reference Manual, if the specified db already exists, a
-      // SQLWarning is issued.)
+      // (Regarding "create=true", per the Derby Reference Manual, if the
+      // specified db already exists, a SQLWarning is issued.)
       final String dbURL = "jdbc:derby:nflDB;create=true;";
       conn = DriverManager.getConnection(dbURL);
 
-      connectionWarning = conn.getWarnings();
-
+      handleWarnings();
     } catch (SQLException except) {
       logger.error("Error connecting to database", except);
       System.exit(1);
     }
 
-    // (Note that ideally here a check for more than 1 warning should be made, &
-    // print them all.)
+    logger.debug("end createConnection");
+  }
+
+  private static void handleWarnings() throws SQLException {
+    logger.debug("begin handleWarnings()");
+    // Consider any SQLWarning to be an unexpected error for which to terminate
+    // this application.
     // Here's an e.g. of a warning that can occur: this PopulateDB class assumes
     // the database doesn't already exist - so here check for if the user tried
     // to run PopulateDB when the db already exists (don't let the user run
     // PopulateDB if the db already exists).
-    if (connectionWarning != null) {
-      System.err.println("terminating due to SQLWarning: " + connectionWarning);
-      System.exit(1);
-    }
+    if (conn != null) {
+      boolean doTerminate = false;
 
-    logger.debug("end createConnection");
+      SQLWarning warningToLog = conn.getWarnings();
+      while (warningToLog != null) {
+        doTerminate = true;
+
+        logger.error("SQLWarning: SQL state '" + warningToLog.getSQLState() + "', error code '"
+            + warningToLog.getErrorCode() + "', message [" + warningToLog.getMessage() + "]");
+
+        warningToLog = warningToLog.getNextWarning();
+      }
+
+      if (doTerminate) {
+        logger.error("terminating due to SQLWarning(s) that occurred.");
+        System.exit(1);
+      }
+    }
+    logger.debug("end handleWarnings");
   }
 
   private static void runMultiLineSqlCommands() {

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ilmservice.fantasyfootball.db.MyHibernateUtil;
+
 @WebServlet("/Fantasy")
 public class FantasyFootballServlet extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(FantasyFootballServlet.class);
@@ -23,12 +25,6 @@ public class FantasyFootballServlet extends HttpServlet {
     String currentWeek = req.getParameter("currentWeek");
     logger.debug("currentWeek: {}", currentWeek);
     MyHibernateUtil.createFactory();
-    // SessionFactory sessionFactory = null;
-    // configuration.configure("hibernate.cfg.xml");
-    // ServiceRegistry serviceRegistry = new
-    // StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-    // sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-    // System.out.println(configuration);
     req.getSession().setAttribute("currentWeek", currentWeek);
     getServletContext().getRequestDispatcher("/jsp/HelloWorld.jsp").forward(req, resp);
     logger.debug("end doPost");
@@ -37,19 +33,6 @@ public class FantasyFootballServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     logger.debug("in doGet");
-
-    // SessionFactory factory = MyHibernateUtil.getFactory();
-    // System.out.println("Made it factory");
-    // Session session = factory.getCurrentSession();
-    // session.beginTransaction();
-    // List<FantasyTeam> players;
-    // players = session.createCriteria(FantasyTeam.class).list();
-    // if(players != null){
-    // System.out.println("Here are my players: " + players.size());
-    // System.out.println(players.get(2).getMascot());
-    // req.getSession().setAttribute("players", players);
-    // }
-    // session.close();
     doPost(req, resp);
   }
 
