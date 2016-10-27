@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd">
+  <!-- Define an appender. -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <!-- "-5" means "left justified to a width of five characters".
+           And "{0}" outputs the un-qualified logger name (the rightmost segment only - without any packages/dots to the left). -->
+      <pattern>%date{HH:mm:ss.SSS} %-5level [%thread] %logger{0}: %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <!-- Choices for level: 'ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', and 'OFF'. -->
+
+  <!-- Set the level for these packages. -->
+  <logger name="com.ilmservice.fantasyfootball" level="DEBUG" additivity="true"/>
+  <logger name="org.hibernate.dialect.resolver" level="DEBUG" additivity="true"/>
+
+  <!-- Set the root/default level. -->
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>
