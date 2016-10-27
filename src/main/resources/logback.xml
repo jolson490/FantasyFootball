@@ -12,10 +12,10 @@
   <!-- Choices for level: 'ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL', and 'OFF'. -->
 
   <!-- Set the level for this package. -->
-  <logger name="com.ilmservice.fantasyfootball" level="TRACE" additivity="true"/>
+  <logger name="com.ilmservice.fantasyfootball" level="DEBUG" additivity="true"/>
 
   <!-- Set the root/default level. -->
-  <root level="DEBUG">
+  <root level="INFO">
     <appender-ref ref="STDOUT"/>
   </root>
 </configuration>
