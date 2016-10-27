@@ -11,6 +11,7 @@
   	<jdk.version>1.8</jdk.version>
   	<org.hibernate.version>5.2.3.Final</org.hibernate.version>
   	<org.hibernate.commons.version>5.0.1.Final</org.hibernate.commons.version>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
  <build>    
