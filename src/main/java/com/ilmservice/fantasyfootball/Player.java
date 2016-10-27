@@ -14,14 +14,19 @@ public class Player {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ID", nullable = false, unique = true, length = 11)
   private int id;
+
   @Column(name = "FNAME")
   String firstName;
+
   @Column(name = "LNAME")
   String lastName;
+
   @Column(name = "POSITION")
   String position;
+
   @Column(name = "NFLTEAM")
   String nflTeam;
+
   @Column(name = "POSITIONRANKING")
   int positionRnking;
 

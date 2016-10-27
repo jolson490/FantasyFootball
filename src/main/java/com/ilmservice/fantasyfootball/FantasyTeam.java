@@ -9,7 +9,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "fantasyteams")
 public class FantasyTeam {
-
   @Id
   @GeneratedValue
   @Column(name = "id")
@@ -25,6 +24,7 @@ public class FantasyTeam {
 
   @Column(name = "USERNAME")
   String username;
+
   @Column(name = "FANTASYMASCOT")
   String mascot;
 

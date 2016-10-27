@@ -2,78 +2,46 @@ package com.ilmservice.fantasyfootball;
 
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-import org.hibernate.service.ServiceRegistry;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MyHibernateUtil {
   private static final Logger logger = LoggerFactory.getLogger(MyHibernateUtil.class);
 
-  private static SessionFactory sessionFactory;
+  private static javax.persistence.EntityManagerFactory sessionFactory;
 
-  public static SessionFactory getFactory() {
-    logger.debug("begin getFactory()");
+  public static void createFactory() {
+    logger.debug("begin createFactory()");
     if (sessionFactory == null) {
       initializeSession();
     }
 
-    Session session = sessionFactory.getCurrentSession();
-    session.beginTransaction();
+    EntityManager entityManager = sessionFactory.createEntityManager();
+    entityManager.getTransaction().begin();
 
-    // List<Object> tables = session.createQuery("from
-    // java.lang.Object").list();
-    // (prints 0)
-    // System.out.println("Number of tables in db: " + tables.size());
-    // for (Object table : tables) {
-    // System.out.println("table: " + table.toString());
-    // }
+    List<FantasyTeam> teams = entityManager.createQuery("from FantasyTeam", FantasyTeam.class).getResultList();
+    if (teams != null) {
+      // (prints 8)
+      logger.debug("number of fantasy teams: {}", teams.size());
+    }
 
-    // List<FantasyTeam> teams =
-    // session.createCriteria(FantasyTeam.class).list();
-    // if (teams != null) {
-    // (prints 0)
-    // System.out.println("Number of fantasy teams: " + teams.size());
-    //
-    // for (FantasyTeam team : teams) {
-    // System.out.println("team's mascot: " + team.getMascot());
-    // }
-    // }
-
-    // ("org.hibernate.hql.internal.ast.QuerySyntaxException: fantasyTeams is
-    // not mapped [from fantasyTeams]")
-    // Query query = session.createQuery("from fantasyTeams");
-    // List<?> list = query.list();
-    // if (list != null) {
-    // System.out.println("Query - Number of fantasy teams: " + list.size());
-    // }
-
-    Query myQuery = session.createNativeQuery("SELECT USERNAME FROM fantasyTeams");
-    List<Object> usernames = myQuery.getResultList();
+    List<String> usernames = entityManager.createQuery("SELECT username FROM FantasyTeam", String.class)
+        .getResultList();
     if (usernames != null) {
       // (prints 8)
       logger.debug("number of usernames (fantasy teams): {}", usernames.size());
-      for (Object username : usernames) {
-        // (prints the 8 usernames)
-        logger.debug("username: {}", username.toString());
-      }
+
+      // (prints the 8 usernames)
+      usernames.stream().forEach(username -> logger.debug("username: {}", username.toString()));
     }
 
-    // (ERROR 42X01: Syntax error: Encountered "SHOW")
-    // System.out.println(session.createSQLQuery("SHOW TABLES").list());
+    entityManager.getTransaction().commit();
+    entityManager.close();
 
-    // (prints addresses of objects)
-    // System.out.println("SYS.SYSTABLES: " + session.createSQLQuery("SELECT *
-    // FROM SYS.SYSTABLES").list());
-
-    session.close();
-
-    logger.debug("end getFactory - sessionFactory: {}", sessionFactory);
-    return sessionFactory;
+    logger.debug("end createFactory - sessionFactory: {}", sessionFactory);
   }
 
   private static void initializeSession() {
@@ -84,19 +52,13 @@ public class MyHibernateUtil {
     // directory that was created by PopulateDB.
     PopulateDB.setDerbyHome();
 
-    Configuration configuration = new Configuration();
-    configuration.configure("hibernate.cfg.xml");
-    logger.debug("configuration: {}", configuration);
-
-    ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties())
-        .build();
-    sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+    sessionFactory = Persistence.createEntityManagerFactory("FantasyFootballUnit");
 
     logger.debug("end initializeSession");
   }
 
   public static void main(String[] args) {
-    MyHibernateUtil.getFactory();
+    MyHibernateUtil.createFactory();
   }
 
 }

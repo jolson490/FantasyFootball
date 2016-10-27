@@ -22,7 +22,7 @@ public class FantasyFootballServlet extends HttpServlet {
     logger.debug("begin doPost()");
     String currentWeek = req.getParameter("currentWeek");
     logger.debug("currentWeek: {}", currentWeek);
-    MyHibernateUtil.getFactory();
+    MyHibernateUtil.createFactory();
     // SessionFactory sessionFactory = null;
     // configuration.configure("hibernate.cfg.xml");
     // ServiceRegistry serviceRegistry = new

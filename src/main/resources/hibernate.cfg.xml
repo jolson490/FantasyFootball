@@ -20,8 +20,5 @@
     
     <!-- Cache Properties -->
     <!-- The default value of hibernate.cache.use_second_level_cache is true, although the default 'RegionFactory' (hibernate.cache.region.factory_class) is 'NoCachingRegionFactory'. -->
-    
-    <mapping class="com.ilmservice.fantasyfootball.Player" />
-    <mapping class="com.ilmservice.fantasyfootball.FantasyTeam" />
   </session-factory>
 </hibernate-configuration>
