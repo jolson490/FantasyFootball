@@ -9,7 +9,7 @@
 </head>
 
 <body onload="getCurrentWeek();">
-<FORM action="/FantasyFootball/Fantasy" method="post">
+<FORM action="/ILMServices-FantasyFootball/Fantasy" method="post">
 <script>
 function getCurrentWeek(){
 	document.getElementsByName('currentWeek')[0].value = ${currentWeek};

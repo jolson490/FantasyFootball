@@ -6,8 +6,6 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   
-  <name>ILM Professional Services - Fantasy Football</name>
-  
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -17,7 +15,7 @@
   <properties>  	
   	<java.version>1.8</java.version>
   	<hibernate.version>5.2.3.Final</hibernate.version>
-  	<derby.version>10.12.1.1</derby.version>
+  	<derby.version>10.13.1.1</derby.version>
   	
   	<start-class>com.ilmservice.fantasyfootball.FantasyFootballApplication</start-class>
   </properties>
@@ -27,25 +25,15 @@
   		<groupId>org.springframework.boot</groupId>
   		<artifactId>spring-boot-starter-web</artifactId>
   	</dependency>
-  
   	<dependency>
-  		<groupId>org.hibernate</groupId>
-  		<artifactId>hibernate-core</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hibernate.javax.persistence</groupId>
-  		<artifactId>hibernate-jpa-2.1-api</artifactId>
-  		<version>1.0.0.Final</version>
-  	</dependency>  	
-  	<dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-c3p0</artifactId>
-	    <version>${hibernate.version}</version>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-starter-data-jpa</artifactId>
   	</dependency>
   	
   	<dependency>
   		<groupId>org.apache.derby</groupId>
   		<artifactId>derby</artifactId>
+  		<scope>runtime</scope>
   	</dependency>
 
   	<dependency>
@@ -61,6 +49,14 @@
   		<groupId>ch.qos.logback</groupId>
   		<artifactId>logback-classic</artifactId>
   	</dependency>
+  	
+  <!-- 
+                <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-test</artifactId>
+                        <scope>test</scope>
+                </dependency>
+  	-->
   </dependencies>
 
 	<build>
@@ -71,4 +67,11 @@
 			</plugin>
 		</plugins>
 	</build>
+
+  <name>ILM Professional Services - Fantasy Football</name>
+	
+  <organization>
+    <name>ILM Professional Services</name>
+    <url>http://ilmservice.com/</url>
+  </organization>
 </project>

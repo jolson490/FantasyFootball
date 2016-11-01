@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ilmservice.fantasyfootball.db.entities.FantasyTeam;
 
+// TODO delete this class - or re-factor & move to test
+
 public class MyHibernateUtil {
   private static final Logger logger = LoggerFactory.getLogger(MyHibernateUtil.class);
 
@@ -60,6 +62,7 @@ public class MyHibernateUtil {
     // directory that was created by PopulateDB.
     PopulateDB.setDerbyHome();
 
+    // T-skip
     sessionFactory = Persistence.createEntityManagerFactory("FantasyFootballUnit");
 
     logger.debug("end initializeSession");
