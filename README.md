@@ -42,4 +42,4 @@ Setup in Eclipse:
 
 ## To Run
 
-Once you have completed the pre-requisites, then start your web server and you can access the application via your browser at: http://localhost:8080/FantasyFootball/
+Once you have completed the pre-requisites, then start your web server and you can access the application via your browser at: http://localhost:8080/ILMServices-FantasyFootball/
