@@ -60,9 +60,9 @@ public class MyHibernateUtil {
     // Make sure the same derby home is used for MyHibernateUtil as was for
     // PopulateDB - otherwise MyHibernateUtil might not find the database
     // directory that was created by PopulateDB.
-    PopulateDB.setDerbyHome();
+    // PopulateDB.setDerbyHome();
 
-    // T-skip
+    // T-skip (note that persistence.xml no longer exists)
     sessionFactory = Persistence.createEntityManagerFactory("FantasyFootballUnit");
 
     logger.debug("end initializeSession");

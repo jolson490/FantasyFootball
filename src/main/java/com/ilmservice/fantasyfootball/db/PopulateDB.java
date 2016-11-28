@@ -14,15 +14,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 
 // Note that Apache Derby is a relational database - more info can be found at: https://db.apache.org/derby/ 
 
-// NOTE: run the "main" method in this class to create & populate the "nflDB" Java/Derby database.
+// NOTE: run the "main" method in this class via eclipse: right-click PopulateDB.java, Run As, Spring Boot App.
 
 public class PopulateDB {
   private static final Logger logger = LoggerFactory.getLogger(PopulateDB.class);
@@ -51,33 +54,23 @@ public class PopulateDB {
   // says between Derby versions "10.3 and 10.8.2" that Derby distributions
   // included plugins for Eclipse.)
 
-  private static Connection conn = null;
-  private static Statement stmt = null;
+  private Connection conn = null;
+  private Statement stmt = null;
+
+  @Value("${ff.derby.system.home}")
+  private String derbySystemHome;
 
   // This method allows the value of the "derby.system.home" System Property to
   // be changed.
   // (The default value of this System Property is the current project directory
   // - i.e. the "user.dir" Property).
-  public static void setDerbyHome() {
+  public void setDerbyHome() {
     logger.debug("begin setDerbyHome()");
-
-    FileInputStream fis = getFISInClassPath("javaProperties.xml");
-    java.util.Properties fileProps = new Properties();
-    try {
-      fileProps.loadFromXML(fis);
-    } catch (InvalidPropertiesFormatException e1) {
-      logger.error("Error reading properties file", e1);
-      System.exit(1);
-    } catch (IOException e1) {
-      logger.error("Error reading properties file", e1);
-      System.exit(1);
-    }
-    logger.trace("derby.system.home (from properties file): {}", fileProps.getProperty("derby.system.home"));
 
     Properties systemProps = System.getProperties();
     logger.trace("derby.system.home from System.Property - before setting from properties file: {}",
         System.getProperty("derby.system.home"));
-    systemProps.setProperty("derby.system.home", fileProps.getProperty("derby.system.home"));
+    systemProps.setProperty("derby.system.home", derbySystemHome);
     logger.debug("derby.system.home from System.Property - after setting from properties file: {}",
         System.getProperty("derby.system.home"));
 
@@ -85,15 +78,20 @@ public class PopulateDB {
   }
 
   public static void main(String[] args) {
-    logger.info("begin main()");
+    new SpringApplicationBuilder(PopulateDB.class).web(false).run(args);
+  }
+
+  // creates & populate the "nflDB" Java/Derby database
+  @PostConstruct
+  public void populateDatabase() {
+    logger.debug("begin populateDatabase()");
     createConnection();
     runMultiLineSqlCommands();
     readAndExecuteFile();
-    logger.info("end main - SUCCESSFULLY COMPLETED PROCESSING (unless any errors noted above)");
-    System.exit(0);
+    logger.info("end populateDatabase - SUCCESSFULLY COMPLETED PROCESSING (unless any errors noted above)");
   }
 
-  private static void createConnection() {
+  private void createConnection() {
     logger.debug("begin createConnection()");
 
     setDerbyHome();
@@ -113,7 +111,7 @@ public class PopulateDB {
     logger.debug("end createConnection");
   }
 
-  private static void handleWarnings() throws SQLException {
+  private void handleWarnings() throws SQLException {
     logger.debug("begin handleWarnings()");
     // Consider any SQLWarning to be an unexpected error for which to terminate
     // this application.
@@ -142,7 +140,7 @@ public class PopulateDB {
     logger.debug("end handleWarnings");
   }
 
-  private static void runMultiLineSqlCommands() {
+  private void runMultiLineSqlCommands() {
     logger.debug("begin runMultiLineSqlCommands()");
     try {
       stmt = conn.createStatement();
@@ -182,7 +180,7 @@ public class PopulateDB {
     logger.debug("end runMultiLineSqlCommands");
   }
 
-  public static FileInputStream getFISInClassPath(String filename) {
+  public FileInputStream getFISInClassPath(String filename) {
     logger.debug("begin getFISInClassPath(filename={})", filename);
 
     // Note that Maven by default includes files in src/main/resources into the
@@ -205,7 +203,7 @@ public class PopulateDB {
     return fis;
   }
 
-  private static void readAndExecuteFile() {
+  private void readAndExecuteFile() {
     logger.debug("begin readAndExecuteFile()");
 
     FileInputStream fis = getFISInClassPath("nflSqlCommands.txt");

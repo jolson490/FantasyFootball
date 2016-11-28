@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-<properties>
-	<comment>Set the value (of the derby.system.home property) to the location where you would like the Derby database to be created.</comment>
-    <entry key="derby.system.home">C:\Users\Admin\git\FantasyFootball</entry>
-</properties>
