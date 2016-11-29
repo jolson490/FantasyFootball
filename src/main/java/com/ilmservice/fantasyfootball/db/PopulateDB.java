@@ -146,7 +146,7 @@ public class PopulateDB {
       stmt = conn.createStatement();
       stmt.execute(
           "CREATE TABLE players (" 
-              + "ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+              + "ID INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
               + "fname VARCHAR(50) NOT NULL," 
               + "lname VARCHAR(50) NOT NULL," 
               + "position VARCHAR(10) NOT NULL,"
@@ -158,20 +158,20 @@ public class PopulateDB {
       stmt = conn.createStatement();
       stmt.execute(
           "CREATE TABLE fantasyTeams (" 
-              + "ID int NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+              + "Id INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
               + "username VARCHAR(50) NOT NULL," 
               + "fantasyMascot VARCHAR(100) NOT NULL," 
-              + "PRIMARY KEY (ID)" + ")");
+              + "PRIMARY KEY (Id)" + ")");
       stmt.close();
 
       stmt = conn.createStatement();
       stmt.execute("CREATE TABLE weeklyTeams (" 
-          + "playerID int NOT NULL," 
-          + "fantasyTeamID INT NOT NULL,"
+          + "playerID INT NOT NULL," 
+          + "fantasyTeamId INT NOT NULL,"
           + "week INT NOT NULL  CHECK (week >= 1 AND week <= 5)," 
-          + "PRIMARY KEY (playerID, fantasyTeamID, week),"
+          + "PRIMARY KEY (playerID, fantasyTeamId, week),"
           + "FOREIGN KEY (playerID) REFERENCES players(ID)," 
-          + "FOREIGN KEY (fantasyTeamID) REFERENCES fantasyTeams(ID)" + ")");
+          + "FOREIGN KEY (fantasyTeamId) REFERENCES fantasyTeams(Id)" + ")");
       stmt.close();
     } catch (SQLException sqlExcept) {
       logger.error("Error running SQL commands", sqlExcept);

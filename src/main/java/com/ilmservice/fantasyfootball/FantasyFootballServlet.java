@@ -11,21 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
 
 @WebServlet("/Fantasy")
+@Component
 public class FantasyFootballServlet extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(FantasyFootballServlet.class);
 
   private static final long serialVersionUID = 1L;
 
-  private FantasyTeamRepository teamRepository;
-
   @Autowired
-  public void setFantasyTeamRepository(FantasyTeamRepository teamRepository) {
-    this.teamRepository = teamRepository;
-  }
+  private FantasyTeamRepository fantasyTeamRepository;
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,12 +46,12 @@ public class FantasyFootballServlet extends HttpServlet {
   }
 
   private void showData() {
-    logger.debug("begin showData()");
+    logger.debug("begin showData(): fantasyTeamRepository={}", fantasyTeamRepository);
 
     // TODO
 
     // (prints 8)
-    // long numberTeams = teamRepository.count();
+    // long numberTeams = fantasyTeamRepository.count();
     // logger.debug("number of fantasy teams: {}", numberTeams);
 
         // (prints 8)

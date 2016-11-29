@@ -1,5 +1,7 @@
 package com.ilmservice.fantasyfootball.db.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,25 +9,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "fantasyteams")
-public class FantasyTeam {
+@Table(name = "fantasyTeams")
+public class FantasyTeam implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue
-  @Column(name = "id")
-  private int id;
+  @Column(name = "Id")
+  private Integer id;
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
-  @Column(name = "USERNAME")
+  @Column(name = "username")
   String username;
 
-  @Column(name = "FANTASYMASCOT")
+  @Column(name = "fantasyMascot")
   String mascot;
 
   public String getUsername() {
@@ -42,6 +46,11 @@ public class FantasyTeam {
 
   public void setMascot(String mascot) {
     this.mascot = mascot;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("FantasyTeam[id=%d, username='%s', mascot='%s']", id, username, mascot);
   }
 
 }
