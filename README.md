@@ -37,9 +37,16 @@ Setup in Eclipse:
 * One more Tomcat thing: Java EE perspective, Servers, double-click "Apache\_Tomcat\_v*.0\_at\_localhost", Modules, Add Web Module, click FantasyFootball, Ctrl+S (to save changes).
 * In application.properties, set the value of ff.derby.system.home & spring.datasource.url.
 * maven clean install. 
-* right-click the FantasyFootball project, Maven, Update Project.
+* right-click this FantasyFootball project, Maven, Update Project.
 * Run the PopulateDB.main method (to create & populate the "nflDB" Java/Derby database).
+
+The first time you run the application:
+ * In application.properties change spring.datasource.initialize from false to true (so the database gets initialized/populated).
+ * To start your web server: in eclipse, right-click this project, Run As, Spring Boot App. 
+    * Or with a command terminal, from the FantasyFootball folder (the top of this project) do "mvn spring-boot:run".
+ * (And then undo the change you made to application.properties.)
 
 ## To Run
 
-Once you have completed the pre-requisites, then start your web server and you can access the application via your browser at: http://localhost:8080/ILMServices-FantasyFootball/
+Once you have completed the pre-requisites, then: in eclipse, in the Servers View, click on "Apache\_Tomcat\_v*.0\_at\_localhost", and click the green play button ("Start the server").
+Then you can access the application via your browser at: http://localhost:8080/ILMServices-FantasyFootball/

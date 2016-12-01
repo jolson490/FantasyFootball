@@ -1,3 +1,5 @@
 /derby.log
+/src/main/resources/derby.log
 /nflDB/
 /target/
+/dblook.log
