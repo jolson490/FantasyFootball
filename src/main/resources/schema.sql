@@ -29,12 +29,10 @@
 --     $ which ij
 --     /cygdrive/c/Program Files/Java/jdk1.8.0_65/db/bin/ij
 --
--- e.g. of how to run 'ij' from a Cygwin terminal (the following 'connect'
--- command assumes the 'nflDB' folder/database exists within the current directory):
---     Joshua@JoshuaOlson /cygdrive/c/Users/Joshua/git/FantasyFootball
+-- e.g. of how to run 'ij' from a Cygwin terminal:
 --     $ ij
---     ij version 10.11
---     ij> connect 'jdbc:derby:nflDB';
+--     ij version 10.13
+--     ij> connect 'jdbc:derby://localhost:1527/C:/Users/Admin/git/FantasyFootball/nflDB';
 --
 -- (Note that https://db.apache.org/derby/integrate/derby_plugin_info.html
 -- says between Derby versions "10.3 and 10.8.2" that Derby distributions
@@ -42,9 +40,10 @@
   
 -- ============================
 
--- To run this sql script outside of Spring Boot: 
+-- To run this sql script outside of Spring Boot:
+--  * in a terminal, follow the steps from README.md to run startNetworkServer.
 --  * uncomment the following "connect" line, and change "${ff.database.location}" to the value of the ff.database.location property from application.properties, 
---  * and then in a terminal in "src/main/resources/" do "ij schema.sql".
+--  * and then in another terminal in "src/main/resources/" do "ij schema.sql".
 -----connect 'jdbc:derby:${ff.database.location};create=true';
 
 -- ----------------------------------------------
