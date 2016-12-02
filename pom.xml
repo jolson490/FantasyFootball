@@ -4,6 +4,7 @@
   <groupId>com.ilmservice</groupId>
   <artifactId>ILMServices-FantasyFootball</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
   <packaging>war</packaging>
   
   <parent>
@@ -11,62 +12,64 @@
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>1.4.1.RELEASE</version>
   </parent>
-  
-  <properties>  	
-  	<java.version>1.8</java.version>
-  	<hibernate.version>5.2.3.Final</hibernate.version>
-  	<derby.version>10.13.1.1</derby.version>
-  	
-  	<start-class>com.ilmservice.fantasyfootball.FantasyFootballApplication</start-class>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <hibernate.version>5.2.3.Final</hibernate.version>
+    <derby.version>10.13.1.1</derby.version>
+    
+    <start-class>com.ilmservice.fantasyfootball.FantasyFootballApplication</start-class>
   </properties>
 
   <dependencies>
-  	<dependency> 
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-web</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-tomcat</artifactId>
-  		<scope>provided</scope>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>org.springframework.boot</groupId>
-  		<artifactId>spring-boot-starter-data-jpa</artifactId>
-  	</dependency>
-  	
-  	<dependency>
-  		<groupId>org.apache.derby</groupId>
-  		<artifactId>derby</artifactId>
-  		<scope>runtime</scope>
-  	</dependency>
+    <dependency> 
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
-  	<dependency>
-  		<groupId>javax.servlet</groupId>
-  		<artifactId>javax.servlet-api</artifactId>
-  	</dependency>
-  	
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    
   <!-- 
                 <dependency>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-test</artifactId>
                         <scope>test</scope>
                 </dependency>
-  	-->
+    -->
   </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+<!--
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+-->
 
   <name>ILM Professional Services - Fantasy Football</name>
-	
+  
   <organization>
     <name>ILM Professional Services</name>
     <url>http://ilmservice.com/</url>
