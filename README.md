@@ -35,7 +35,7 @@ Setup in Eclipse:
     * Git Perspective, "Clone a Git repository", enter https://github.com/ILMServices/FantasyFootball.git as URI.
     * Git Repositories, right-click FantasyFootball, Import Projects, "Import existing Eclipse projects".
 * One more Tomcat thing: Java EE perspective, Servers, double-click "Apache\_Tomcat\_v*.0\_at\_localhost", Modules, Add Web Module, click FantasyFootball, Ctrl+S (to save changes).
-* In application.properties, set the value of ff.derby.system.home & spring.datasource.url.
+* In application.properties, set the value of ff.database.location.
 * maven clean install. 
 * right-click this FantasyFootball project, Maven, Update Project.
 * Run the PopulateDB.main method (to create & populate the "nflDB" Java/Derby database).

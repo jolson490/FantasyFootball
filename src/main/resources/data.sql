@@ -1,4 +1,6 @@
------connect 'jdbc:derby:c:/Users/Admin/git/FantasyFootball/nflDB';
+-- (Some of the commentary in schema.sql also applies to this data.sql file.)
+
+-----connect 'jdbc:derby:${ff.database.location}';
 
 SET SCHEMA APP;
 

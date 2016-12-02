@@ -8,6 +8,7 @@
 -- appendLogs: false
 
 -- NOTES:
+--  * More info about the SQL commands/syntax supported by Derby can be found in the Derby Reference Manual, which can be found at: https://db.apache.org/derby/manuals/
 --  * This file was created by doing:
 --      Admin@DESKTOP-4P28AA3 ~/git/FantasyFootball
 --      $ dblook -d 'jdbc:derby:C:\Users\Admin\git\FantasyFootball\nflDB' -z APP -o 'C:\Users\Admin\Desktop\schema.sql'
@@ -41,8 +42,10 @@
   
 -- ============================
 
--- To run this sql script outside of Spring Boot: uncomment the following line, and then in a terminal in "src/main/resources/" do "ij schema.sql".
------connect 'jdbc:derby:c:/Users/Admin/git/FantasyFootball/nflDB;create=true';
+-- To run this sql script outside of Spring Boot: 
+--  * uncomment the following "connect" line, and change "${ff.database.location}" to the value of the ff.database.location property from application.properties, 
+--  * and then in a terminal in "src/main/resources/" do "ij schema.sql".
+-----connect 'jdbc:derby:${ff.database.location};create=true';
 
 -- ----------------------------------------------
 -- DDL Statements for tables
