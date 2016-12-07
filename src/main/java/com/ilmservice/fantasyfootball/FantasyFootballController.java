@@ -1,7 +1,6 @@
 package com.ilmservice.fantasyfootball;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,11 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilmservice.fantasyfootball.db.entities.FantasyTeam;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
 import com.ilmservice.fantasyfootball.model.Week;
 
@@ -25,22 +25,31 @@ public class FantasyFootballController {
   @Autowired
   private FantasyTeamRepository fantasyTeamRepository;
 
-  // http://localhost:8080/ILMServices-FantasyFootball/ -> index.jsp
+  // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
     logger.debug("in home()");
-    showData();
+    // showData();
     return "index";
   }
 
-  // http://localhost:8080/ILMServices-FantasyFootball/jsptest -> jsp-spring-boot.jsp
+  // http://localhost:8080/ILMServices-FantasyFootball/showTeams
+  // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/showTeams -o ShowTeams.html
+  @RequestMapping(value = "/showTeams", method = RequestMethod.GET)
+  public String listTeams(Model model) {
+    logger.debug("in listTeams()");
+    model.addAttribute("teamsAttribute", fantasyTeamRepository.findAll());
+    return "ShowTeams";
+  }
+
+  // http://localhost:8080/ILMServices-FantasyFootball/jsptest
   @RequestMapping("/jsptest")
   public String jsptest(ModelAndView modelAndView) {
     logger.debug("in jsptest()");
     return "jsp-spring-boot";
   }
 
-  // http://localhost:8080/ILMServices-FantasyFootball/chooseWeek -> ChooseWeek.jsp
+  // http://localhost:8080/ILMServices-FantasyFootball/chooseWeek
   @RequestMapping("/chooseWeek")
   public ModelAndView weekForm() {
     logger.debug("in weekForm()");
@@ -60,8 +69,9 @@ public class FantasyFootballController {
     return mav;
   }
 
-  // http://localhost:8080/ILMServices-FantasyFootball/showWeek -> ShowWeek.jsp
+  // http://localhost:8080/ILMServices-FantasyFootball/showWeek
   // TODO-data-weeks-validate: If user puts above URL directly into browser, they get "Selected week: 0" - add validation to prevent/handle invalid values.
+  // e.g.: curl -X POST -F 'week=2' http://localhost:8080/ILMServices-FantasyFootball/showWeek
   @RequestMapping("/showWeek")
   public ModelAndView weekSubmit(@ModelAttribute Week chosenWeekModel) {
     logger.debug("in weekSubmit(): chosenWeekModel.getWeek()={}", chosenWeekModel.getWeek());
@@ -71,6 +81,8 @@ public class FantasyFootballController {
     return mav;
   }
 
+  //@formatter:off
+  /*
   private void showData() {
     logger.debug("begin showData(): fantasyTeamRepository={}", fantasyTeamRepository);
 
@@ -84,5 +96,7 @@ public class FantasyFootballController {
 
     logger.debug("end showData");
   }
+   */
+  //@formatter:on
 
 }
