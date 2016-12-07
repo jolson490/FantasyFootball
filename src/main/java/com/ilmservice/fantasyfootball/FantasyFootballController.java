@@ -55,7 +55,7 @@ public class FantasyFootballController {
     weeks.put(5, "Week 5");
     mav.addObject("weeksMap", weeks);
 
-    mav.addObject("weekModel", new Week());
+    mav.addObject("blankWeekModel", new Week());
 
     return mav;
   }
@@ -63,11 +63,11 @@ public class FantasyFootballController {
   // http://localhost:8080/ILMServices-FantasyFootball/showWeek -> ShowWeek.jsp
   // TODO-data-weeks-validate: If user puts above URL directly into browser, they get "Selected week: 0" - add validation to prevent/handle invalid values.
   @RequestMapping("/showWeek")
-  public ModelAndView weekSubmit(@ModelAttribute Week weekModel) {
-    logger.debug("in weekSubmit(): weekModel.getWeek()={}", weekModel.getWeek());
-    // TODO-data-weeklyTeams get data from db for weekModel, and have the view display/print it to browser.
+  public ModelAndView weekSubmit(@ModelAttribute Week chosenWeekModel) {
+    logger.debug("in weekSubmit(): chosenWeekModel.getWeek()={}", chosenWeekModel.getWeek());
+    // TODO-data-weeklyTeams get data from db for chosenWeekModel, and have the view display/print it to browser.
     ModelAndView mav = new ModelAndView("ShowWeek");
-    mav.addObject("weekModel", weekModel);
+    mav.addObject("chosenWeekModel", chosenWeekModel);
     return mav;
   }
 
