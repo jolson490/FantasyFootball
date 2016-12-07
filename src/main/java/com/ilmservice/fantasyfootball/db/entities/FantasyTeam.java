@@ -50,7 +50,7 @@ public class FantasyTeam implements Serializable {
 
   @Override
   public String toString() {
-    return String.format("FantasyTeam[id=%d, username='%s', mascot='%s']", id, username, mascot);
+    return String.format("FantasyTeam[id=%2d, username='%10s', mascot='%20s']", id, username, mascot);
   }
 
 }

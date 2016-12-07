@@ -10,6 +10,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "com.ilmservice.fantasyfootball.db.entities" })
@@ -29,5 +32,15 @@ public class FantasyFootballApplication extends SpringBootServletInitializer {
   @PostConstruct
   public void logSomething() {
     logger.debug("in logSomething()");
+  }
+}
+
+// Just to test out a REST controller
+@RestController
+class GreetingController {
+  // e.g. http://localhost:8080/ILMServices-FantasyFootball/hello/JoshO
+  @RequestMapping("/hello/{name}")
+  public String hello(@PathVariable String name) {
+    return "Hello, " + name + "!";
   }
 }
