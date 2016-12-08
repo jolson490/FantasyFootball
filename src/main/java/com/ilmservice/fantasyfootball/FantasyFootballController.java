@@ -3,19 +3,24 @@ package com.ilmservice.fantasyfootball;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
-import com.ilmservice.fantasyfootball.model.Week;
+import com.ilmservice.fantasyfootball.model.WeekForm;
 
 @Controller
 @EnableAutoConfiguration
@@ -53,10 +58,9 @@ public class FantasyFootballController {
   }
 
   // http://localhost:8080/ILMServices-FantasyFootball/chooseWeek
-  @RequestMapping("/chooseWeek")
-  public ModelAndView weekForm() {
-    logger.debug("in weekForm()");
-    ModelAndView mav = new ModelAndView("ChooseWeek");
+  @GetMapping("/chooseWeek")
+  public String setupWeekForm(Model model) {
+    logger.debug("in setupWeekForm()");
 
     Map<Integer, String> weeks = new HashMap<Integer, String>();
     // TO-DO-data-weeks: populate based on weeks stored in db
@@ -65,23 +69,33 @@ public class FantasyFootballController {
     weeks.put(3, "Week 3");
     weeks.put(4, "Week 4");
     weeks.put(5, "Week 5");
-    mav.addObject("weeksMap", weeks);
 
-    mav.addObject("blankWeekModel", new Week());
+    model.addAttribute("weeksMap", weeks);
 
-    return mav;
+    model.addAttribute("weekForm", new WeekForm());
+
+    return "ChooseWeek";
   }
 
   // http://localhost:8080/ILMServices-FantasyFootball/showWeek
-  // TO-DO-data-weeks-validate: If user puts above URL directly into browser, they get "Selected week: 0" - add validation to prevent/handle invalid values.
   // e.g.: curl -X POST -F 'week=2' http://localhost:8080/ILMServices-FantasyFootball/showWeek
-  @RequestMapping("/showWeek")
-  public ModelAndView weekSubmit(@ModelAttribute Week chosenWeekModel) {
-    logger.debug("in weekSubmit(): chosenWeekModel.getWeek()={}", chosenWeekModel.getWeek());
-    // TO-DO-data-weeklyTeams get data from db for chosenWeekModel, and have the view display/print it to browser.
-    ModelAndView mav = new ModelAndView("ShowWeek");
-    mav.addObject("chosenWeekModel", chosenWeekModel);
-    return mav;
+  @PostMapping("/showWeek")
+  public String showWeek(@Valid @ModelAttribute("weekForm") WeekForm weekForm, BindingResult result) {
+    logger.debug("in showWeek(): weekForm.getWeek()={} result.hasErrors()={}", weekForm.getWeek(), result.hasErrors());
+
+    // This validation is kinda pointless, because requests from a browser will
+    // limit the choices in the drop-down menu to the options specified by
+    // 'weeksMap'. But include this validation in case a user does something
+    // like the following (note the invalid value for week):
+    // curl -X POST -F 'week=6' http://localhost:8080/ILMServices-FantasyFootball/showWeek
+    if (result.hasErrors()) {
+      // Since the code inside this "if" check is only for curl commands, do not
+      // bother creating & adding 'weeksMap'.
+      return "ChooseWeek";
+    }
+
+    // TO-DO-data-weeklyTeams get data from db for weekForm, and have the view display/print it to browser.
+    return "ShowWeek";
   }
 
   //@formatter:off

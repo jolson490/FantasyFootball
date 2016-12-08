@@ -1,6 +1,11 @@
 package com.ilmservice.fantasyfootball.model;
 
-public class Week {
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+public class WeekForm {
+  @Min(1)
+  @Max(5)
   private int week;
 
   public int getWeek() {

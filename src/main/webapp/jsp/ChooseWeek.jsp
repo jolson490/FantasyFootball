@@ -6,20 +6,30 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Choose Week - ILM Fantasy Football</title>
+<style>
+.error 
+{
+  color: #ff0000;
+  font-weight: bold;
+}
+</style>
 </head>
 
 <body>
-<form:form action="showWeek" method="post" modelAttribute="blankWeekModel">
-
-Choose a week<%-- TO-DO-data-weeklyTeams uncomment text: to show the players/teams for--%>:
-<br>
-<%-- The purpose of 'path' is to bind to the 'week' variable within the model. 
-     And 'items' specifies the list of objects to use for generating the 'option' tags (i.e. choices in the drop-down menu).  --%>
-<form:select path="week" items="${weeksMap}"/>
-<br><br>
-<INPUT type="submit" value="Show Week">
-
-</form:form>
+  <%-- The form data is bound to a model of the name specified by modelAttribute. --%>
+  <form:form action="showWeek" method="post" modelAttribute="weekForm">
+  
+  Choose a week<%-- TO-DO-data-weeklyTeams uncomment text: to show the players/teams for--%>:
+  <br>
+  <%-- The purpose of 'path' is to bind to the 'week' variable within the model. 
+       And 'items' specifies the list of objects to use for generating the 'option' tags (i.e. choices in the drop-down menu). --%>
+  <form:select path="week" items="${weeksMap}"/>
+  
+  <form:errors path="week" cssClass="error"/>
+  <br><br>
+  <INPUT type="submit" value="Show Week">
+  
+  </form:form>
 </body>
 
 </html>
