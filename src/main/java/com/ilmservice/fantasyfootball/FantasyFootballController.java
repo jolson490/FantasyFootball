@@ -25,6 +25,9 @@ public class FantasyFootballController {
   @Autowired
   private FantasyTeamRepository fantasyTeamRepository;
 
+  // @Autowired
+  // private PlayerRepository playerRepository;
+
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
@@ -56,7 +59,7 @@ public class FantasyFootballController {
     ModelAndView mav = new ModelAndView("ChooseWeek");
 
     Map<Integer, String> weeks = new HashMap<Integer, String>();
-    // TODO-data-weeks: populate based on weeks stored in db
+    // TO-DO-data-weeks: populate based on weeks stored in db
     weeks.put(1, "Week 1");
     weeks.put(2, "Week 2");
     weeks.put(3, "Week 3");
@@ -70,12 +73,12 @@ public class FantasyFootballController {
   }
 
   // http://localhost:8080/ILMServices-FantasyFootball/showWeek
-  // TODO-data-weeks-validate: If user puts above URL directly into browser, they get "Selected week: 0" - add validation to prevent/handle invalid values.
+  // TO-DO-data-weeks-validate: If user puts above URL directly into browser, they get "Selected week: 0" - add validation to prevent/handle invalid values.
   // e.g.: curl -X POST -F 'week=2' http://localhost:8080/ILMServices-FantasyFootball/showWeek
   @RequestMapping("/showWeek")
   public ModelAndView weekSubmit(@ModelAttribute Week chosenWeekModel) {
     logger.debug("in weekSubmit(): chosenWeekModel.getWeek()={}", chosenWeekModel.getWeek());
-    // TODO-data-weeklyTeams get data from db for chosenWeekModel, and have the view display/print it to browser.
+    // TO-DO-data-weeklyTeams get data from db for chosenWeekModel, and have the view display/print it to browser.
     ModelAndView mav = new ModelAndView("ShowWeek");
     mav.addObject("chosenWeekModel", chosenWeekModel);
     return mav;

@@ -11,7 +11,7 @@
 <body>
 <form:form action="showWeek" method="post" modelAttribute="blankWeekModel">
 
-Choose a week<%-- TODO-data-weeklyTeams uncomment text: to show the players/teams for--%>:
+Choose a week<%-- TO-DO-data-weeklyTeams uncomment text: to show the players/teams for--%>:
 <br>
 <%-- The purpose of 'path' is to bind to the 'week' variable within the model. 
      And 'items' specifies the list of objects to use for generating the 'option' tags (i.e. choices in the drop-down menu).  --%>

@@ -11,7 +11,7 @@
 Selected week: ${chosenWeekModel.week}
 <br/>
 
-<%-- TODO-data-weeklyTeams: show the players/teams for specified week. --%>
+<%-- TO-DO-data-weeklyTeams: show the players/teams for specified week. --%>
 
 <a href="${pageContext.request.contextPath}/">Main page</a>
 
