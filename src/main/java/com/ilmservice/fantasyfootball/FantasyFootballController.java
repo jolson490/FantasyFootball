@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -78,13 +79,16 @@ public class FantasyFootballController {
     return "ChooseWeek";
   }
 
+  private final String binding_boundWeek = "org.springframework.validation.BindingResult.boundWeek";
+  private final String binding_blankWeek = "org.springframework.validation.BindingResult.blankWeek";
+
   // http://localhost:8080/ILMServices-FantasyFootball/showWeek
   // e.g.: curl -X POST -F 'week=2' http://localhost:8080/ILMServices-FantasyFootball/showWeek
   @PostMapping("/showWeek")
-  // If "boundWeek" weren't specified, then the default name (for the model
-  // attribute) would be "weekForm". ("The default model attribute name is
-  // inferred from the declared attribute type".)
-  public String showWeek(@Valid @ModelAttribute("boundWeek") WeekForm theBoundWeek, BindingResult result) {
+  // If "boundWeek" weren't specified, then the default name (for the model attribute) would be
+  // "weekForm". ("The default model attribute name is inferred from the declared attribute type".)
+  public String showWeek(@Valid @ModelAttribute("boundWeek") WeekForm theBoundWeek, BindingResult result, Model model) {
+    // Note that 'model' has an attribute in it named 'boundWeek'.
     logger.debug("in showWeek(): theBoundWeek.getWeek()={} result.hasErrors()={}", theBoundWeek.getWeek(), result.hasErrors());
 
     // This validation is kinda pointless, because requests from a browser will
@@ -95,11 +99,69 @@ public class FantasyFootballController {
     if (result.hasErrors()) {
       // Since the code inside this "if" check is only for curl commands, do not
       // bother creating & adding 'weeksMap'.
+      // But do add both blankWeek and 'binding_blankWeek' to the model (I couldn't figure out how to re-name the existing model attributes).
+
+      logger.debug("in showWeek(): before: model has: boundWeek={} blankWeek={}: binding: boundWeek={} blankWeek={}",
+          model.containsAttribute("boundWeek"), model.containsAttribute("blankWeek"),
+          model.containsAttribute(binding_boundWeek), model.containsAttribute(binding_blankWeek));
+
+      // Add the following line of code to avoid getting: "java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'blankWeek' available as request attribute"
+      // (ACTUALLY, after adding code below to add 'binding_blankWeek', the following line of code isn't needed, so I commented it out.)
+      ///// model.addAttribute("blankWeek", theBoundWeek);
+
+      // for binding, copy bound to blank.
+      if (model.containsAttribute(binding_boundWeek)) {
+        logger.debug("modelMap - if: found {}", binding_boundWeek);
+        Map<String, Object> myModelMap = model.asMap();
+        BeanPropertyBindingResult br = (BeanPropertyBindingResult) myModelMap.get(binding_boundWeek);
+        logger.debug("modelMap - if: br=***{}***", br);
+
+        // Add this so that ChooseWeek.jsp is able to get the "form:errors" for
+        // blankWeek.
+        //
+        // Note this will put an attribute in the model with the KEY that will match up with the following from ChooseWeek.jsp:
+        //  * modelAttribute="blankWeek"
+        //  * form:errors path="week"
+        // But the VALUE will still have "boundWeek" in its text. But that doesn't make a difference in the html text that is
+        // returned to the curl command, because only the message ("must be less than or equal to 5") is returned.
+        model.addAttribute(binding_blankWeek, br);
+      }
+
+      printMap(model);
+
+      logger.debug("in showWeek(): after: model has: boundWeek={} blankWeek={}: binding: boundWeek={} blankWeek={}",
+          model.containsAttribute("boundWeek"), model.containsAttribute("blankWeek"),
+          model.containsAttribute(binding_boundWeek), model.containsAttribute(binding_blankWeek));
+
       return "ChooseWeek";
     }
 
     // TO-DO-data-weeklyTeams get data from db for theBoundWeek, and have the view display/print it to browser.
     return "ShowWeek";
+  }
+
+  private void printMap(Model model) {
+    try {
+      Map<String, Object> modelMap = model.asMap();
+      modelMap.forEach((key, value) -> {
+        logger.debug("");
+        logger.debug("modelMap: key={} value={}", key, value);
+        if (value instanceof WeekForm) {
+          logger.debug("modelMap: found WeekForm");
+          logger.debug("modelMap: week={}", ((WeekForm) value).getWeek());
+        } else if (key.equals(binding_boundWeek)) {
+          logger.debug("modelMap: found {}", binding_boundWeek);
+          BeanPropertyBindingResult br = (BeanPropertyBindingResult) value;
+          logger.debug("modelMap: br=***{}***", br);
+        } else if (key.equals(binding_blankWeek)) {
+          logger.debug("modelMap: found {}", binding_blankWeek);
+          BeanPropertyBindingResult br = (BeanPropertyBindingResult) value;
+          logger.debug("modelMap: br=***{}***", br);
+        }
+      });
+    } catch (Exception e) {
+      logger.error("showWeek: exception caught", e);
+    }
   }
 
   //@formatter:off
