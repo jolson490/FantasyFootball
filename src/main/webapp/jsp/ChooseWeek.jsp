@@ -16,8 +16,8 @@
 </head>
 
 <body>
-  <%-- The form data is bound to a model of the name specified by modelAttribute. --%>
-  <form:form action="showWeek" method="post" modelAttribute="weekForm">
+  <%-- The form data is bound to the model specified by modelAttribute. --%>
+  <form:form action="showWeek" method="post" modelAttribute="blankWeek">
   
   Choose a week<%-- TO-DO-data-weeklyTeams uncomment text: to show the players/teams for--%>:
   <br>

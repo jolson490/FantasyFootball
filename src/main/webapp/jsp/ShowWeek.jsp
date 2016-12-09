@@ -8,8 +8,7 @@
 </head>
 <body>
 
-Selected week: ${weekForm.week}
-<br/>
+Selected week: ${boundWeek.week}<br/>
 
 <%-- TO-DO-data-weeklyTeams: show the players/teams for specified week. --%>
 

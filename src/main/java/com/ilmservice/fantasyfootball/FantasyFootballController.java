@@ -59,8 +59,9 @@ public class FantasyFootballController {
 
   // http://localhost:8080/ILMServices-FantasyFootball/chooseWeek
   @GetMapping("/chooseWeek")
-  public String setupWeekForm(Model model) {
-    logger.debug("in setupWeekForm()");
+  // This method gathers & sets up the data/model needed to present the user with the ChooseWeek form/page.
+  public String chooseWeek(Model model) {
+    logger.debug("in chooseWeek()");
 
     Map<Integer, String> weeks = new HashMap<Integer, String>();
     // TO-DO-data-weeks: populate based on weeks stored in db
@@ -72,7 +73,7 @@ public class FantasyFootballController {
 
     model.addAttribute("weeksMap", weeks);
 
-    model.addAttribute("weekForm", new WeekForm());
+    model.addAttribute("blankWeek", new WeekForm());
 
     return "ChooseWeek";
   }
@@ -80,8 +81,11 @@ public class FantasyFootballController {
   // http://localhost:8080/ILMServices-FantasyFootball/showWeek
   // e.g.: curl -X POST -F 'week=2' http://localhost:8080/ILMServices-FantasyFootball/showWeek
   @PostMapping("/showWeek")
-  public String showWeek(@Valid @ModelAttribute("weekForm") WeekForm weekForm, BindingResult result) {
-    logger.debug("in showWeek(): weekForm.getWeek()={} result.hasErrors()={}", weekForm.getWeek(), result.hasErrors());
+  // If "boundWeek" weren't specified, then the default name (for the model
+  // attribute) would be "weekForm". ("The default model attribute name is
+  // inferred from the declared attribute type".)
+  public String showWeek(@Valid @ModelAttribute("boundWeek") WeekForm theBoundWeek, BindingResult result) {
+    logger.debug("in showWeek(): theBoundWeek.getWeek()={} result.hasErrors()={}", theBoundWeek.getWeek(), result.hasErrors());
 
     // This validation is kinda pointless, because requests from a browser will
     // limit the choices in the drop-down menu to the options specified by
@@ -94,7 +98,7 @@ public class FantasyFootballController {
       return "ChooseWeek";
     }
 
-    // TO-DO-data-weeklyTeams get data from db for weekForm, and have the view display/print it to browser.
+    // TO-DO-data-weeklyTeams get data from db for theBoundWeek, and have the view display/print it to browser.
     return "ShowWeek";
   }
 
