@@ -12,8 +12,8 @@
 --  * This file was created by doing:
 --      Admin@DESKTOP-4P28AA3 ~/git/FantasyFootball
 --      $ dblook -d 'jdbc:derby:C:\Users\Admin\git\FantasyFootball\nflDB' -z APP -o 'C:\Users\Admin\Desktop\schema.sql'
---  * Originally this FantasyFootball project used SQL commands in the PopulateDB class (in the com.ilmservice.fantasyfootball.db package) to create the tables (and add rows to the tables).
---    But then that nflDB folder/database was used to create the equivalent commands in this schema.sql file (and the data.sql file). (And at that time PopulateDB was deleted.)
+--  * Originally this FantasyFootball project used SQL commands (included below as reference) to create the tables (and add rows to the tables).
+--    But then that nflDB folder/database was used in conjunction with dblook to create the equivalent commands in this schema.sql file (and the data.sql file). 
 
 -- ============================
 
@@ -50,11 +50,11 @@
 -- DDL Statements for tables
 -- ----------------------------------------------
 
--- From PopulateDB:
+-- SQL command:
 --          "CREATE TABLE weeklyTeams (" 
---          + "playerID INT NOT NULL," 
---          + "fantasyTeamId INT NOT NULL,"
---          + "week INT NOT NULL  CHECK (week >= 1 AND week <= 5)," 
+--          + "playerID INT  NOT NULL," 
+--          + "fantasyTeamId INT  NOT NULL,"
+--          + "week INT  NOT NULL  CHECK (week >= 1 AND week <= 5)," 
 --          + "PRIMARY KEY (playerID, fantasyTeamId, week),"
 --          + "FOREIGN KEY (playerID) REFERENCES players(ID)," 
 --          + "FOREIGN KEY (fantasyTeamId) REFERENCES fantasyTeams(Id)" + ")"
@@ -63,33 +63,44 @@ CREATE TABLE "APP"."WEEKLYTEAMS" (
   "FANTASYTEAMID" INTEGER NOT NULL, 
   "WEEK" INTEGER NOT NULL);
 
--- From PopulateDB:
+-- SQL command:
 --          "CREATE TABLE fantasyTeams (" 
---              + "Id INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
---              + "username VARCHAR(50) NOT NULL," 
---              + "fantasyMascot VARCHAR(100) NOT NULL," 
+--              + "Id INT  NOT NULL  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+--              + "username VARCHAR(50)  NOT NULL," 
+--              + "fantasyMascot VARCHAR(100)  NOT NULL," 
 --              + "PRIMARY KEY (Id)" + ")"
 CREATE TABLE "APP"."FANTASYTEAMS" (
   "ID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
   "USERNAME" VARCHAR(50) NOT NULL, 
   "FANTASYMASCOT" VARCHAR(100) NOT NULL);
 
--- From PopulateDB:
---          "CREATE TABLE players (" 
---              + "ID INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
---              + "fname VARCHAR(50) NOT NULL," 
---              + "lname VARCHAR(50) NOT NULL," 
---              + "position VARCHAR(10) NOT NULL,"
---              + "positionRanking INT NOT NULL CHECK (positionRanking >= 0)," 
---              + "nflTeam VARCHAR(50) NOT NULL,"
---              + "PRIMARY KEY (ID)" + ")"
+-- SQL command:
+--   CREATE TABLE nflTeams (
+--     locationAbbreviation VARCHAR(3)  NOT NULL  PRIMARY KEY,
+--     location VARCHAR(20)  NOT NULL,
+--     mascot VARCHAR(20)  NOT NULL);
+CREATE TABLE "APP"."NFLTEAMS" (
+  "LOCATIONABBREVIATION" VARCHAR(3)  NOT NULL, 
+  "LOCATION" VARCHAR(20)  NOT NULL, 
+  "MASCOT" VARCHAR(20)  NOT NULL);
+  
+-- SQL command:
+-- CREATE TABLE players (
+--   ID INT  NOT NULL  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+--   fname VARCHAR(50)  NOT NULL, 
+--   lname VARCHAR(50)  NOT NULL, 
+--   position VARCHAR(2)  NOT NULL  CONSTRAINT POSITION_CONSTRAINT CHECK (position IN ('QB', 'RB', 'WR', 'TE', 'K')),
+--   positionRanking INT  NOT NULL  CHECK (positionRanking >= 0), 
+--   nflTeam VARCHAR(3)  NOT NULL,
+--   PRIMARY KEY (ID),
+--   CONSTRAINT fk_nflTeam FOREIGN KEY (nflTeam) REFERENCES nflTeams(locationAbbreviation) );
 CREATE TABLE "APP"."PLAYERS" (
   "ID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
   "FNAME" VARCHAR(50) NOT NULL, 
   "LNAME" VARCHAR(50) NOT NULL, 
-  "POSITION" VARCHAR(10) NOT NULL, 
+  "POSITION" VARCHAR(2) NOT NULL, 
   "POSITIONRANKING" INTEGER NOT NULL, 
-  "NFLTEAM" VARCHAR(50) NOT NULL);
+  "NFLTEAM" VARCHAR(3) NOT NULL);
 
 -- ----------------------------------------------
 -- DDL Statements for keys
@@ -100,12 +111,16 @@ ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "SQL161128153209451" PRIMARY KEY 
 
 ALTER TABLE "APP"."FANTASYTEAMS" ADD CONSTRAINT "SQL161128153209440" PRIMARY KEY ("ID");
 
+ALTER TABLE "APP"."NFLTEAMS" ADD CONSTRAINT "SQL161212131427620" PRIMARY KEY ("LOCATIONABBREVIATION");
+
 ALTER TABLE "APP"."PLAYERS" ADD CONSTRAINT "SQL161128153209391" PRIMARY KEY ("ID");
 
 -- FOREIGN
 ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "SQL161128153209452" FOREIGN KEY ("PLAYERID") REFERENCES "APP"."PLAYERS" ("ID") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "SQL161128153209453" FOREIGN KEY ("FANTASYTEAMID") REFERENCES "APP"."FANTASYTEAMS" ("ID") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE "APP"."PLAYERS" ADD CONSTRAINT "FK_NFLTEAM" FOREIGN KEY ("NFLTEAM") REFERENCES "APP"."NFLTEAMS" ("LOCATIONABBREVIATION")  ON DELETE NO ACTION  ON UPDATE NO ACTION;
 
 -- ----------------------------------------------
 -- DDL Statements for checks
@@ -115,3 +130,4 @@ ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "SQL161128153209450" CHECK (week 
 
 ALTER TABLE "APP"."PLAYERS" ADD CONSTRAINT "SQL161128153209390" CHECK (positionRanking >= 0);
 
+ALTER TABLE "APP"."PLAYERS" ADD CONSTRAINT "POSITION_CONSTRAINT" CHECK (position IN ('QB', 'RB', 'WR', 'TE', 'K'));

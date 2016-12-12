@@ -4,6 +4,12 @@
 
 SET SCHEMA APP;
 
+insert into nflTeams (locationAbbreviation, location, mascot) values ('GB', 'Green Bay', 'Packers'); 
+insert into nflTeams (locationAbbreviation, location, mascot) values ('DET', 'Detroit', 'Lions'); 
+insert into nflTeams (locationAbbreviation, location, mascot) values ('CHI', 'Chicago', 'Bears'); 
+insert into nflTeams (locationAbbreviation, location, mascot) values ('MIN', 'Minnesota', 'Vikings'); 
+insert into nflTeams (locationAbbreviation, location, mascot) values ('TB', 'Tampa Bay', 'Buccaneers'); 
+
 insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Aaron','Rodgers','QB',1,'GB');
 insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Matthew','Stafford','QB',2,'DET');
 insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Jay','Cutler','QB',3,'CHI');
@@ -61,11 +67,11 @@ insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('
 insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Matt','Prater','K',4,'DET');
 insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Robbie','Gould','K',5,'CHI');
 
-insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Detroit','Lions','Defense',1,'DET');
-insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Minnesota','Vikings','Defense',2,'MIN');
-insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Green Bay','Packers','Defense',3,'GB');
-insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Tampa Bay','Buccaneers','Defense',4,'TB');
-insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Chicago','Bears','Defense',5,'CHI');
+-- insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Detroit','Lions','Defense',1,'DET');
+-- insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Minnesota','Vikings','Defense',2,'MIN');
+-- insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Green Bay','Packers','Defense',3,'GB');
+-- insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Tampa Bay','Buccaneers','Defense',4,'TB');
+-- insert into players (FNAME, LNAME, POSITION, POSITIONRANKING, NFLTEAM) values ('Chicago','Bears','Defense',5,'CHI');
 
 insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('jOlson', '1.21 JJ Watts'); 
 insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('cJohnson', 'Kobayshi Maru');
@@ -79,6 +85,6 @@ insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('matt', 'Hawkeyes');
 insert into weeklyTeams values (1, 1, 1);
 insert into weeklyTeams values (1, 2, 2);
 insert into weeklyTeams values (10, 1, 3);
-insert into weeklyTeams values (11,2, 4);
+insert into weeklyTeams values (11, 2, 4);
 insert into weeklyTeams values (12, 1, 5);
 insert into weeklyTeams values (13, 2, 5);
