@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Show Teams - ILM Fantasy Football</title>
+<title>Show Fantasy Teams - ILM Fantasy Football</title>
 </head>
 <body>
   <table border="1">
