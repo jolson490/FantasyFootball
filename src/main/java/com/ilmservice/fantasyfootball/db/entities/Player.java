@@ -19,20 +19,20 @@ public class Player {
   private int id;
 
   @Column(name = "FNAME")
-  String firstName;
+  private String firstName;
 
   @Column(name = "LNAME")
-  String lastName;
+  private String lastName;
 
   @Column(name = "POSITION")
-  String position;
+  private String position;
 
   @Column(name = "POSITIONRANKING")
-  int positionRanking;
+  private int positionRanking;
 
   @OneToOne
   @JoinColumn(name = "NFLTEAM")
-  NFLTeam nflTeam;
+  private NFLTeam nflTeam;
 
   public int getId() {
     return id;
@@ -65,7 +65,6 @@ public class Player {
   public int getPositionRanking() {
     return positionRanking;
   }
-
   public void setPositionRanking(int positionRanking) {
     this.positionRanking = positionRanking;
   }
@@ -80,7 +79,7 @@ public class Player {
   @Override
   public String toString() {
     return String.format(
-        "Player[id=%2d, firstName='%12s', lastName='%20s', position='%3s', positionRanking=%3d, nflTeam='%25s']", 
+        "Player[id=%2d, firstName='%12s', lastName='%20s', position='%3s', positionRanking=%3d, nflTeam='%25s']",
         id, firstName, lastName, position, positionRanking, nflTeam);
   }
 }

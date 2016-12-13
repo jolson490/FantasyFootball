@@ -18,18 +18,18 @@ public class FantasyTeam implements Serializable {
   @Column(name = "Id")
   private Integer id;
 
+  @Column(name = "username")
+  private String username;
+
+  @Column(name = "fantasyMascot")
+  private String mascot;
+
   public Integer getId() {
     return id;
   }
   public void setId(Integer id) {
     this.id = id;
   }
-
-  @Column(name = "username")
-  String username;
-
-  @Column(name = "fantasyMascot")
-  String mascot;
 
   public String getUsername() {
     return username;
