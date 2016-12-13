@@ -51,13 +51,13 @@ public class FantasyFootballController {
     return "ShowTeams";
   }
 
-  // http://localhost:8080/ILMServices-FantasyFootball/showPlayers
-  // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/showPlayers -o ShowPlayers.html
-  @RequestMapping(value = "/showPlayers", method = RequestMethod.GET)
+  // http://localhost:8080/ILMServices-FantasyFootball/nflPlayers
+  // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/nflPlayers -o NFLPlayers.html
+  @RequestMapping(value = "/nflPlayers", method = RequestMethod.GET)
   public String listPlayers(Model model) {
     logger.debug("in listPlayers()");
     model.addAttribute("playersAttribute", playerRepository.findAll());
-    return "ShowPlayers";
+    return "NFLPlayers";
   }
 
   // http://localhost:8080/ILMServices-FantasyFootball/jsptest

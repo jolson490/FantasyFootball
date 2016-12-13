@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Show NFL Players - ILM Fantasy Football</title>
+<title>NFL Players - ILM Fantasy Football</title>
 </head>
 <body>
   <table border="1">
@@ -16,14 +16,19 @@
               <c:forEach var="field" items="${currentPlayer['class'].declaredFields}">
                   <th>${field.name}</th>
               </c:forEach>
+              <th>Edit</th>
+              <th>Delete</th>
           </tr>
       </c:if>
+      
       <%-- For the current player, print the value of each of its fields. --%>
       <c:if test="${not empty currentPlayer['class'].declaredFields}">
         <tr>
           <c:forEach var="field" items="${currentPlayer['class'].declaredFields}">
             <td>${currentPlayer[field.name]}</td>            
           </c:forEach>
+          <td>Edit</td>
+          <td>Delete</td>
         </tr>
       </c:if>
     </c:forEach>
