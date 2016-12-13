@@ -51,24 +51,24 @@
 -- ----------------------------------------------
 
 -- SQL command:
---          "CREATE TABLE weeklyTeams (" 
---          + "playerID INT  NOT NULL," 
---          + "fantasyTeamId INT  NOT NULL,"
---          + "week INT  NOT NULL  CHECK (week >= 1 AND week <= 5)," 
---          + "PRIMARY KEY (playerID, fantasyTeamId, week),"
---          + "FOREIGN KEY (playerID) REFERENCES players(ID)," 
---          + "FOREIGN KEY (fantasyTeamId) REFERENCES fantasyTeams(Id)" + ")"
+--   CREATE TABLE weeklyTeams (
+--     playerID INT  NOT NULL,
+--     fantasyTeamId INT  NOT NULL,
+--     week INT  NOT NULL  CHECK (week >= 1 AND week <= 5),
+--     PRIMARY KEY (playerID, fantasyTeamId, week),
+--     FOREIGN KEY (playerID) REFERENCES players(ID),
+--     FOREIGN KEY (fantasyTeamId) REFERENCES fantasyTeams(Id) );
 CREATE TABLE "APP"."WEEKLYTEAMS" (
   "PLAYERID" INTEGER NOT NULL, 
   "FANTASYTEAMID" INTEGER NOT NULL, 
   "WEEK" INTEGER NOT NULL);
 
 -- SQL command:
---          "CREATE TABLE fantasyTeams (" 
---              + "Id INT  NOT NULL  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
---              + "username VARCHAR(50)  NOT NULL," 
---              + "fantasyMascot VARCHAR(100)  NOT NULL," 
---              + "PRIMARY KEY (Id)" + ")"
+--   CREATE TABLE fantasyTeams (
+--     Id INT  NOT NULL  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+--     username VARCHAR(50)  NOT NULL,
+--     fantasyMascot VARCHAR(100)  NOT NULL,
+--     PRIMARY KEY (Id) );
 CREATE TABLE "APP"."FANTASYTEAMS" (
   "ID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
   "USERNAME" VARCHAR(50) NOT NULL, 
@@ -78,22 +78,22 @@ CREATE TABLE "APP"."FANTASYTEAMS" (
 --   CREATE TABLE nflTeams (
 --     locationAbbreviation VARCHAR(3)  NOT NULL  PRIMARY KEY,
 --     location VARCHAR(20)  NOT NULL,
---     mascot VARCHAR(20)  NOT NULL);
+--     mascot VARCHAR(20)  NOT NULL );
 CREATE TABLE "APP"."NFLTEAMS" (
   "LOCATIONABBREVIATION" VARCHAR(3)  NOT NULL, 
   "LOCATION" VARCHAR(20)  NOT NULL, 
   "MASCOT" VARCHAR(20)  NOT NULL);
   
 -- SQL command:
--- CREATE TABLE players (
---   ID INT  NOT NULL  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
---   fname VARCHAR(50)  NOT NULL, 
---   lname VARCHAR(50)  NOT NULL, 
---   position VARCHAR(2)  NOT NULL  CONSTRAINT POSITION_CONSTRAINT CHECK (position IN ('QB', 'RB', 'WR', 'TE', 'K')),
---   positionRanking INT  NOT NULL  CHECK (positionRanking >= 0), 
---   nflTeam VARCHAR(3)  NOT NULL,
---   PRIMARY KEY (ID),
---   CONSTRAINT fk_nflTeam FOREIGN KEY (nflTeam) REFERENCES nflTeams(locationAbbreviation) );
+--   CREATE TABLE players (
+--     ID INT  NOT NULL  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+--     fname VARCHAR(50)  NOT NULL, 
+--     lname VARCHAR(50)  NOT NULL, 
+--     position VARCHAR(2)  NOT NULL  CONSTRAINT POSITION_CONSTRAINT CHECK (position IN ('QB', 'RB', 'WR', 'TE', 'K')),
+--     positionRanking INT  NOT NULL  CHECK (positionRanking >= 0), 
+--     nflTeam VARCHAR(3)  NOT NULL,
+--     PRIMARY KEY (ID),
+--     CONSTRAINT fk_nflTeam FOREIGN KEY (nflTeam) REFERENCES nflTeams(locationAbbreviation) );
 CREATE TABLE "APP"."PLAYERS" (
   "ID" INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), 
   "FNAME" VARCHAR(50) NOT NULL, 
