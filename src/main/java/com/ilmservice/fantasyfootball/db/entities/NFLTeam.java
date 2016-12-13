@@ -15,12 +15,6 @@ public class NFLTeam {
 
   private String mascot;
 
-  /*
-   * //bi-directional many-to-one association to Player
-   * 
-   * @OneToMany(mappedBy="nflteamBean") private List<Player> players;
-   */
-
   public String getLocationabbreviation() {
     return this.locationAbbreviation;
   }
@@ -42,19 +36,10 @@ public class NFLTeam {
     this.mascot = mascot;
   }
 
-  /*
-   * public List<Player> getPlayers() { return this.players; }
-   * 
-   * public void setPlayers(List<Player> players) { this.players = players; }
-   * 
-   * public Player addPlayer(Player player) { getPlayers().add(player);
-   * player.setNflteamBean(this);
-   * 
-   * return player; }
-   * 
-   * public Player removePlayer(Player player) { getPlayers().remove(player);
-   * player.setNflteamBean(null);
-   * 
-   * return player; }
-   */
+  @Override
+  public String toString() {
+    // return String.format("NFLTeam[location='%12s', mascot='%12s']", location, mascot);
+    return (location + " " + mascot);
+  }
+
 }

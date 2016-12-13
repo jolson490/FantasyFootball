@@ -1,6 +1,7 @@
 package com.ilmservice.fantasyfootball;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ilmservice.fantasyfootball.db.entities.Player;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
-import com.ilmservice.fantasyfootball.model.WeekForm;
+import com.ilmservice.fantasyfootball.db.repositories.PlayerRepository;
+import com.ilmservice.fantasyfootball.model.WeekForm;;
 
 @Controller
 @EnableAutoConfiguration
@@ -30,14 +33,22 @@ public class FantasyFootballController {
   @Autowired
   private FantasyTeamRepository fantasyTeamRepository;
 
-  // @Autowired
-  // private PlayerRepository playerRepository;
+  @Autowired
+  private PlayerRepository playerRepository;
 
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
     logger.debug("in home()");
     // showData();
+
+    long numberPlayers = playerRepository.count();
+    logger.debug("number of NFL players: {}", numberPlayers);
+
+    // (prints all of the fields/columns for each of the players)
+    List<Player> players = (List<Player>) playerRepository.findAll();
+    players.stream().forEach(player -> logger.debug("NFL player: {}", player.toString()));
+
     return "index";
   }
 
@@ -48,6 +59,15 @@ public class FantasyFootballController {
     logger.debug("in listTeams()");
     model.addAttribute("teamsAttribute", fantasyTeamRepository.findAll());
     return "ShowTeams";
+  }
+
+  // http://localhost:8080/ILMServices-FantasyFootball/showPlayers
+  // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/showPlayers -o ShowPlayers.html
+  @RequestMapping(value = "/showPlayers", method = RequestMethod.GET)
+  public String listPlayers(Model model) {
+    logger.debug("in listPlayers()");
+    model.addAttribute("playersAttribute", playerRepository.findAll());
+    return "ShowPlayers";
   }
 
   // http://localhost:8080/ILMServices-FantasyFootball/jsptest
@@ -94,7 +114,7 @@ public class FantasyFootballController {
     if (result.hasErrors()) {
       // Since the code inside this "if" check is only for curl commands, do not
       // bother creating & adding 'weeksMap'.
-      
+
       // NOTE: In order to avoid encountering the following exception, both "ChooseWeek" and "ShowWeek" use the same name ("weekAttribute") for the model attribute.
       //  * "java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'blankWeek' available as request attribute"
 

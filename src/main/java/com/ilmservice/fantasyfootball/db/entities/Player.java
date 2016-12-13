@@ -27,12 +27,12 @@ public class Player {
   @Column(name = "POSITION")
   String position;
 
+  @Column(name = "POSITIONRANKING")
+  int positionRanking;
+
   @OneToOne
   @JoinColumn(name = "NFLTEAM")
   NFLTeam nflTeam;
-
-  @Column(name = "POSITIONRANKING")
-  int positionRanking;
 
   public int getId() {
     return id;
@@ -62,6 +62,14 @@ public class Player {
     this.position = position;
   }
 
+  public int getPositionRanking() {
+    return positionRanking;
+  }
+
+  public void setPositionRanking(int positionRanking) {
+    this.positionRanking = positionRanking;
+  }
+
   public NFLTeam getNflTeam() {
     return nflTeam;
   }
@@ -69,10 +77,10 @@ public class Player {
     this.nflTeam = nflTeam;
   }
 
-  public int getPositionRanking() {
-    return positionRanking;
-  }
-  public void setPositionRanking(int positionRanking) {
-    this.positionRanking = positionRanking;
+  @Override
+  public String toString() {
+    return String.format(
+        "Player[id=%2d, firstName='%12s', lastName='%20s', position='%3s', positionRanking=%3d, nflTeam='%25s']", 
+        id, firstName, lastName, position, positionRanking, nflTeam);
   }
 }

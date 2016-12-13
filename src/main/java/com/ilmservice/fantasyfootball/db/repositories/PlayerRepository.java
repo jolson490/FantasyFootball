@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.ilmservice.fantasyfootball.db.entities.Player;
 
-public interface PlayerRepository extends CrudRepository<Player, Long> {
+public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
 }
