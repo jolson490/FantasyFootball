@@ -38,7 +38,6 @@ public class NFLTeam {
 
   @Override
   public String toString() {
-    // return String.format("NFLTeam[location='%12s', mascot='%12s']", location, mascot);
     return (location + " " + mascot);
   }
 

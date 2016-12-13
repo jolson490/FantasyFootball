@@ -1,7 +1,6 @@
 package com.ilmservice.fantasyfootball;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilmservice.fantasyfootball.db.entities.Player;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
 import com.ilmservice.fantasyfootball.db.repositories.PlayerRepository;
 import com.ilmservice.fantasyfootball.model.WeekForm;;
@@ -41,14 +39,6 @@ public class FantasyFootballController {
   public String home() {
     logger.debug("in home()");
     // showData();
-
-    long numberPlayers = playerRepository.count();
-    logger.debug("number of NFL players: {}", numberPlayers);
-
-    // (prints all of the fields/columns for each of the players)
-    List<Player> players = (List<Player>) playerRepository.findAll();
-    players.stream().forEach(player -> logger.debug("NFL player: {}", player.toString()));
-
     return "index";
   }
 
@@ -133,10 +123,17 @@ public class FantasyFootballController {
     // (prints 8)
     long numberTeams = fantasyTeamRepository.count();
     logger.debug("number of fantasy teams: {}", numberTeams);
-
+    //
     // (prints all of the fields/columns for each of the 8 fantasy teams)
     List<FantasyTeam> fantasyTeams = (List<FantasyTeam>)fantasyTeamRepository.findAll();
     fantasyTeams.stream().forEach(fantasyTeam -> logger.debug("fantasyTeam: {}", fantasyTeam.toString()));
+
+    long numberPlayers = playerRepository.count();
+    logger.debug("number of NFL players: {}", numberPlayers);
+    //
+    // (prints all of the fields/columns for each of the players)
+    List<Player> players = (List<Player>) playerRepository.findAll();
+    players.stream().forEach(player -> logger.debug("NFL player: {}", player.toString()));
 
     logger.debug("end showData");
   }
