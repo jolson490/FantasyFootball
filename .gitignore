@@ -1,6 +1,5 @@
-/derby.log
-/src/main/resources/derby.log
+derby.log
 /nflDB/
 /target/
-/dblook.log
+dblook.log
 /.springBeans

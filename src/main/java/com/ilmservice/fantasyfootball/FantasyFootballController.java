@@ -1,7 +1,10 @@
 package com.ilmservice.fantasyfootball;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -9,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ilmservice.fantasyfootball.db.entities.NFLTeam;
+import com.ilmservice.fantasyfootball.db.entities.Player;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
+import com.ilmservice.fantasyfootball.db.repositories.NFLTeamRepository;
 import com.ilmservice.fantasyfootball.db.repositories.PlayerRepository;
 import com.ilmservice.fantasyfootball.model.WeekForm;;
 
@@ -34,11 +41,17 @@ public class FantasyFootballController {
   @Autowired
   private PlayerRepository playerRepository;
 
+  @Autowired
+  private NFLTeamRepository nflTeamRepository;
+
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
     logger.debug("in home()");
-    // showData();
+
+    showData();
+    testPlayers();
+
     return "index";
   }
 
@@ -106,7 +119,7 @@ public class FantasyFootballController {
       // bother creating & adding 'weeksMap'.
 
       // NOTE: In order to avoid encountering the following exception, both "ChooseWeek" and "ShowWeek" use the same name ("weekAttribute") for the model attribute.
-      //  * "java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'blankWeek' available as request attribute"
+      // * "java.lang.IllegalStateException: Neither BindingResult nor plain target object for bean name 'blankWeek' available as request attribute"
 
       return "ChooseWeek";
     }
@@ -115,29 +128,112 @@ public class FantasyFootballController {
     return "ShowWeek";
   }
 
-  //@formatter:off
-  /*
+  // ************************ BEGIN DEBUG/TESTING CODE... ************************
   private void showData() {
-    logger.debug("begin showData(): fantasyTeamRepository={}", fantasyTeamRepository);
-
-    // (prints 8)
-    long numberTeams = fantasyTeamRepository.count();
-    logger.debug("number of fantasy teams: {}", numberTeams);
-    //
-    // (prints all of the fields/columns for each of the 8 fantasy teams)
-    List<FantasyTeam> fantasyTeams = (List<FantasyTeam>)fantasyTeamRepository.findAll();
-    fantasyTeams.stream().forEach(fantasyTeam -> logger.debug("fantasyTeam: {}", fantasyTeam.toString()));
-
-    long numberPlayers = playerRepository.count();
-    logger.debug("number of NFL players: {}", numberPlayers);
-    //
-    // (prints all of the fields/columns for each of the players)
-    List<Player> players = (List<Player>) playerRepository.findAll();
-    players.stream().forEach(player -> logger.debug("NFL player: {}", player.toString()));
-
-    logger.debug("end showData");
+    // showFantasyTeams();
+    // showNflTeams();
+    showNflPlayers();
   }
-   */
-  //@formatter:on
 
+  @SuppressWarnings("unused")
+  private void showFantasyTeams() {
+    showTable(fantasyTeamRepository, "Fantasy team");
+  }
+
+  @SuppressWarnings("unused")
+  private void showNflTeams() {
+    showTable(nflTeamRepository, "NFL team");
+  }
+
+  private void showNflPlayers() {
+    showTable(playerRepository, "NFL player");
+  }
+
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  private void showTable(CrudRepository repository, String entityName) {
+    logger.debug("in showTable()");
+    long numberEntities = repository.count();
+    logger.debug("number of {}s: {}", entityName, numberEntities);
+
+    // (prints all of the fields/columns for each of the entities)
+    ArrayList entities = (ArrayList) repository.findAll();
+    entities.stream().forEach(entity -> logger.debug("{}: {}", entityName, entity.toString()));
+  }
+
+  private void testPlayers() {
+    deletePlayerIfExists("Josh", "Olson");
+    deletePlayerIfExists("Jason", "Erdahl");
+    showNflPlayers();
+
+    addPlayer("Josh", "Olson", "QB", 9, "GB");
+    addPlayer("Jason", "Erdahl", "QB", 0, "GB");
+    showNflPlayers();
+  }
+  // ************************ ...END DEBUG/TESTING CODE ************************
+
+  // Note that the names are treated as case insensitive.
+  private void deletePlayerIfExists(final String firstName, final String lastName) {
+    // find & delete the player(s)
+    logger.debug("in deletePlayerIfExists(): firstName={} lastName={}", firstName, lastName);
+    List<Player> players = playerRepository.findByFirstName_AndLastName_AllIgnoreCase(firstName, lastName);
+    logger.debug("number of players to delete: {}", players.size());
+    players.stream().forEach(player -> logger.debug("about to delete NFL player: {}", player.toString()));
+    players.stream().forEach(player -> playerRepository.delete(player));
+
+    if (players.size() > 0) {
+      reorderPlayersRankings();
+    }
+  }
+
+  private void reorderPlayersRankings() {
+    logger.debug("in reorderPlayersRankings()");
+    // Go through all the players and update their ranking - might not be the
+    // most efficient, but requires the least amount of code. :)
+    List<Player> nflPlayers = (List<Player>) playerRepository.findAll();
+    for (int playerCounter = 1; playerCounter <= nflPlayers.size(); playerCounter++) {
+      logger.debug("setting ranking to {} for player...: {}", playerCounter, nflPlayers.get(playerCounter - 1));
+      nflPlayers.get(playerCounter - 1).setNflRanking(playerCounter);
+      logger.debug("...player's ranking now set to: {}", nflPlayers.get(playerCounter - 1).getNflRanking());
+    }
+
+    // Make sure the next nflRanking value is correct.
+    playerRepository.restartNflRanking(); //// playerRepository.count() + 1
+  }
+
+  // TO-DO make this application thread-safe - e.g. what if another user between
+  // getMaxNflRanking and playerRepository.save? (Currently this implementation
+  // isn't foolproof with ensuring/maintaining the sort order of the
+  // 'nflRanking' field.)
+  private void addPlayer(final String firstName, final String lastName, final String position, final int nflRanking, final String nflTeamAbbreviation) {
+    logger.debug("in addPlayer(): firstName={} lastName={} position={} nflRanking={} nflTeamAbbreviation={}",
+        firstName, lastName, position, nflRanking, nflTeamAbbreviation);
+    logger.debug("number of existing players with nflRanking of {}: {}", nflRanking,
+        playerRepository.countByNflRanking(nflRanking));
+
+    final int curentMaxNflRanking = playerRepository.getMaxNflRanking();
+    logger.debug("curentMaxNflRanking: {}", curentMaxNflRanking);
+
+    List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
+    Optional<NFLTeam> optionalNflTeam = nflTeams.stream()
+        .filter(nflTeam -> nflTeam.getLocationabbreviation().equals(nflTeamAbbreviation)).findFirst();
+    if (!optionalNflTeam.isPresent()) {
+      logger.error("NFLTeam not found for abbreviation: {}", nflTeamAbbreviation);
+    }
+    else {
+      NFLTeam nflTeam = optionalNflTeam.get();
+
+      Player newPlayer = new Player(firstName, lastName, position, nflRanking, nflTeam);
+      logger.debug("about to create/save new player: {}", newPlayer);
+      // TODO1: the db ignores the value of nflRanking in newPlayer - i.e. db always uses next generated value. (Matters for insert in middle table.)
+      playerRepository.save(newPlayer);
+
+      // If the user did not specify a value for nflRanking, then the db (in the call above to save) will have generated the correct next value for
+      // 'nflRanking' (and updated the next value to be generated accordingly) - in which case there's no need to tell the db to do anything further (TODO1 test this).
+      // (Note that we also don't need to go into the following "if" check if the user happened to specify the next value that the db was going to
+      // generate, but I don't bother checking for that.)
+      if (nflRanking > 0) {
+        reorderPlayersRankings();
+      }
+    }
+  }
 }
