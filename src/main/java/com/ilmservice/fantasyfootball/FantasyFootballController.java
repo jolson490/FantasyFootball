@@ -197,7 +197,7 @@ public class FantasyFootballController {
     }
 
     // Make sure the next nflRanking value is correct.
-    playerRepository.restartNflRanking(); //// playerRepository.count() + 1
+    playerRepository.restartNflRanking(playerRepository.count() + 1);
   }
 
   // TO-DO make this application thread-safe - e.g. what if another user between

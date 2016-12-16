@@ -17,9 +17,8 @@ import org.hibernate.annotations.GenerationTime;
 @Entity
 @NamedNativeQuery(
     name = "Player.restartNflRanking",
-    query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH 83",
+    query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH :nextGeneratedValue",
     resultClass = Player.class
-//// WITH :nextGeneratedValue"
     )
 @Table(name = "Players")
 public class Player {
