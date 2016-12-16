@@ -27,6 +27,7 @@ import com.ilmservice.fantasyfootball.db.entities.NFLTeam;
 import com.ilmservice.fantasyfootball.db.entities.Player;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
 import com.ilmservice.fantasyfootball.db.repositories.NFLTeamRepository;
+import com.ilmservice.fantasyfootball.db.repositories.PlayerDao;
 import com.ilmservice.fantasyfootball.db.repositories.PlayerRepository;
 import com.ilmservice.fantasyfootball.model.WeekForm;;
 
@@ -43,6 +44,9 @@ public class FantasyFootballController {
 
   @Autowired
   private NFLTeamRepository nflTeamRepository;
+
+  @Autowired
+  private PlayerDao playerDao;
 
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
@@ -216,7 +220,7 @@ public class FantasyFootballController {
     }
 
     // Make sure the next nflRanking value is correct.
-    playerRepository.restartNflRankingHardCoded(); /// (int) (playerRepository.count() + 1)
+    playerDao.restartNflRanking((int) (playerRepository.count() + 1));
   }
 
   // TO-DO make this application thread-safe - e.g. what if another user between

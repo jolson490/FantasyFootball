@@ -18,7 +18,7 @@ import org.hibernate.annotations.GenerationTime;
 @Entity
 @Table(name = "Players")
 @NamedNativeQueries({
-  // This query doesn't work if I change the hard-coded number to a (positional or named) input parameter.
+  // This query doesn't work (get SQLSyntaxErrorException) if I change the hard-coded number to a (positional or named) JPQL input parameter.
   @NamedNativeQuery(
       name = "Player.restartNflRankingHardCoded",
       query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH 99", /// WITH :nextGeneratedValue /// WITH ?1
