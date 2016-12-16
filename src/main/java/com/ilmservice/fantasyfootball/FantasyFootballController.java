@@ -146,7 +146,7 @@ public class FantasyFootballController {
   }
 
   private void showNflPlayers() {
-    /// showTable(playerRepository, "NFL player");
+    showTable(playerRepository, "NFL player");
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -161,17 +161,20 @@ public class FantasyFootballController {
   }
 
   private void testPlayers() {
-    testNativeJPASelectQueriesWithParameter();
+    // testNativeJPASelectQueriesWithParameter();
 
     deletePlayerIfExists("Josh", "Olson");
+    deletePlayerIfExists("Matt", "McDonald");
     deletePlayerIfExists("Jason", "Erdahl");
     showNflPlayers();
 
-    addPlayer("Josh", "Olson", "QB", 9, "GB");
+    addPlayer("Josh", "Olson", "QB", 3, "GB");
+    addPlayer("Matt", "McDonald", "K", 444, "MIN");
     addPlayer("Jason", "Erdahl", "QB", 0, "GB");
     showNflPlayers();
   }
 
+  @SuppressWarnings("unused")
   private void testNativeJPASelectQueriesWithParameter() {
     logger.debug("in testNativeJPASelectQueriesWithParameter()");
 
@@ -202,18 +205,18 @@ public class FantasyFootballController {
   }
 
   private void reorderPlayersRankings() {
-    logger.debug("in reorderPlayersRankings()");
+    logger.debug("in reorderPlayersRankings(): playerRepository.count()={}", playerRepository.count());
     // Go through all the players and update their ranking - might not be the
     // most efficient, but requires the least amount of code. :)
-    List<Player> nflPlayers = playerRepository.findAll();
+    List<Player> nflPlayers = (List<Player>) playerRepository.findAll();
     for (int playerCounter = 1; playerCounter <= nflPlayers.size(); playerCounter++) {
-      logger.debug("setting ranking to {} for player...: {}", playerCounter, nflPlayers.get(playerCounter - 1));
+      logger.trace("setting ranking to {} for player...: {}", playerCounter, nflPlayers.get(playerCounter - 1));
       nflPlayers.get(playerCounter - 1).setNflRanking(playerCounter);
-      logger.debug("...player's ranking now set to: {}", nflPlayers.get(playerCounter - 1).getNflRanking());
+      logger.trace("...player's ranking now set to: {}", nflPlayers.get(playerCounter - 1).getNflRanking());
     }
 
     // Make sure the next nflRanking value is correct.
-    playerRepository.restartNflRanking((int) (playerRepository.count() + 1)); ///
+    playerRepository.restartNflRankingHardCoded(); /// (int) (playerRepository.count() + 1)
   }
 
   // TO-DO make this application thread-safe - e.g. what if another user between
