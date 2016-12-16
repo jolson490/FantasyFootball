@@ -34,7 +34,7 @@ public interface PlayerRepository extends JpaRepository<Player, Integer> {
   @Transactional
   @Modifying
   @Query(nativeQuery = true)
-  void restartNflRanking(@Param("nextGeneratedValue") int nextGeneratedValue); ///
+  void restartNflRanking(int nextGeneratedValue); /// @Param("nextGeneratedValue")
 
   // Test out different queries than restartNflRanking - but somewhat similar.
   @Query(nativeQuery = true)

@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenerationTime;
   // This query doesn't work if I change the hard-coded number to a (positional or named) input parameter.
   @NamedNativeQuery(
       name = "Player.restartNflRanking",
-      query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH :nextGeneratedValue", /// WITH ?1 /// WITH 99
+      query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH ?1", /// WITH :nextGeneratedValue /// WITH 99
       resultClass = Player.class
       ),
   // Both of the following queries work (the JPA 2.1 spec
