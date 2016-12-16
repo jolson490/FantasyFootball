@@ -27,7 +27,6 @@ import com.ilmservice.fantasyfootball.db.entities.NFLTeam;
 import com.ilmservice.fantasyfootball.db.entities.Player;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
 import com.ilmservice.fantasyfootball.db.repositories.NFLTeamRepository;
-import com.ilmservice.fantasyfootball.db.repositories.PlayerDao;
 import com.ilmservice.fantasyfootball.db.repositories.PlayerRepository;
 import com.ilmservice.fantasyfootball.model.WeekForm;;
 
@@ -45,8 +44,8 @@ public class FantasyFootballController {
   @Autowired
   private NFLTeamRepository nflTeamRepository;
 
-  @Autowired
-  private PlayerDao playerDao;
+  // @Autowired
+  // private PlayerDao playerDao;
 
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
@@ -165,7 +164,7 @@ public class FantasyFootballController {
   }
 
   private void testPlayers() {
-    // testNativeJPASelectQueriesWithParameter();
+    testNativeJPASelectQueriesWithParameter();
 
     deletePlayerIfExists("Josh", "Olson");
     deletePlayerIfExists("Matt", "McDonald");
@@ -178,19 +177,20 @@ public class FantasyFootballController {
     showNflPlayers();
   }
 
-  @SuppressWarnings("unused")
   private void testNativeJPASelectQueriesWithParameter() {
     logger.debug("in testNativeJPASelectQueriesWithParameter()");
 
     List<Player> specifiedPositionalPlayers = playerRepository.getForPositionalSpecifiedRanking(1);
     logger.debug("number of players found by getForPositionalSpecifiedRanking: {}", specifiedPositionalPlayers.size());
-    specifiedPositionalPlayers.stream().forEach(specifiedPositionalPlayer -> logger
-        .debug("specifiedPositionalPlayer: {}", specifiedPositionalPlayer.toString()));
+    specifiedPositionalPlayers.stream().forEach(specifiedPositionalPlayer -> logger.debug("specifiedPositionalPlayer: {}", specifiedPositionalPlayer.toString()));
 
     List<Player> specifiedNamedPlayers = playerRepository.getForNamedSpecifiedRanking(9);
     logger.debug("number of players found by getForNamedSpecifiedRanking: {}", specifiedNamedPlayers.size());
-    specifiedNamedPlayers.stream()
-    .forEach(specifiedNamedPlayer -> logger.debug("specifiedNamedPlayer: {}", specifiedNamedPlayer.toString()));
+    specifiedNamedPlayers.stream().forEach(specifiedNamedPlayer -> logger.debug("specifiedNamedPlayer: {}", specifiedNamedPlayer.toString()));
+
+    List<Player> specifiedSpELPlayers = playerRepository.getForSpELSpecifiedRanking(4);
+    logger.debug("number of players found by getForSpELSpecifiedRanking: {}", specifiedSpELPlayers.size());
+    specifiedSpELPlayers.stream().forEach(specifiedSpELPlayer -> logger.debug("specifiedSpELPlayer: {}", specifiedSpELPlayer.toString()));
   }
   // ************************ ...END DEBUG/TESTING CODE ************************
 
@@ -220,7 +220,9 @@ public class FantasyFootballController {
     }
 
     // Make sure the next nflRanking value is correct.
-    playerDao.restartNflRanking((int) (playerRepository.count() + 1));
+    logger.debug("about to call restartNflRanking");
+    /// playerDao.restartNflRanking((int) (playerRepository.count() + 1));
+    playerRepository.restartNflRanking((int) (playerRepository.count() + 1));
   }
 
   // TO-DO make this application thread-safe - e.g. what if another user between
@@ -258,5 +260,5 @@ public class FantasyFootballController {
         reorderPlayersRankings();
       }
     }
-  }
+  } // end addPlayer
 }

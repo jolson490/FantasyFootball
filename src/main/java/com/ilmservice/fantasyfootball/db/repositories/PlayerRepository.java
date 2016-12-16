@@ -28,14 +28,23 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
   int countByNflRanking(Integer nflRanking);
 
+  // java.sql.SQLSyntaxErrorException: Syntax error: Encountered "?" at line 1, column 58.
   @Transactional
   @Modifying
-  @Query(nativeQuery = true)
-  void restartNflRankingHardCoded(); /// @Param("nextGeneratedValue") int nextGeneratedValue
+  @Query(value = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH ?#{[0]}", nativeQuery = true)
+  void restartNflRanking(int nextGeneratedValue); /// @Param("nextGeneratedValue") int nextGeneratedValue
 
   // Test out different queries than restartNflRankingHardCoded - but somewhat similar.
+  //
+  // JPQL positional input parameter
   @Query(nativeQuery = true)
   List<Player> getForPositionalSpecifiedRanking(int theRanking);
+  //
+  // JPQL named input parameter
   @Query(nativeQuery = true)
   List<Player> getForNamedSpecifiedRanking(@Param("theRanking") int theRanking);
+  //
+  // SpEL dynamically bound query parameter - access the method argument
+  @Query(value = "SELECT * FROM players WHERE nflRanking= ?#{[0]}", nativeQuery = true)
+  List<Player> getForSpELSpecifiedRanking(int nextGeneratedValue);
 }
