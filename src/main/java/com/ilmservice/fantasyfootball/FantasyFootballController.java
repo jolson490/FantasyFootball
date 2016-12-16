@@ -161,6 +161,8 @@ public class FantasyFootballController {
   }
 
   private void testPlayers() {
+    testNativeJPASelectQueriesWithParameter();
+
     deletePlayerIfExists("Josh", "Olson");
     deletePlayerIfExists("Jason", "Erdahl");
     showNflPlayers();
@@ -168,6 +170,20 @@ public class FantasyFootballController {
     addPlayer("Josh", "Olson", "QB", 9, "GB");
     addPlayer("Jason", "Erdahl", "QB", 0, "GB");
     showNflPlayers();
+  }
+
+  private void testNativeJPASelectQueriesWithParameter() {
+    logger.debug("in testNativeJPASelectQueriesWithParameter()");
+
+    List<Player> specifiedPositionalPlayers = playerRepository.getForPositionalSpecifiedRanking(1);
+    logger.debug("number of players found by getForPositionalSpecifiedRanking: {}", specifiedPositionalPlayers.size());
+    specifiedPositionalPlayers.stream().forEach(specifiedPositionalPlayer -> logger
+        .debug("specifiedPositionalPlayer: {}", specifiedPositionalPlayer.toString()));
+
+    List<Player> specifiedNamedPlayers = playerRepository.getForNamedSpecifiedRanking(9);
+    logger.debug("number of players found by getForNamedSpecifiedRanking: {}", specifiedNamedPlayers.size());
+    specifiedNamedPlayers.stream()
+    .forEach(specifiedNamedPlayer -> logger.debug("specifiedNamedPlayer: {}", specifiedNamedPlayer.toString()));
   }
   // ************************ ...END DEBUG/TESTING CODE ************************
 
@@ -197,7 +213,7 @@ public class FantasyFootballController {
     }
 
     // Make sure the next nflRanking value is correct.
-    playerRepository.restartNflRanking(playerRepository.count() + 1);
+    playerRepository.restartNflRanking(); /// playerRepository.count() + 1
   }
 
   // TO-DO make this application thread-safe - e.g. what if another user between

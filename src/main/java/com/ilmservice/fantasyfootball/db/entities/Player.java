@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -15,11 +16,26 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 @Entity
-@NamedNativeQuery(
+@NamedNativeQueries({
+  // This query doesn't work if I change the hard-coded number to a (positional or named) input parameter.
+  @NamedNativeQuery(
     name = "Player.restartNflRanking",
-    query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH :nextGeneratedValue",
+    query = "ALTER TABLE players ALTER COLUMN nflRanking RESTART WITH 99", /// WITH ?1 /// WITH :nextGeneratedValue
+    resultClass = Player.class
+    ),
+  // Both of the following queries work (the JPA 2.1 spec
+  // says: "Input parameters can only be used in the WHERE clause or HAVING clause of a query or as the new value for an update item in the SET clause of an update statement.").
+  @NamedNativeQuery(
+    name = "Player.getForPositionalSpecifiedRanking",
+    query = "SELECT * FROM players WHERE nflRanking=?1",
+    resultClass = Player.class
+    ),
+  @NamedNativeQuery(
+    name = "Player.getForNamedSpecifiedRanking",
+    query = "SELECT * FROM players WHERE nflRanking=:theRanking",
     resultClass = Player.class
     )
+})
 @Table(name = "Players")
 public class Player {
 

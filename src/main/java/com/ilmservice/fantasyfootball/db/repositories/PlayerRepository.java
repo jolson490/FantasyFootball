@@ -34,5 +34,11 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
   @Transactional
   @Modifying
   @Query(nativeQuery = true)
-  void restartNflRanking(@Param("nextGeneratedValue") long nextGeneratedValue);
+  void restartNflRanking(); /// @Param("nextGeneratedValue") long nextGeneratedValue
+
+  // Test out different queries than restartNflRanking - but somewhat similar.
+  @Query(nativeQuery = true)
+  List<Player> getForPositionalSpecifiedRanking(int theRanking);
+  @Query(nativeQuery = true)
+  List<Player> getForNamedSpecifiedRanking(@Param("theRanking") int theRanking);
 }
