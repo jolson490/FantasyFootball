@@ -146,7 +146,7 @@ public class FantasyFootballController {
   }
 
   private void showNflPlayers() {
-    showTable(playerRepository, "NFL player");
+    /// showTable(playerRepository, "NFL player");
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -205,7 +205,7 @@ public class FantasyFootballController {
     logger.debug("in reorderPlayersRankings()");
     // Go through all the players and update their ranking - might not be the
     // most efficient, but requires the least amount of code. :)
-    List<Player> nflPlayers = (List<Player>) playerRepository.findAll();
+    List<Player> nflPlayers = playerRepository.findAll();
     for (int playerCounter = 1; playerCounter <= nflPlayers.size(); playerCounter++) {
       logger.debug("setting ranking to {} for player...: {}", playerCounter, nflPlayers.get(playerCounter - 1));
       nflPlayers.get(playerCounter - 1).setNflRanking(playerCounter);
@@ -213,7 +213,7 @@ public class FantasyFootballController {
     }
 
     // Make sure the next nflRanking value is correct.
-    playerRepository.restartNflRanking(); /// playerRepository.count() + 1
+    playerRepository.restartNflRanking((int) (playerRepository.count() + 1)); ///
   }
 
   // TO-DO make this application thread-safe - e.g. what if another user between
