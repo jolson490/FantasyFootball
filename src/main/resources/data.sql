@@ -4,69 +4,70 @@
 
 SET SCHEMA APP;
 
+-- For simplicity, this application only has 5 NFL Teams - the 5 teams that were in the NFC Central Division (before the realignment that occurred in 2002).
 insert into nflTeams (locationAbbreviation, location, mascot) values ('GB', 'Green Bay', 'Packers');
 insert into nflTeams (locationAbbreviation, location, mascot) values ('DET', 'Detroit', 'Lions'); 
 insert into nflTeams (locationAbbreviation, location, mascot) values ('CHI', 'Chicago', 'Bears'); 
 insert into nflTeams (locationAbbreviation, location, mascot) values ('MIN', 'Minnesota', 'Vikings'); 
 insert into nflTeams (locationAbbreviation, location, mascot) values ('TB', 'Tampa Bay', 'Buccaneers'); 
 
---TODO1: change logical value from positionRanking to nflRanking - keep DEFAULT, re-order all players?
+-- To create the "insert into players" commands, the following spreadsheet was used as a starting point: http://www.scoresheet.com/FB_2015_num.xls 
+--  * (As noted on http://www.scoresheet.com/FB_current.php, the columns in that spreadsheet are: SS Player Number, 2014 Total Points, Points Per Game, Age, Team and Bye, Name.)
+--  * TO-DO: Instead of storing/maintaing a sort-ordered/unique nflRanking, perhaps:
+--     ** the "2014 Total Points" column (from the spreadsheet) should be stored/used (in this 'players') table,
+--     ** and derive the corresponding NFL Ranking if needed. 
 insert into players values (NEXT VALUE FOR playerPK_seq,'Aaron','Rodgers','QB',DEFAULT,'GB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Matthew','Stafford','QB',DEFAULT,'DET');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Jay','Cutler','QB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Teddy','Bridgewater','QB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Shaun','Hill','QB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Glennon','QB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jimmy','Clausen','QB',DEFAULT,'CHI');
-
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Forte','RB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Eddie','Lacy','RB',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Joique','Bell','RB',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Asiata','RB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jerick','McKinnon','RB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Bobby','Rainey','RB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Doug','Martin','RB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'James','Starks','RB',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Theo','Riddick','RB',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jacquizz','Rodgers','RB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Charles','Sims','RB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'KaDeem','Carey','RB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Adrian','Peterson','RB',DEFAULT,'MIN');
-
 insert into players values (NEXT VALUE FOR playerPK_seq,'Jordy','Nelson','WR',DEFAULT,'GB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Forte','RB',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Teddy','Bridgewater','QB',DEFAULT,'MIN');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Randall','Cobb','WR',DEFAULT,'GB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Eddie','Lacy','RB',DEFAULT,'GB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Golden','Tate','WR',DEFAULT,'DET');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Alshon','Jeffery','WR',DEFAULT,'CHI');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Evans','WR',DEFAULT,'TB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Calvin','Johnson','WR',DEFAULT,'DET');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Martellus','Bennett','TE',DEFAULT,'CHI');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Wallace','WR',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Joique','Bell','RB',DEFAULT,'DET');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Vincent','Jackson','WR',DEFAULT,'TB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Eddie','Royal','WR',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Asiata','RB',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Shaun','Hill','QB',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Mason','Crosby','K',DEFAULT,'GB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Jarius','Wright','WR',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Glennon','QB',DEFAULT,'TB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Blair','Walsh','K',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Patrick','Murray','K',DEFAULT,'TB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Cordarrelle','Patterson','WR',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Jerick','McKinnon','RB',DEFAULT,'MIN');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Davante','Adams','WR',DEFAULT,'GB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Bobby','Rainey','RB',DEFAULT,'TB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Prater','K',DEFAULT,'DET');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Charles','Johnson','WR',DEFAULT,'MIN');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Louis','Murphy','WR',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jeremy','Ross','WR',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Corey','Fuller','WR',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Marquess','Wilson','WR',DEFAULT,'CHI');
-
-insert into players values (NEXT VALUE FOR playerPK_seq,'Martellus','Bennett','TE',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Doug','Martin','RB',DEFAULT,'TB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Andrew','Quarless','TE',DEFAULT,'GB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'James','Starks','RB',DEFAULT,'GB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Theo','Riddick','RB',DEFAULT,'DET');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Jacquizz','Rodgers','RB',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Jeremy','Ross','WR',DEFAULT,'DET');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Kyle','Rudolph','TE',DEFAULT,'MIN');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Eric','Ebron','TE',DEFAULT,'DET');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Richard','Rodgers','TE',DEFAULT,'GB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Austin','Seferian-Jenkins','TE',DEFAULT,'TB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Rhett','Ellison','TE',DEFAULT,'MIN');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Charles','Sims','RB',DEFAULT,'TB');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Brandon','Myers','TE',DEFAULT,'TB');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Corey','Fuller','WR',DEFAULT,'DET');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Marquess','Wilson','WR',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Robbie','Gould','K',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'KaDeem','Carey','RB',DEFAULT,'CHI');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Dante','Rosario','TE',DEFAULT,'CHI');
 insert into players values (NEXT VALUE FOR playerPK_seq,'Brandon','Pettigrew','TE',DEFAULT,'DET');
-
-insert into players values (NEXT VALUE FOR playerPK_seq,'Mason','Crosby','K',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Blair','Walsh','K',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Patrick','Murray','K',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Prater','K',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Robbie','Gould','K',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Jimmy','Clausen','QB',DEFAULT,'CHI');
+insert into players values (NEXT VALUE FOR playerPK_seq,'Adrian','Peterson','RB',DEFAULT,'MIN');
 
 -- insert into players values (NEXT VALUE FOR playerPK_seq,'Detroit','Lions','Defense',DEFAULT,'DET');
 -- insert into players values (NEXT VALUE FOR playerPK_seq,'Minnesota','Vikings','Defense',DEFAULT,'MIN');
