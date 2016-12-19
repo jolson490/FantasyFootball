@@ -54,7 +54,7 @@ public class FantasyFootballController {
     logger.debug("in home()");
 
     showData();
-    testPlayers();
+    // testPlayers();
 
     return "index";
   }
@@ -169,6 +169,7 @@ public class FantasyFootballController {
     entities.stream().forEach(entity -> logger.debug("{}: {}", entityName, entity.toString()));
   }
 
+  @SuppressWarnings("unused")
   private void testPlayers() {
     logger.debug("in testPlayers()");
 
