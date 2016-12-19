@@ -25,7 +25,7 @@ public class Player {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "playerPK_generator")
   @SequenceGenerator(name = "playerPK_generator", schema = "APP", sequenceName = "playerPK_seq", initialValue = 1, allocationSize = 1)
   @Column(name = "PLAYERPK")
-  private int playerPK;
+  private Integer playerPK;
 
   @Column(name = "FNAME")
   private String firstName;
@@ -59,10 +59,11 @@ public class Player {
     setNflTeam(nflTeam);
   }
 
-  public int getPlayerPK() {
+  public Integer getPlayerPK() {
     return playerPK;
   }
-  public void setPlayerPK(int playerPK) {
+
+  public void setPlayerPK(Integer playerPK) {
     this.playerPK = playerPK;
   }
 
@@ -107,4 +108,22 @@ public class Player {
         "Player[playerPK=%5d, firstName='%12s', lastName='%20s', position='%3s', nflRanking=%3d, nflTeam='%25s']",
         playerPK, firstName, lastName, position, nflRanking, nflTeam);
   }
+
+  //@formatter:off
+  /*
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (playerPK == null || obj == null || getClass() != obj.getClass())
+      return false;
+    Player that = (Player) obj;
+    return playerPK.equals(that.playerPK);
+  }
+  @Override
+  public int hashCode() {
+    return playerPK == null ? 0 : playerPK.hashCode();
+  }
+   */
+  //@formatter:on
 }

@@ -115,7 +115,6 @@ public class FantasyFootballController {
     }
 
     addPlayer(theBoundPlayer);
-    showNflPlayers(); ///
 
     return "redirect:/nflPlayers";
   }
@@ -260,10 +259,17 @@ public class FantasyFootballController {
     // most efficient, but requires the least amount of code. :)
     // This method is not a no-op when a player has been inserted/removed somewhere from the middle (with regards to nflRanking).
     List<Player> nflPlayers = playerRepository.findAllByOrderByNflRankingAsc();
-    for (int playerCounter = 1; playerCounter <= nflPlayers.size(); playerCounter++) {
-      logger.trace("setting ranking to {} for player...: {}", playerCounter, nflPlayers.get(playerCounter - 1));
-      nflPlayers.get(playerCounter - 1).setNflRanking(playerCounter);
-      logger.trace("...player's ranking now set to: {}", nflPlayers.get(playerCounter - 1).getNflRanking());
+    for (int playerCounter = 0; playerCounter < nflPlayers.size(); playerCounter++) {
+      final int newRanking = (playerCounter + 1);
+      logger.debug("setting ranking to {} for player: {}", newRanking, nflPlayers.get(playerCounter));
+      final int id = nflPlayers.get(playerCounter).getPlayerPK();
+      Player loopPlayer = playerRepository.findOne(id);
+      if (null == loopPlayer) {
+        logger.error("Couldn't find Player: newRanking={} id={}", newRanking, id);
+      } else {
+        loopPlayer.setNflRanking(newRanking);
+        playerRepository.save(loopPlayer);
+      }
     }
   }
 
