@@ -73,7 +73,7 @@ public class FantasyFootballController {
   @RequestMapping(value = "/nflPlayers", method = RequestMethod.GET)
   public String listPlayers(Model model) {
     logger.debug("in listPlayers()");
-    model.addAttribute("playersAttribute", playerRepository.findAll());
+    model.addAttribute("playersAttribute", playerRepository.findAllByOrderByNflRankingAsc());
     return "NFLPlayers";
   }
 
@@ -190,7 +190,7 @@ public class FantasyFootballController {
     addPlayer("Jason", "Erdahl", "QB", 0, "GB"); // test user not specifying value for nflRanking (no call made to reorderPlayersRankings)
     showNflPlayers();
 
-    // At this point the nflRanking of these players should be: 
+    // At this point the nflRanking of these players should be:
     // 95         |Josh                                              |Olson                                             |QB|2          |GB
     // 96         |Matt                                              |McDonald                                          |K |54         |MIN
     // 97         |Jason                                             |Erdahl                                            |QB|55         |GB
