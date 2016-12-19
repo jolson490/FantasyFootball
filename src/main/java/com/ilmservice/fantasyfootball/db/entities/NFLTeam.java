@@ -15,11 +15,11 @@ public class NFLTeam {
 
   private String mascot;
 
-  public String getLocationabbreviation() {
+  public String getLocationAbbreviation() {
     return this.locationAbbreviation;
   }
-  public void setLocationabbreviation(String locationabbreviation) {
-    this.locationAbbreviation = locationabbreviation;
+  public void setLocationAbbreviation(String locationAbbreviation) {
+    this.locationAbbreviation = locationAbbreviation;
   }
 
   public String getLocation() {

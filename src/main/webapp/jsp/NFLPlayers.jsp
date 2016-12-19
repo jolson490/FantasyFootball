@@ -8,6 +8,10 @@
 <title>NFL Players - ILM Fantasy Football</title>
 </head>
 <body>
+  <a href="${pageContext.request.contextPath}/newNFLPlayer">Add a player</a><br>
+  
+  <div class="row">
+  <h1>Players</h1>
   <table border="1">
     <c:forEach var="currentPlayer" items="${playersAttribute}" varStatus="loop">
       <%-- Using the first player in the list, print a table heading (the name of each field within the model). --%>
@@ -16,8 +20,8 @@
               <c:forEach var="field" items="${currentPlayer['class'].declaredFields}">
                   <th>${field.name}</th>
               </c:forEach>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th></th> <%-- (Edit) --%>
+              <th></th> <%-- (Delete) --%>
           </tr>
       </c:if>
       
@@ -33,6 +37,7 @@
       </c:if>
     </c:forEach>
   </table>
+  </div>
   <br>
 
   <a href="${pageContext.request.contextPath}/">Main page</a>

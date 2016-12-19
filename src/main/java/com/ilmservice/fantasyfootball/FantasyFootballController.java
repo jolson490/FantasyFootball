@@ -1,6 +1,7 @@
 package com.ilmservice.fantasyfootball;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ilmservice.fantasyfootball.db.entities.NFLTeam;
 import com.ilmservice.fantasyfootball.db.entities.Player;
@@ -48,6 +48,8 @@ public class FantasyFootballController {
   @Autowired
   private PlayerDao playerDao;
 
+  // ************************ BEGIN MAPPING METHODS... ************************
+
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
@@ -59,6 +61,8 @@ public class FantasyFootballController {
     return "index";
   }
 
+  // ***********
+
   // http://localhost:8080/ILMServices-FantasyFootball/showTeams
   // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/showTeams -o ShowTeams.html
   @RequestMapping(value = "/showTeams", method = RequestMethod.GET)
@@ -67,6 +71,8 @@ public class FantasyFootballController {
     model.addAttribute("teamsAttribute", fantasyTeamRepository.findAll());
     return "ShowTeams";
   }
+
+  // ***********
 
   // http://localhost:8080/ILMServices-FantasyFootball/nflPlayers
   // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/nflPlayers -o NFLPlayers.html
@@ -77,12 +83,44 @@ public class FantasyFootballController {
     return "NFLPlayers";
   }
 
-  // http://localhost:8080/ILMServices-FantasyFootball/jsptest
-  @RequestMapping("/jsptest")
-  public String jsptest(ModelAndView modelAndView) {
-    logger.debug("in jsptest()");
-    return "jsp-spring-boot";
+  // ****
+
+  // http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer
+  // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer -o NewNFLPlayer.html
+  @GetMapping("/newNFLPlayer")
+  public String newNFLPlayer(Model model) {
+    logger.debug("in newNFLPlayer()");
+
+    final List<String> positions = Arrays.asList("QB", "RB", "WR", "TE", "K");
+    model.addAttribute("positionsList", positions);
+
+    List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
+    model.addAttribute("nflTeamsList", nflTeams);
+
+    model.addAttribute("playerAttribute", new Player());
+
+    return "NewNFLPlayer";
   }
+
+  /// saveProduct -> createNFLPlayer (TODO create separate editNFLPlayer - or combine both (createNFLPlayer & editNFLPlayer) into saveNFLPlayer?)
+  ///
+  // http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer
+  // e.g.: curl -X POST -F firstName=Joshua -F lastName=Olson -F position=K -F nflRanking=40 -F nflTeam=MIN http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer -o createNFLPlayer.html
+  @PostMapping("/createNFLPlayer")
+  public String createNFLPlayer(@Valid @ModelAttribute("playerAttribute") Player theBoundPlayer, BindingResult result, Model model) {
+    logger.debug("in createNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
+
+    if (result.hasErrors()) {
+      return "NewNFLPlayer";
+    }
+
+    addPlayer(theBoundPlayer);
+    showNflPlayers(); ///
+
+    return "redirect:/nflPlayers";
+  }
+
+  // ***********
 
   // http://localhost:8080/ILMServices-FantasyFootball/chooseWeek
   @GetMapping("/chooseWeek")
@@ -97,7 +135,6 @@ public class FantasyFootballController {
     weeks.put(3, "Week 3");
     weeks.put(4, "Week 4");
     weeks.put(5, "Week 5");
-
     model.addAttribute("weeksMap", weeks);
 
     model.addAttribute("weekAttribute", new WeekForm());
@@ -131,6 +168,8 @@ public class FantasyFootballController {
     // TO-DO-data-weeklyTeams get data from db for theBoundWeek, and have the view display/print it to browser.
     return "ShowWeek";
   }
+
+  // ************************ ...END MAPPING METHODS ************************
 
   // ************************ BEGIN DEBUG/TESTING CODE... ************************
   private void showData() {
@@ -228,6 +267,10 @@ public class FantasyFootballController {
     }
   }
 
+  private void addPlayer(final Player player) {
+    addPlayer(player.getFirstName(), player.getLastName(), player.getPosition(), player.getNflRanking(), player.getNflTeam().getLocationAbbreviation());
+  }
+
   // TO-DO make this application thread-safe - e.g. what if another user between
   // restartNflRanking and playerRepository.save? (Currently this implementation
   // isn't foolproof with ensuring/maintaining the sort order of the
@@ -238,7 +281,7 @@ public class FantasyFootballController {
 
     List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
     Optional<NFLTeam> optionalNflTeam = nflTeams.stream()
-        .filter(nflTeam -> nflTeam.getLocationabbreviation().equals(nflTeamAbbreviation)).findFirst();
+        .filter(nflTeam -> nflTeam.getLocationAbbreviation().equals(nflTeamAbbreviation)).findFirst();
     if (!optionalNflTeam.isPresent()) {
       logger.error("NFLTeam not found for abbreviation: {}", nflTeamAbbreviation);
     }
