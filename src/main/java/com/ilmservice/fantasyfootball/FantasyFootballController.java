@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -118,6 +119,43 @@ public class FantasyFootballController {
 
     return "redirect:/nflPlayers";
   }
+
+  // ****
+
+  // TODO: move Aaron Rodgers to 52, then move back to 1 and actually ends up 2 (behind Matthew Stafford still at nflRanking 1).
+  
+  @GetMapping("/editNFLPlayer/{playerPK}")
+  public String editNFLPlayer(@PathVariable Integer playerPK, Model model) {
+    logger.debug("in editNFLPlayer(): playerPK={}", playerPK);
+
+    List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
+    model.addAttribute("nflTeamsList", nflTeams);
+
+    model.addAttribute("playerToEdit", playerRepository.findOne(playerPK));
+
+    return "EditNFLPlayer";
+  }
+
+  // TO-DO why not?: "/saveEditedNFLPlayer"
+  @PostMapping("/editNFLPlayer/{playerPK}/saveEditedNFLPlayer")
+  public String saveEditedNFLPlayer(@Valid @ModelAttribute("playerToEdit") Player theBoundPlayer, BindingResult result, Model model) {
+    logger.debug("in saveEditedNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
+
+    if (result.hasErrors()) {
+      return "EditNFLPlayer";
+    }
+
+    playerRepository.save(theBoundPlayer);
+    reorderPlayersRankings();
+
+    return "redirect:/nflPlayers";
+  }
+
+  // ****
+
+  // TODO
+  // deleteNFLPlayer
+  // productRepository.delete(id);
 
   // ***********
 

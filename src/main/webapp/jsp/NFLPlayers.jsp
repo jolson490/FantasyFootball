@@ -31,8 +31,8 @@
           <c:forEach var="field" items="${currentPlayer['class'].declaredFields}">
             <td>${currentPlayer[field.name]}</td>            
           </c:forEach>
-          <td>Edit</td>
-          <td>Delete</td>
+          <td><a href="${pageContext.request.contextPath}/editNFLPlayer/${currentPlayer.playerPK}/">Edit</a></td>
+          <td>Delete</td> <%-- <td><a th:href="${'/product/delete/' + product.id}">Delete</a></td>  --%>
         </tr>
       </c:if>
     </c:forEach>
