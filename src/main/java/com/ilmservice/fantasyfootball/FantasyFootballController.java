@@ -84,7 +84,7 @@ public class FantasyFootballController {
     return "NFLPlayers";
   }
 
-  // TODO for rest of mapping methods below:
+  // TODO-foolproof for rest of mapping methods below:
   //  * Add help info, and confirmation what happened when user changes something.
   //  * Add curl command, and
   //  * for both various curls commands and URLS: test both happy path and error conditions.
@@ -135,12 +135,14 @@ public class FantasyFootballController {
     List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
     model.addAttribute("nflTeamsList", nflTeams);
 
+    // TODO-foolproof
     model.addAttribute("playerToEdit", playerRepository.findOne(playerPK));
 
     return "EditNFLPlayer";
   }
 
   // TO-DO why not?: "/saveEditedNFLPlayer"
+  // TODO-foolproof-test
   @PostMapping("/editNFLPlayer/{playerPK}/saveEditedNFLPlayer")
   public String saveEditedNFLPlayer(@Valid @ModelAttribute("playerToEdit") Player theBoundPlayer, BindingResult result, Model model) {
     logger.debug("in saveEditedNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
@@ -159,13 +161,11 @@ public class FantasyFootballController {
   // ****
 
   // TO-DO? change to Post (add JavaScript to corresponding "a href"?).
+  // TODO-foolproof-test
   @GetMapping("deleteNFLPlayer/{playerPK}")
   public String deleteNFLPlayer(@PathVariable Integer playerPK) {
     logger.debug("in deleteNFLPlayer(): playerPK={}", playerPK);
-
-    playerRepository.delete(playerPK);
-    reorderPlayersRankings();
-
+    deletePlayer(playerPK); // takes care of calling reorderPlayersRankings
     return "redirect:/nflPlayers";
   }
 
@@ -289,18 +289,31 @@ public class FantasyFootballController {
 
   // Note that the names are treated as case insensitive.
   private void deletePlayerIfExists(final String firstName, final String lastName) {
-    // find & delete the player(s) - given the input parameters there's probably at most 1 player to be deleted, but this method does support deleting 2+ players.
-    logger.debug("in deletePlayerIfExists(): firstName={} lastName={}", firstName, lastName);
+    // Find & delete the player(s) - given the input parameters there's probably at most 1 player to be deleted, but this method does support deleting 2+ players.
     List<Player> players = playerRepository.findByFirstName_AndLastName_AllIgnoreCase(firstName, lastName);
-    logger.debug("number of players to delete: {}", players.size());
-    players.stream().forEach(player -> logger.debug("about to delete NFL player: {}", player.toString()));
-    players.stream().forEach(player -> playerRepository.delete(player));
-
-    // If 1+ player was deleted, then call reorderPlayersRankings.
+    logger.debug("deletePlayerIfExists(): firstName={} lastName={} players.size()={}", firstName, lastName, players.size());
     if (players.size() > 0) {
-      // (For simplicity, don't bother to skip calling reorderPlayersRankings when the only deleted player
-      // was the last one - i.e. the one with the worst nflRanking.)
-      reorderPlayersRankings();
+      players.stream().forEach(player -> deletePlayer(player.getPlayerPK()));
+    }
+  }
+
+  private void deletePlayer(Integer playerPK) {
+    logger.debug("in deletePlayer(): playerPK={}", playerPK);
+
+    if (playerPK == null) {
+      logger.error("playerPK is null");
+    } else {
+      final Player playerToDelete = playerRepository.findOne(playerPK);
+      if (playerToDelete == null) {
+        logger.error("Couldn't find Player to delete for playerPK={}", playerPK);
+      } else {
+        playerRepository.logAndDeletePlayer(playerToDelete);
+
+        // (For simplicity, don't bother to skip calling reorderPlayersRankings
+        // when the only deleted player
+        // was the last one - i.e. the one with the worst nflRanking.)
+        reorderPlayersRankings();
+      }
     }
   }
 
@@ -312,15 +325,11 @@ public class FantasyFootballController {
     List<Player> nflPlayers = playerRepository.findAll();
     for (int playerCounter = 0; playerCounter < nflPlayers.size(); playerCounter++) {
       final int newRanking = (playerCounter + 1);
-      logger.debug("setting ranking to {} for player: {}", newRanking, nflPlayers.get(playerCounter));
-      final int id = nflPlayers.get(playerCounter).getPlayerPK();
-      Player loopPlayer = playerRepository.findOne(id);
-      if (null == loopPlayer) {
-        logger.error("Couldn't find Player: newRanking={} id={}", newRanking, id);
-      } else {
-        loopPlayer.setNflRanking(newRanking);
-        playerRepository.save(loopPlayer);
-      }
+      Player loopPlayer = nflPlayers.get(playerCounter);
+      
+      logger.trace("setting ranking to {} for player: {}", newRanking, nflPlayers.get(playerCounter));
+      loopPlayer.setNflRanking(newRanking);
+      playerRepository.save(loopPlayer);
     }
   }
 
@@ -332,9 +341,9 @@ public class FantasyFootballController {
   // restartNflRanking and playerRepository.save? (Currently this implementation
   // isn't foolproof with ensuring/maintaining the sort order of the
   // 'nflRanking' field.)
-  private void addPlayer(final String firstName, final String lastName, final String position, final int nflRanking, final String nflTeamAbbreviation) {
-    logger.debug("in addPlayer(): firstName={} lastName={} position={} nflRanking={} nflTeamAbbreviation={}",
-        firstName, lastName, position, nflRanking, nflTeamAbbreviation);
+  private void addPlayer(final String firstName, final String lastName, final String position, final int requestedNflRanking, final String nflTeamAbbreviation) {
+    logger.debug("in addPlayer(): firstName={} lastName={} position={} requestedNflRanking={} nflTeamAbbreviation={}",
+        firstName, lastName, position, requestedNflRanking, nflTeamAbbreviation);
 
     List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
     Optional<NFLTeam> optionalNflTeam = nflTeams.stream()
@@ -347,14 +356,14 @@ public class FantasyFootballController {
 
       // Make sure the next nflRanking value is correct. (The db (call below to PlayerRepository.save) ignores the value of nflRanking in
       // newPlayer - i.e. the db always uses next generated value; this matters when inserting a new player into the middle of the table.)
-      int nextGeneratedValue = nflRanking;
-      if ((nflRanking == 0) || (nflRanking > playerRepository.count() + 1)) {
-        // Override the nflRanking value that was requested by the client of this 'addPlayer' method.
+      int nextGeneratedValue = requestedNflRanking;
+      if ((requestedNflRanking == 0) || (requestedNflRanking > playerRepository.count() + 1)) {
+        // Override the requestedNflRanking value (that was requested by the client of this 'addPlayer' method).
         nextGeneratedValue = (int) (playerRepository.count() + 1);
       }
       playerDao.restartNflRanking(nextGeneratedValue);
 
-      Player newPlayer = new Player(firstName, lastName, position, nflRanking, nflTeam);
+      Player newPlayer = new Player(firstName, lastName, position, requestedNflRanking, nflTeam);
       logger.debug("nextGeneratedValue={}, about to create/save new player: {}", nextGeneratedValue, newPlayer);
       playerRepository.save(newPlayer);
 
@@ -362,7 +371,7 @@ public class FantasyFootballController {
       // highest value for 'nflRanking' (i.e. added the player to the end of the table) - in which case there's no need to tell the db to reorder the players.
       // (Note that we also don't need to go into the following "if" check if the user happened to specify the next value that the db was going to
       // generate, but for simplicity don't bother checking for that.)
-      if (nflRanking > 0) {
+      if (requestedNflRanking > 0) {
         reorderPlayersRankings();
       }
     }
