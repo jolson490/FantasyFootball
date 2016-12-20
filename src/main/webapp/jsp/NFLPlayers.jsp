@@ -32,7 +32,7 @@
             <td>${currentPlayer[field.name]}</td>            
           </c:forEach>
           <td><a href="${pageContext.request.contextPath}/editNFLPlayer/${currentPlayer.playerPK}/">Edit</a></td>
-          <td>Delete</td> <%-- <td><a th:href="${'/product/delete/' + product.id}">Delete</a></td>  --%>
+          <td><a href="${pageContext.request.contextPath}/deleteNFLPlayer/${currentPlayer.playerPK}/">Delete</a></td>
         </tr>
       </c:if>
     </c:forEach>

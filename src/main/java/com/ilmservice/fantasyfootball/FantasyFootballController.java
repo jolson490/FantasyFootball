@@ -103,8 +103,6 @@ public class FantasyFootballController {
     return "NewNFLPlayer";
   }
 
-  /// saveProduct -> createNFLPlayer (TODO create separate editNFLPlayer - or combine both (createNFLPlayer & editNFLPlayer) into saveNFLPlayer?)
-  ///
   // http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer
   // e.g.: curl -X POST -F firstName=Joshua -F lastName=Olson -F position=K -F nflRanking=40 -F nflTeam=MIN http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer -o createNFLPlayer.html
   @PostMapping("/createNFLPlayer")
@@ -122,8 +120,8 @@ public class FantasyFootballController {
 
   // ****
 
-  // TODO: move Aaron Rodgers to 52, then move back to 1 and actually ends up 2 (behind Matthew Stafford still at nflRanking 1).
-  
+  // TO-DO: move Aaron Rodgers to 52, then move back to 1 and actually ends up 2 (behind Matthew Stafford still at nflRanking 1).
+
   @GetMapping("/editNFLPlayer/{playerPK}")
   public String editNFLPlayer(@PathVariable Integer playerPK, Model model) {
     logger.debug("in editNFLPlayer(): playerPK={}", playerPK);
@@ -153,9 +151,14 @@ public class FantasyFootballController {
 
   // ****
 
-  // TODO
-  // deleteNFLPlayer
-  // productRepository.delete(id);
+  // TO-DO? change to Post (add JavaScript to corresponding "a href"?).
+  @GetMapping("deleteNFLPlayer/{playerPK}")
+  public String deleteNFLPlayer(@PathVariable Integer playerPK) {
+    playerRepository.delete(playerPK);
+    reorderPlayersRankings();
+
+    return "redirect:/nflPlayers";
+  }
 
   // ***********
 

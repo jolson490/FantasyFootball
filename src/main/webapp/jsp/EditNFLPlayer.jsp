@@ -12,7 +12,6 @@
   <h1>Edit a player</h1>
     <%-- The form data is bound to the model specified by modelAttribute. --%>
     <form:form action="saveEditedNFLPlayer" method="post" modelAttribute="playerToEdit">
-      <%-- <input type="hidden" th:field="*{id}"/> --%>
       <%-- TODO: test invalid input (& corresponding error messages). --%>
       <div>
         <label>First Name:</label>
