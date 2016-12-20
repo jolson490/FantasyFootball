@@ -43,13 +43,14 @@ For all remaining steps, you need to have the derby database network server star
 * $ cd $DERBY_HOME/bin
 * $ ./startNetworkServer
 
-The first time you run the application:
+NOTE: to start the application: in eclipse, in the Servers View, click on "Apache\_Tomcat\_v*.0\_at\_localhost", and click the green play button ("Start the server").
+
+The first time you are going to run the application:
  * In application.properties change spring.datasource.initialize from false to true (so the database gets initialized/populated).
- * To start your web server: in eclipse, right-click this project, Run As, Spring Boot App. 
-    * Or with a command terminal, from the FantasyFootball folder (the top of this project) do "mvn spring-boot:run".
- * (And then undo the change you made to application.properties.)
+ * Then start the application.
+ * (And then once the application initializes, terminate it and undo the change you made to application.properties.)
 
 ## To Run this application
 
-Once you have completed the pre-requisites, then: in eclipse, in the Servers View, click on "Apache\_Tomcat\_v*.0\_at\_localhost", and click the green play button ("Start the server").
+Once you have completed the pre-requisites, then start the application.
 Then you can access the application via your browser at: http://localhost:8080/ILMServices-FantasyFootball/
