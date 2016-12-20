@@ -84,6 +84,12 @@ public class FantasyFootballController {
     return "NFLPlayers";
   }
 
+  // TODO for rest of mapping methods below:
+  //  * Add help info, and confirmation what happened when user changes something.
+  //  * Add curl command, and
+  //  * for both various curls commands and URLS: test both happy path and error conditions.
+  //   ** (e.g. add code to methods to validate input - e.g. check that playerPK exists)
+
   // ****
 
   // http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer
@@ -113,7 +119,7 @@ public class FantasyFootballController {
       return "NewNFLPlayer";
     }
 
-    addPlayer(theBoundPlayer);
+    addPlayer(theBoundPlayer); // takes care of calling reorderPlayersRankings
 
     return "redirect:/nflPlayers";
   }
@@ -143,6 +149,7 @@ public class FantasyFootballController {
       return "EditNFLPlayer";
     }
 
+    // TODO?: create helper function(s) to minimize the number of calls to reorderPlayersRankings.
     playerRepository.save(theBoundPlayer);
     reorderPlayersRankings();
 
@@ -154,6 +161,8 @@ public class FantasyFootballController {
   // TO-DO? change to Post (add JavaScript to corresponding "a href"?).
   @GetMapping("deleteNFLPlayer/{playerPK}")
   public String deleteNFLPlayer(@PathVariable Integer playerPK) {
+    logger.debug("in deleteNFLPlayer(): playerPK={}", playerPK);
+
     playerRepository.delete(playerPK);
     reorderPlayersRankings();
 
@@ -248,6 +257,7 @@ public class FantasyFootballController {
     entities.stream().forEach(entity -> logger.debug("{}: {}", entityName, entity.toString()));
   }
 
+  // TODO: migrate the stuff in testPlayers to src/test/
   @SuppressWarnings("unused")
   private void testPlayers() {
     logger.debug("in testPlayers()");

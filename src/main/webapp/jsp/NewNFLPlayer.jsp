@@ -12,7 +12,7 @@
   <h1>Add a player</h1>
     <%-- The form data is bound to the model specified by modelAttribute. --%>
     <form:form action="createNFLPlayer" method="post" modelAttribute="playerAttribute">
-      <%-- TODO: test invalid input (& corresponding error messages). --%>
+      <%-- TODO: test invalid input (& corresponding error messages) - also applies to EditNFLPlayer. --%>
       <div>
         <label>First Name:</label>
         <input type="text" name="firstName"/>
