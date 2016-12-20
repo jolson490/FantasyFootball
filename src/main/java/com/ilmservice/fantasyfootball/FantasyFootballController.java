@@ -80,7 +80,7 @@ public class FantasyFootballController {
   @RequestMapping(value = "/nflPlayers", method = RequestMethod.GET)
   public String listPlayers(Model model) {
     logger.debug("in listPlayers()");
-    model.addAttribute("playersAttribute", playerRepository.findAllByOrderByNflRankingAsc());
+    model.addAttribute("playersAttribute", playerRepository.findAll());
     return "NFLPlayers";
   }
 
@@ -242,7 +242,7 @@ public class FantasyFootballController {
     long numberPlayers = playerRepository.count();
     logger.debug("number of NFL players: {}", numberPlayers);
 
-    List<Player> nflPlayers = playerRepository.findAllByOrderByNflRankingAsc();
+    List<Player> nflPlayers = playerRepository.findAll();
     nflPlayers.stream().forEach(nflPlayer -> logger.debug("NFL player: {}", nflPlayer.toString()));
   }
 
@@ -309,7 +309,7 @@ public class FantasyFootballController {
     // Go through all the players and update their ranking - might not be the
     // most efficient, but requires the least amount of code. :)
     // This method is not a no-op when a player has been inserted/removed somewhere from the middle (with regards to nflRanking).
-    List<Player> nflPlayers = playerRepository.findAllByOrderByNflRankingAsc();
+    List<Player> nflPlayers = playerRepository.findAll();
     for (int playerCounter = 0; playerCounter < nflPlayers.size(); playerCounter++) {
       final int newRanking = (playerCounter + 1);
       logger.debug("setting ranking to {} for player: {}", newRanking, nflPlayers.get(playerCounter));

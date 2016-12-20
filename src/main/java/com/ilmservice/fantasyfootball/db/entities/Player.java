@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -15,6 +16,7 @@ import org.hibernate.annotations.GenerationTime;
 
 @Entity
 @Table(name = "Players")
+@NamedQuery(name = "Player.findAll", query = "select p from Player p order by p.nflRanking")
 public class Player {
 
   // Both FantasyTeam and this Player class have an INT primary key.
