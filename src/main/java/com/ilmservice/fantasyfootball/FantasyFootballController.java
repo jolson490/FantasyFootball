@@ -47,6 +47,8 @@ public class FantasyFootballController {
 
   // ************************ BEGIN MAPPING METHODS... ************************
 
+  // TODO create generic 404 error page - e.g. for http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/abc
+
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
@@ -80,14 +82,9 @@ public class FantasyFootballController {
     return "NFLPlayers";
   }
 
-  // TODO-FrontEnd: Add confirmation what happened when user changes something? (When they create/edit/delete a player.)
-
-  // TODO-foolproof for rest of mapping methods below:
-  //  * Add curl command, and
-  //  * for both various curls commands and URLS: test both happy path and error conditions.
-  //   ** (e.g. add code to methods to validate input - e.g. check that playerPK exists)
-
   // ****
+
+  // TODO-FrontEnd: Add confirmation what happened when user changes something? (When they create/edit/delete a player.)
 
   // http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer
   // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer -o NewNFLPlayer.html
@@ -106,24 +103,24 @@ public class FantasyFootballController {
     return "NewNFLPlayer";
   }
 
-  // http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer
+  // (Directly copy/pasting URL into browser (or try to navigate to page via bookmark) is not allowed for POST.)
   // e.g.: curl -X POST -F firstName=Joshua -F lastName=Olson -F position=K -F nflRanking=40 -F nflTeam=MIN http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer -o createNFLPlayer.html
   @PostMapping("/createNFLPlayer")
   public String createNFLPlayer(@Valid @ModelAttribute("playerAttribute") Player theBoundPlayer, BindingResult result, Model model) {
     logger.debug("in createNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
 
-    // Note that the following commands...:
+    // Note that the following commands (invalid field values)...:
     //   #1) curl -X POST -F firstName=Jane -F lastName=Doe -F position=XX -F nflRanking=30 -F nflTeam=TB http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer -o createNFLPlayer2.html
     //   #2) curl -X POST -F firstName=Jane -F lastName=Doe -F position=QB -F nflRanking=30 -F nflTeam=XYZ http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer
     // ...do not cause a binding error - but they cause the following exceptions:
     //   #1) SqlExceptionHelper: The check constraint 'POSITION_CONSTRAINT' was violated while performing an INSERT or UPDATE on table '"APP"."PLAYERS"'.
     //   #2) SqlExceptionHelper: Column 'NFLTEAM'  cannot accept a NULL value.
-    
+
     if (result.hasErrors()) {
       // return "redirect:/newNFLPlayer"; // Not ideal: doesn't display any field error messages
-      
-      // Not ideal: allows the URL in the browser to change from newNFLPlayer to createNFLPlayer
-      // But at least field error messages get displayed - e.g. when NFL Ranking is left blank, then get error message, albeit not the most human readable/friendly (not concise/customized):
+
+      // Not ideal (allows the URL in the browser to change from newNFLPlayer to createNFLPlayer)...
+      // ...but at least field error messages get displayed - e.g. when NFL Ranking is left blank, then get error message, albeit not the most human readable/friendly (not concise/customized):
       //  * Failed to convert property value of type [java.lang.String] to required type [int] for property nflRanking; nested exception is java.lang.NumberFormatException: For input string: ""
       return "NewNFLPlayer";
     }
@@ -137,22 +134,30 @@ public class FantasyFootballController {
 
   // TO-DO: move Aaron Rodgers to 52, then move back to 1 and actually ends up 2 (behind Matthew Stafford still at nflRanking 1).
 
+  // e.g.:
+  //  * http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/6/
+  //  * curl -X GET http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/6/ -o EditNFLPlayer.html
   @GetMapping("/editNFLPlayer/{playerPK}")
   public String editNFLPlayer(@PathVariable Integer playerPK, Model model) {
     logger.debug("in editNFLPlayer(): playerPK={}", playerPK);
 
+    // If user manually puts something like the following into their browser (where no player with an id of 999 exists):
+    //  * http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/999/
+    if (playerPK == null || !playerRepository.exists(playerPK)) {
+      model.addAttribute("errorMsg", ("edit player: Invalid player id (does not exist): " + playerPK));
+      return "errorMessage";
+    } else {
+      model.addAttribute("playerToEdit", playerRepository.findOne(playerPK));
+    }
+
     List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
     model.addAttribute("nflTeamsList", nflTeams);
-
-    // TODO-foolproof
-    model.addAttribute("playerToEdit", playerRepository.findOne(playerPK));
 
     return "EditNFLPlayer";
   }
 
-  // TO-DO why not?: "/saveEditedNFLPlayer"
-  // TODO-foolproof-test
-  @PostMapping("/editNFLPlayer/{playerPK}/saveEditedNFLPlayer")
+  // e.g.: curl http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/6/saveEditedNFLPlayer --data "firstName=Teddy&lastName=Bridgewater&position=QB&nflRanking=46&nflTeam=DET"
+  @PostMapping("/editNFLPlayer/{playerPK}/saveEditedNFLPlayer") // TO-DO figure out why the mapping is not simply: "/saveEditedNFLPlayer"
   public String saveEditedNFLPlayer(@Valid @ModelAttribute("playerToEdit") Player theBoundPlayer, BindingResult result, Model model) {
     logger.debug("in saveEditedNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
 
@@ -160,6 +165,22 @@ public class FantasyFootballController {
       return "EditNFLPlayer";
     }
 
+    // If user manually does something like the following:
+    //  * curl http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/999/saveEditedNFLPlayer --data "firstName=Jordy&lastName=Nelson&nflTeam=GB&position=WR&nflRanking=5"
+    if (theBoundPlayer == null || theBoundPlayer.getPlayerPK() == null || !playerRepository.exists(theBoundPlayer.getPlayerPK())) {
+      model.addAttribute("errorMsg", ("save player: Invalid player (does not exist): " + theBoundPlayer));
+      return "errorMessage";
+    }
+
+    // Note that curl commands missing the following field values do not cause a binding error - but they cause the following exceptions:
+    //  * (<name of missing field>: "<exception>")
+    //  * position: "SqlExceptionHelper: Column 'POSITION'  cannot accept a NULL value."
+    //  * nflTeam: "SqlExceptionHelper: Column 'NFLTEAM'  cannot accept a NULL value."
+    //  * firstName (and ditto for lastName): "SqlExceptionHelper: Column 'FNAME'  cannot accept a NULL value."
+
+    // TO-DO: ensure that only the non-readonly form fields (i.e. nflRanking & nflTeam) are modified - prevent other fields from
+    // being modified by a curl command? Or better to not have the front end coupled in such a manner to the back end? e.g. the following command is accepted:
+    //  * curl http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/1/saveEditedNFLPlayer --data "firstName=Aaron1&lastName=Rodgers1&position=K&nflRanking=12&nflTeam=MIN"
     playerRepository.editPlayer(theBoundPlayer);
 
     return "redirect:/nflPlayers";
@@ -167,12 +188,24 @@ public class FantasyFootballController {
 
   // ****
 
-  // TO-DO? change to Post (add JavaScript to corresponding "a href"?).
-  // TODO-foolproof-test
-  @GetMapping("deleteNFLPlayer/{playerPK}")
-  public String deleteNFLPlayer(@PathVariable Integer playerPK) {
+  // e.g.:
+  // * http://localhost:8080/ILMServices-FantasyFootball/deleteNFLPlayer/25/
+  // * curl -X GET http://localhost:8080/ILMServices-FantasyFootball/deleteNFLPlayer/25/
+  @GetMapping("deleteNFLPlayer/{playerPK}") // TO-DO?: change to Post (add JavaScript to corresponding "a href"?).
+  public String deleteNFLPlayer(@PathVariable Integer playerPK, Model model) {
     logger.debug("in deleteNFLPlayer(): playerPK={}", playerPK);
+
+    // If user manually puts something like the following into their browser:
+    //  * http://localhost:8080/ILMServices-FantasyFootball/deleteNFLPlayer/999/
+    if (playerPK == null || !playerRepository.exists(playerPK)) {
+      model.addAttribute("errorMsg", ("delete player: Invalid player id (does not exist): " + playerPK));
+      return "errorMessage";
+    } else {
+      model.addAttribute("playerToEdit", playerRepository.findOne(playerPK));
+    }
+
     playerRepository.deletePlayer(playerPK);
+
     return "redirect:/nflPlayers";
   }
 
@@ -263,7 +296,7 @@ public class FantasyFootballController {
     entities.stream().forEach(entity -> logger.debug("{}: {}", entityName, entity.toString()));
   }
 
-  // TODO: migrate the stuff in testPlayers to src/test/
+  // TODO: migrate the stuff in testPlayers to src/test/ (create automated unit tests).
   @SuppressWarnings("unused")
   private void testPlayers() {
     logger.debug("in testPlayers()");

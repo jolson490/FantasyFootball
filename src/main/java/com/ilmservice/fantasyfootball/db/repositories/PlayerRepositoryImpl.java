@@ -52,14 +52,10 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
 
     // Make sure the next nflRanking value is correct. (The db (call below to PlayerRepository.save) ignores the value of nflRanking in
     // newPlayer - i.e. the db always uses next generated value; this matters when inserting a new player into the middle of the table.)
-    int nextGeneratedValue = requestedNflRanking;
-    if ((requestedNflRanking == 0) || (requestedNflRanking > playerRepository.count() + 1)) {
-      // Override the requestedNflRanking value (that was requested by the client of this 'addPlayer' method).
-      nextGeneratedValue = (int) (playerRepository.count() + 1);
-    }
+    final int nextGeneratedValue = getActualNflRanking(requestedNflRanking);
     playerDao.restartNflRanking(nextGeneratedValue);
 
-    logger.debug("nextGeneratedValue={}, about to create/save new player: {}", nextGeneratedValue, newPlayer);
+    logger.debug("about to create/save new player: {}", newPlayer);
     playerRepository.save(newPlayer);
 
     // If the user did not specify a value for nflRanking, then the db (in the call above to PlayerRepository.save) will have generated the next
@@ -70,10 +66,27 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
       reorderPlayersRankings();
     }
   }
+  
+  // Given the requested Nfl Ranking, return what value can actually be allowed.
+  private int getActualNflRanking(final int requestedNflRanking) {
+    int actualNflRanking = requestedNflRanking;
+    if ((requestedNflRanking == 0) || (requestedNflRanking > playerRepository.count() + 1)) {
+      // Override the requestedNflRanking value
+      actualNflRanking = (int) (playerRepository.count() + 1);
+    }
+    logger.debug("getActualNflRanking(): requestedNflRanking={} actualNflRanking={}", requestedNflRanking, actualNflRanking);
+    return actualNflRanking;
+  }
 
   @Override
   public void editPlayer(Player player) {
     logger.debug("in editPlayer(): player={}", player);
+    
+    // Handle a request that omitted the nflRanking (in which case the default value is 0) - e.g.:
+    //  * curl http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/4/saveEditedNFLPlayer --data "firstName=Jordy&lastName=Nelson&nflTeam=GB&position=WR"
+    final int requestedNflRanking = player.getNflRanking();
+    final int actualNflRanking = getActualNflRanking(requestedNflRanking);
+    player.setNflRanking(actualNflRanking);
 
     playerRepository.save(player);
 
@@ -97,5 +110,4 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
       playerRepository.save(loopPlayer);
     }
   }
-
 }
