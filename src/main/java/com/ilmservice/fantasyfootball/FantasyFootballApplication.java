@@ -20,6 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class FantasyFootballApplication extends SpringBootServletInitializer {
   private static final Logger logger = LoggerFactory.getLogger(FantasyFootballApplication.class);
 
+  public FantasyFootballApplication() {
+    super();
+
+    // Disable ErrorPageFilter - instead of user getting "Whitelabel Error Page" in their browser, let the server (e.g. Apache Tomcat) handle errors.
+    setRegisterErrorPageFilter(false);
+  }
+
   public static void main(String[] args) {
     SpringApplication.run(FantasyFootballApplication.class, args);
   }

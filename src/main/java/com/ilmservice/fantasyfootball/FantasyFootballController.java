@@ -47,8 +47,6 @@ public class FantasyFootballController {
 
   // ************************ BEGIN MAPPING METHODS... ************************
 
-  // TODO create generic 404 error page - e.g. for http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/abc
-
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
   public String home() {
