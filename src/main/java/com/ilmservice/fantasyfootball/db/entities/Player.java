@@ -10,6 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -44,6 +45,7 @@ public class Player {
   // application code to create a new player that has the same ranking as an existing player (by first bumping down the ranking of all subsequent players).
   @Column(name = "NFLRANKING")
   @Generated(GenerationTime.INSERT)
+  @NotNull(message = "The nflRanking is required") // (I couldn't come up with a situation (with browser nor curl) where this error message gets presented.)
   private int nflRanking;
 
   @OneToOne

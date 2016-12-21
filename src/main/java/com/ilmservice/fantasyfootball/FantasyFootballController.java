@@ -80,8 +80,9 @@ public class FantasyFootballController {
     return "NFLPlayers";
   }
 
+  // TODO-FrontEnd: Add confirmation what happened when user changes something? (When they create/edit/delete a player.)
+
   // TODO-foolproof for rest of mapping methods below:
-  //  * Add help info, and confirmation what happened when user changes something.
   //  * Add curl command, and
   //  * for both various curls commands and URLS: test both happy path and error conditions.
   //   ** (e.g. add code to methods to validate input - e.g. check that playerPK exists)
@@ -111,7 +112,19 @@ public class FantasyFootballController {
   public String createNFLPlayer(@Valid @ModelAttribute("playerAttribute") Player theBoundPlayer, BindingResult result, Model model) {
     logger.debug("in createNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
 
+    // Note that the following commands...:
+    //   #1) curl -X POST -F firstName=Jane -F lastName=Doe -F position=XX -F nflRanking=30 -F nflTeam=TB http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer -o createNFLPlayer2.html
+    //   #2) curl -X POST -F firstName=Jane -F lastName=Doe -F position=QB -F nflRanking=30 -F nflTeam=XYZ http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer
+    // ...do not cause a binding error - but they cause the following exceptions:
+    //   #1) SqlExceptionHelper: The check constraint 'POSITION_CONSTRAINT' was violated while performing an INSERT or UPDATE on table '"APP"."PLAYERS"'.
+    //   #2) SqlExceptionHelper: Column 'NFLTEAM'  cannot accept a NULL value.
+    
     if (result.hasErrors()) {
+      // return "redirect:/newNFLPlayer"; // Not ideal: doesn't display any field error messages
+      
+      // Not ideal: allows the URL in the browser to change from newNFLPlayer to createNFLPlayer
+      // But at least field error messages get displayed - e.g. when NFL Ranking is left blank, then get error message, albeit not the most human readable/friendly (not concise/customized):
+      //  * Failed to convert property value of type [java.lang.String] to required type [int] for property nflRanking; nested exception is java.lang.NumberFormatException: For input string: ""
       return "NewNFLPlayer";
     }
 
