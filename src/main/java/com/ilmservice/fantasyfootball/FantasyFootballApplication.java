@@ -23,8 +23,8 @@ public class FantasyFootballApplication extends SpringBootServletInitializer {
   public FantasyFootballApplication() {
     super();
 
-    // Disable ErrorPageFilter - instead of user getting "Whitelabel Error Page" in their browser, let the server (e.g. Apache Tomcat) handle errors.
-    setRegisterErrorPageFilter(false);
+    // Uncomment the following line to disable ErrorPageFilter - i.e. instead of user getting "Whitelabel Error Page" in their browser, let the server (e.g. Apache Tomcat) handle errors.
+    // setRegisterErrorPageFilter(false);
   }
 
   public static void main(String[] args) {
