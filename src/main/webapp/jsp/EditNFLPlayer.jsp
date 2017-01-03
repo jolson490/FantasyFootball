@@ -9,6 +9,7 @@
 <title>Edit an NFL Player - ILM Fantasy Football</title>
 <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
 </head>
+
 <body>
   <div class="row">
   <h1>Edit a player</h1>
@@ -16,17 +17,17 @@
     <form:form action="saveEditedNFLPlayer" method="post" modelAttribute="playerToEdit">
       <div>
         <label>First Name:</label>
-        <input type="text" name="firstName" value="${playerToEdit.firstName}" readonly>
+        <input type="text" name="firstName" value="${playerToEdit.firstName}" readonly class="readonly">
         <form:errors path="firstName" cssClass="error"/>
       </div>
       <div>
         <label>Last Name:</label>
-        <input type="text" name="lastName" value="${playerToEdit.lastName}" readonly>
+        <input type="text" name="lastName" value="${playerToEdit.lastName}" readonly class="readonly">
         <form:errors path="lastName" cssClass="error"/>
       </div>
       <div>
         <label>Position:</label>
-        <input type="text" name="position" value="${playerToEdit.position}" readonly>
+        <input type="text" name="position" value="${playerToEdit.position}" readonly class="readonly">
         <form:errors path="position" cssClass="error"/>
       </div>
       <div>

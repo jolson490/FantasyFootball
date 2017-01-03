@@ -3,3 +3,9 @@
   color: red;
   font-weight: bold;
 }
+
+.readonly
+{
+  color: gray;
+  font-style: italic;
+}
