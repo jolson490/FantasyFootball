@@ -12,7 +12,6 @@
   <h1>Edit a player</h1>
     <%-- The form data is bound to the model specified by modelAttribute. --%>
     <form:form action="saveEditedNFLPlayer" method="post" modelAttribute="playerToEdit">
-      <%-- TODO-FE: shade the readonly fields gray. --%>
       <div>
         <label>First Name:</label>
         <input type="text" name="firstName" value="${playerToEdit.firstName}" readonly>

@@ -82,8 +82,6 @@ public class FantasyFootballController {
 
   // ****
 
-  // TODO-FrontEnd: Add confirmation what happened when user changes something? (When they create/edit/delete a player.)
-
   // http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer
   // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer -o NewNFLPlayer.html
   @GetMapping("/newNFLPlayer")
