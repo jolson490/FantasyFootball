@@ -31,18 +31,18 @@ public class Player {
   @Column(name = "PLAYERPK")
   private Integer playerPK;
 
-  // (For a required string field, "@NotNull" alone won't do the trick - also need "@Size(min=1)".)
+  // (For a required string field, "@NotNull" alone won't do the trick - also need "@Size(min = 1)".)
 
   @Column(name = "FNAME")
-  @NotNull @Size(min=1)
+  @NotNull @Size(min = 1, message = "First Name is required")
   private String firstName;
 
   @Column(name = "LNAME")
-  @NotNull @Size(min=1)
+  @NotNull @Size(min = 1, message = "Last Name is required")
   private String lastName;
 
   @Column(name = "POSITION")
-  @NotNull @Size(min=1)
+  @NotNull @Size(min = 1, message = "Position is required")
   // Without the @Size, then for the following curl command, instead of (for position) getting form error "size must be between ...", would get an exception (for POSITION_CONSTRAINT being violated):
   //  * curl -X POST -F firstName=Steve -F lastName=Rodgers -F position="" -F nflRanking=40 -F nflTeam=TB http://localhost:8080/ILMServices-FantasyFootball/createNFLPlayer
   private String position;
@@ -53,8 +53,8 @@ public class Player {
   // application code to create a new player that has the same ranking as an existing player (by first bumping down the ranking of all subsequent players).
   @Column(name = "NFLRANKING")
   @Generated(GenerationTime.INSERT)
-  @NotNull(message = "The nflRanking is required") // (I couldn't come up with a situation (with browser nor curl) where this error message gets presented.)
-  private int nflRanking;
+  @NotNull(message = "NFL Ranking is required")
+  private Integer nflRanking;
 
   @OneToOne
   @JoinColumn(name = "NFLTEAM")
@@ -101,10 +101,11 @@ public class Player {
     this.position = position;
   }
 
-  public int getNflRanking() {
+  public Integer getNflRanking() {
     return nflRanking;
   }
-  public void setNflRanking(int nflRanking) {
+
+  public void setNflRanking(Integer nflRanking) {
     this.nflRanking = nflRanking;
   }
 
