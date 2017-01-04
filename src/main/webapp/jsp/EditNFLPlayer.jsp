@@ -30,14 +30,15 @@
         <input type="text" name="position" value="${playerToEdit.position}" readonly class="readonly">
         <form:errors path="position" cssClass="error"/>
       </div>
+      
       <div>
         <label>NFL Ranking:</label>
-        <input type="number" name="nflRanking" min="0"/>
+        <input type="number" name="nflRanking" value="${playerToEdit.nflRanking}" min="0"/> <%-- Set the default/initial value to the existing value. --%>
         <form:errors path="nflRanking" cssClass="error"/>
       </div>
       <div>
         <label>NFL Team:</label>
-        <form:select path="nflTeam">
+        <form:select path="nflTeam">  <%-- itemValue="${playerAttribute.nflTeam.locationAbbreviation}" --%>
           <form:options items="${nflTeamsList}" itemValue="locationAbbreviation" itemLabel="locationAbbreviation"/>
         </form:select>
         <form:errors path="nflTeam" cssClass="error"/>
