@@ -11,7 +11,7 @@
 --  * More info about the SQL commands/syntax supported by Derby can be found in the Derby Reference Manual, which can be found at: https://db.apache.org/derby/manuals/
 --  * This file was created by doing:
 --      Admin@DESKTOP-4P28AA3 ~/git/FantasyFootball
---      $ dblook -d 'jdbc:derby:C:\Users\Admin\git\FantasyFootball\nflDB' -z APP -o 'C:\Users\Admin\Desktop\schema.sql'
+--      $ dblook -d 'jdbc:derby://localhost:1527/C:\Users\Admin\git\FantasyFootball\nflDB' -z APP -o 'C:\Users\Admin\Desktop\schema.sql'
 --  * Originally this FantasyFootball project used SQL commands (included below as reference) to create the tables (and add rows to the tables).
 --    But then that nflDB folder/database was used in conjunction with dblook to create the equivalent commands in this schema.sql file (and the data.sql file). 
 
@@ -110,7 +110,7 @@ CREATE TABLE "APP"."FANTASYTEAMS" (
 --     fantasyTeamId INT  NOT NULL,
 --     week INT  NOT NULL  CONSTRAINT WEEK_CONSTRAINT CHECK (week >= 1 AND week <= 5),
 --     CONSTRAINT pk_weeklyTeams PRIMARY KEY (playerID, fantasyTeamId, week),
---     CONSTRAINT fk_playerID FOREIGN KEY (playerID) REFERENCES players(playerPK),
+--     CONSTRAINT fk_playerID  FOREIGN KEY (playerID)  REFERENCES players(playerPK)  ON DELETE CASCADE,
 --     CONSTRAINT fk_fantasyTeamId FOREIGN KEY (fantasyTeamId) REFERENCES fantasyTeams(Id) );
 CREATE TABLE "APP"."WEEKLYTEAMS" (
   "PLAYERID" INTEGER NOT NULL, 
@@ -131,7 +131,7 @@ ALTER TABLE "APP"."NFLTEAMS" ADD CONSTRAINT "PK_LOCATIONABBREVIATION" PRIMARY KE
 ALTER TABLE "APP"."PLAYERS" ADD CONSTRAINT "PK_PLAYERPK" PRIMARY KEY ("PLAYERPK");
 
 -- FOREIGN
-ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "FK_PLAYERID" FOREIGN KEY ("PLAYERID") REFERENCES "APP"."PLAYERS" ("PLAYERPK")  ON DELETE NO ACTION  ON UPDATE NO ACTION;
+ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "FK_PLAYERID" FOREIGN KEY ("PLAYERID") REFERENCES "APP"."PLAYERS" ("PLAYERPK")  ON DELETE CASCADE  ON UPDATE NO ACTION;
 
 ALTER TABLE "APP"."WEEKLYTEAMS" ADD CONSTRAINT "FK_FANTASYTEAMID" FOREIGN KEY ("FANTASYTEAMID") REFERENCES "APP"."FANTASYTEAMS" ("ID")  ON DELETE NO ACTION  ON UPDATE NO ACTION;
 
