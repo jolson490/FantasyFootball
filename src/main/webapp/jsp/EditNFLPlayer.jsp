@@ -38,7 +38,7 @@
       </div>
       <div>
         <label>NFL Team:</label>
-        <form:select path="nflTeam">  <%-- itemValue="${playerAttribute.nflTeam.locationAbbreviation}" --%>
+        <form:select path="nflTeam">
           <form:options items="${nflTeamsList}" itemValue="locationAbbreviation" itemLabel="locationAbbreviation"/>
         </form:select>
         <form:errors path="nflTeam" cssClass="error"/>

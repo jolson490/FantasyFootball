@@ -144,7 +144,6 @@ public class FantasyFootballController {
 
     if (result.hasErrors()) {
       addNewPlayerLists(model);
-      // model.addAttribute("playerAttribute", theBoundPlayer);
 
       // return "redirect:/newNFLPlayer"; // Not ideal: doesn't display any field error messages
 
@@ -189,7 +188,6 @@ public class FantasyFootballController {
     logger.debug("in saveEditedNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
 
     if (result.hasErrors()) {
-      // model.addAttribute("playerToEdit", theBoundPlayer);
       addNflTeamsList(model); // e.g. for curl command that omits a readonly field
 
       return "EditNFLPlayer";

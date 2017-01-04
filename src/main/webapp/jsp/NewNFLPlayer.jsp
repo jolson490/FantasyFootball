@@ -32,7 +32,7 @@
         
         <%-- The purpose of 'path' is to bind to the 'position' variable within the model. 
              And 'items' specifies the list of objects to use for generating the 'option' tags (i.e. choices in the drop-down menu). --%>
-        <form:select path="position" items="${positionsList}"/>  <%-- itemValue="${playerAttribute.position}" --%>
+        <form:select path="position" items="${positionsList}"/>
         
         <form:errors path="position" cssClass="error"/>
       </div>
@@ -43,7 +43,7 @@
       </div>
       <div>
         <label>NFL Team:</label>        
-        <form:select path="nflTeam">  <%-- itemValue="${playerAttribute.nflTeam.locationAbbreviation}" --%>
+        <form:select path="nflTeam">
           <form:options items="${nflTeamsList}" itemValue="locationAbbreviation" itemLabel="locationAbbreviation"/>
         </form:select>
         <form:errors path="nflTeam" cssClass="error"/>
