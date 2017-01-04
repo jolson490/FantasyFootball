@@ -100,18 +100,30 @@ public class FantasyFootballController {
 
   // ****
 
+  private void addPositionsList(Model model) {
+    final List<String> positions = Arrays.asList("QB", "RB", "WR", "TE", "K");
+    model.addAttribute("positionsList", positions);
+  }
+
+  private void addNflTeamsList(Model model) {
+    List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
+    model.addAttribute("nflTeamsList", nflTeams);
+  }
+
+  // **
+
+  private void addNewPlayerLists(Model model) {
+    addPositionsList(model);
+    addNflTeamsList(model);
+  }
+
   // http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer
   // curl -X GET http://localhost:8080/ILMServices-FantasyFootball/newNFLPlayer -o NewNFLPlayer.html
   @GetMapping("/newNFLPlayer")
   public String newNFLPlayer(Model model) {
     logger.debug("in newNFLPlayer()");
 
-    final List<String> positions = Arrays.asList("QB", "RB", "WR", "TE", "K");
-    model.addAttribute("positionsList", positions);
-
-    List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
-    model.addAttribute("nflTeamsList", nflTeams);
-
+    addNewPlayerLists(model);
     model.addAttribute("playerAttribute", new Player());
 
     return "NewNFLPlayer";
@@ -131,6 +143,8 @@ public class FantasyFootballController {
     //   #2) SqlExceptionHelper: Column 'NFLTEAM'  cannot accept a NULL value.
 
     if (result.hasErrors()) {
+      addNewPlayerLists(model);
+
       // return "redirect:/newNFLPlayer"; // Not ideal: doesn't display any field error messages
 
       // Not ideal (allows the URL in the browser to change from newNFLPlayer to createNFLPlayer)...
@@ -143,7 +157,7 @@ public class FantasyFootballController {
     return "redirect:/nflPlayers";
   }
 
-  // ****
+  // **
 
   // TO-DO: move Aaron Rodgers to 52, then move back to 1 and actually ends up 2 (behind Matthew Stafford still at nflRanking 1).
 
@@ -163,8 +177,7 @@ public class FantasyFootballController {
       model.addAttribute("playerToEdit", playerRepository.findOne(playerPK));
     }
 
-    List<NFLTeam> nflTeams = (List<NFLTeam>) nflTeamRepository.findAll();
-    model.addAttribute("nflTeamsList", nflTeams);
+    addNflTeamsList(model);
 
     return "EditNFLPlayer";
   }
@@ -175,6 +188,8 @@ public class FantasyFootballController {
     logger.debug("in saveEditedNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
 
     if (result.hasErrors()) {
+      addNflTeamsList(model); // e.g. for curl command that omits a readonly field
+
       return "EditNFLPlayer";
     }
 
