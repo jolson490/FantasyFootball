@@ -12,12 +12,15 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +47,21 @@ public class FantasyFootballController {
 
   @Autowired
   private NFLTeamRepository nflTeamRepository;
+
+  // convert blank String (form field - e.g. nflRanking) to zero Integer.
+  @InitBinder
+  public void registerCustomerBinder(WebDataBinder binder) {
+    logger.debug("in registerCustomerBinder()");
+    binder.registerCustomEditor(
+        Integer.class,
+        new CustomNumberEditor(Integer.class, true) {
+          @Override
+          public void setValue(Object o) {
+            super.setValue((o == null)? 0 : o);
+          }
+        }
+        );
+  }
 
   // ************************ BEGIN MAPPING METHODS... ************************
 
@@ -116,8 +134,7 @@ public class FantasyFootballController {
       // return "redirect:/newNFLPlayer"; // Not ideal: doesn't display any field error messages
 
       // Not ideal (allows the URL in the browser to change from newNFLPlayer to createNFLPlayer)...
-      // ...but at least field error messages get displayed - e.g. when NFL Ranking is left blank, then get error message, albeit not the most human readable/friendly (not concise/customized):
-      //  * Failed to convert property value of type [java.lang.String] to required type [int] for property nflRanking; nested exception is java.lang.NumberFormatException: For input string: ""
+      // ...but at least field error messages get displayed.
       return "NewNFLPlayer";
     }
 

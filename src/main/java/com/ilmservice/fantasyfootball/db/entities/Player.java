@@ -53,7 +53,7 @@ public class Player {
   // application code to create a new player that has the same ranking as an existing player (by first bumping down the ranking of all subsequent players).
   @Column(name = "NFLRANKING")
   @Generated(GenerationTime.INSERT)
-  @NotNull(message = "NFL Ranking is required")
+  @NotNull(message = "NFL Ranking is required") // Similar to @Size above (for 'position'), @NotNull is needed here (for 'nflRanking') to avoid an exception for an invalid curl command (when nflRanking is omitted - and thus null).
   private Integer nflRanking;
 
   @OneToOne

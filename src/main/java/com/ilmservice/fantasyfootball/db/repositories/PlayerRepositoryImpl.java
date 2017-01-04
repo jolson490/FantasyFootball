@@ -53,10 +53,10 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
     // Make sure the next nflRanking value is correct. (The db (call below to PlayerRepository.save) ignores the value of nflRanking in
     // newPlayer - i.e. the db always uses next generated value; this matters when inserting a new player into the middle of the table.)
     final int nextGeneratedValue = getActualNflRanking(requestedNflRanking);
-    playerDao.restartNflRanking(nextGeneratedValue);
+    playerDao.restartNflRanking(nextGeneratedValue); // don't need to bother also setting the nflRanking in 'newPlayer' to 'nextGeneratedValue'...
 
     logger.debug("about to create/save new player: {}", newPlayer);
-    playerRepository.save(newPlayer);
+    playerRepository.save(newPlayer); // ...ignores the value of nflRanking in 'newPlayer' - instead uses 'nextGeneratedValue'.
 
     // If the user did not specify a value for nflRanking, then the db (in the call above to PlayerRepository.save) will have generated the next
     // highest value for 'nflRanking' (i.e. added the player to the end of the table) - in which case there's no need to tell the db to reorder the players.
