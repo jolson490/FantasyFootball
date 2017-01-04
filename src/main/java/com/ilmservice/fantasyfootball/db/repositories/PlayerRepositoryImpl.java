@@ -66,11 +66,11 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
       reorderPlayersRankings();
     }
   }
-  
+
   // Given the requested Nfl Ranking, return what value can actually be allowed.
   private int getActualNflRanking(final int requestedNflRanking) {
     int actualNflRanking = requestedNflRanking;
-    if ((requestedNflRanking == 0) || (requestedNflRanking > playerRepository.count() + 1)) {
+    if ((requestedNflRanking <= 0) || (requestedNflRanking > playerRepository.count() + 1)) {
       // Override the requestedNflRanking value
       actualNflRanking = (int) (playerRepository.count() + 1);
     }
@@ -81,7 +81,7 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
   @Override
   public void editPlayer(Player player) {
     logger.debug("in editPlayer(): player={}", player);
-    
+
     // Handle a request that omitted the nflRanking (in which case the default value is 0) - e.g.:
     //  * curl http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/4/saveEditedNFLPlayer --data "firstName=Jordy&lastName=Nelson&nflTeam=GB&position=WR"
     final int requestedNflRanking = player.getNflRanking();

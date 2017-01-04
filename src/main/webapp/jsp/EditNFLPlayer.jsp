@@ -32,7 +32,7 @@
       </div>
       <div>
         <label>NFL Ranking:</label>
-        <input type="number" name="nflRanking"/>
+        <input type="number" name="nflRanking" min="0"/>
         <form:errors path="nflRanking" cssClass="error"/>
       </div>
       <div>
