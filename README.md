@@ -1,5 +1,22 @@
 # FantasyFootball
 
+## Current State
+
+This is not a fully fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :).
+But this is a good example of a (relatively simple) Java EE web application, using: Spring (Boot & MVC & JPA), a SQL database, JSP, and a little CSS.
+
+Pages:
+ * "Choose Week" - just a simple proof-of-concept for a Spring MVC drop-down menu. (The idea is to eventually add functionality to allow a given user to specify which players they want to play (vs have on their bench) on their fantasy team for a given week of the season.)
+ * "Show Fantasy Teams" - simply shows the pre-populated teams from the database. (Currently there is no way to create/edit/delete fantasy teams/users - nor is their any login/authentication.)
+ * "NFL Players" - by far the most interesting of the 3 pages. Allows you to create/edit/delete NFL players in the database.
+    * The nflRanking of each player is based on their 2014 fantasy points - e.g. the player with a value of 1 for this field had the highest total points, 2 had the 2nd highest, etc. And whenever the user creates/edits/deletes a player, the application updates the value of this field across all players accordingly (to ensure it is sort-ordered - the best player has a value of 1, and subsequent values increase by 1 per player). Currently there is no display of ranking within a given position - the ranking is across all players.
+
+Info about data:
+* For simplicity, I used only the 5 teams that were part of the NFC Central Division (https://en.wikipedia.org/wiki/NFL_Central_Division). (Note that in 2002 the division was re-named to the NFC North.)
+* And for the NFL players data, I used a copy of http://www.scoresheet.com/FB_2015_num.xls (from http://www.scoresheet.com/FB_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
+    * the players who played in 2015, 
+    * and their total fantasy points from 2014.
+
 ## Reference Info
 
 This FantasyFootball application is hosted in the following repository: https://github.com/ILMServices/FantasyFootball
