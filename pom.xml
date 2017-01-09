@@ -5,7 +5,7 @@
   <artifactId>ILMServices-FantasyFootball</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -29,7 +29,15 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
     </dependency>
     
     <dependency>
@@ -43,17 +51,6 @@
       <scope>runtime</scope>
       <version>${derby.version}</version>
     </dependency>
-
-    <dependency>
-        <groupId>javax.servlet.jsp</groupId>
-        <artifactId>jsp-api</artifactId>
-        <version>2.2</version>
-    </dependency>
-    
-    <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>jstl</artifactId>
-    </dependency>
     
   <!-- 
                 <dependency>
@@ -64,7 +61,6 @@
     -->
   </dependencies>
 
-<!--
   <build>
     <plugins>
       <plugin>
@@ -73,7 +69,6 @@
       </plugin>
     </plugins>
   </build>
--->
 
   <name>ILM Professional Services - Fantasy Football</name>
   
