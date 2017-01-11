@@ -1,7 +1,7 @@
 -- To run this sql script outside of Spring Boot:
 --  * follow the steps from README.md to make sure your database server is started.
 --  * do the following command: 
---      mysql -u root -p -h 127.0.0.1 -P 3307
+--      mysql -u root -p -h 127.0.0.1
 
 CREATE DATABASE  IF NOT EXISTS  nflDB;
 USE nflDB;
