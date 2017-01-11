@@ -1,92 +1,91 @@
 -- (Some of the commentary in schema.sql also applies to this data.sql file.)
 
------connect 'jdbc:derby:${ff.database.location}';
+USE nflDB;
 
-SET SCHEMA APP;
+INSERT INTO nflTeams (locationAbbreviation, location, mascot) VALUES ('GB', 'Green Bay', 'Packers');
+INSERT INTO nflTeams (locationAbbreviation, location, mascot) VALUES ('DET', 'Detroit', 'Lions'); 
+INSERT INTO nflTeams (locationAbbreviation, location, mascot) VALUES ('CHI', 'Chicago', 'Bears'); 
+INSERT INTO nflTeams (locationAbbreviation, location, mascot) VALUES ('MIN', 'Minnesota', 'Vikings'); 
+INSERT INTO nflTeams (locationAbbreviation, location, mascot) VALUES ('TB', 'Tampa Bay', 'Buccaneers'); 
 
--- For simplicity, this application only has 5 NFL Teams - the 5 teams that were in the NFC Central Division (before the realignment that occurred in 2002).
-insert into nflTeams (locationAbbreviation, location, mascot) values ('GB', 'Green Bay', 'Packers');
-insert into nflTeams (locationAbbreviation, location, mascot) values ('DET', 'Detroit', 'Lions'); 
-insert into nflTeams (locationAbbreviation, location, mascot) values ('CHI', 'Chicago', 'Bears'); 
-insert into nflTeams (locationAbbreviation, location, mascot) values ('MIN', 'Minnesota', 'Vikings'); 
-insert into nflTeams (locationAbbreviation, location, mascot) values ('TB', 'Tampa Bay', 'Buccaneers'); 
-
--- To create the "insert into players" commands, the following spreadsheet was used as a starting point: http://www.scoresheet.com/FB_2015_num.xls 
+-- To create the "INSERT INTO players" commands, a spreadsheet (described by the README.md) was used as a starting point. 
 --  * (As noted on http://www.scoresheet.com/FB_current.php, the columns in that spreadsheet are: SS Player Number, 2014 Total Points, Points Per Game, Age, Team and Bye, Name.)
 --  * TO-DO: Instead of storing/maintaing a sort-ordered/unique nflRanking, perhaps:
 --     ** the "2014 Total Points" column (from the spreadsheet) should be stored/used (in this 'players') table,
 --     ** and derive the corresponding NFL Ranking if needed. 
-insert into players values (NEXT VALUE FOR playerPK_seq,'Aaron','Rodgers','QB',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matthew','Stafford','QB',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jay','Cutler','QB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jordy','Nelson','WR',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Forte','RB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Teddy','Bridgewater','QB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Randall','Cobb','WR',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Eddie','Lacy','RB',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Golden','Tate','WR',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Alshon','Jeffery','WR',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Evans','WR',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Calvin','Johnson','WR',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Martellus','Bennett','TE',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Wallace','WR',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Joique','Bell','RB',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Vincent','Jackson','WR',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Eddie','Royal','WR',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Asiata','RB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Shaun','Hill','QB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Mason','Crosby','K',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jarius','Wright','WR',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Mike','Glennon','QB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Blair','Walsh','K',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Patrick','Murray','K',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Cordarrelle','Patterson','WR',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jerick','McKinnon','RB',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Davante','Adams','WR',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Bobby','Rainey','RB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Matt','Prater','K',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Charles','Johnson','WR',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Louis','Murphy','WR',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Doug','Martin','RB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Andrew','Quarless','TE',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'James','Starks','RB',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Theo','Riddick','RB',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jacquizz','Rodgers','RB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jeremy','Ross','WR',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Kyle','Rudolph','TE',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Eric','Ebron','TE',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Richard','Rodgers','TE',DEFAULT,'GB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Austin','Seferian-Jenkins','TE',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Rhett','Ellison','TE',DEFAULT,'MIN');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Charles','Sims','RB',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Brandon','Myers','TE',DEFAULT,'TB');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Corey','Fuller','WR',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Marquess','Wilson','WR',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Robbie','Gould','K',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'KaDeem','Carey','RB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Dante','Rosario','TE',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Brandon','Pettigrew','TE',DEFAULT,'DET');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Jimmy','Clausen','QB',DEFAULT,'CHI');
-insert into players values (NEXT VALUE FOR playerPK_seq,'Adrian','Peterson','RB',DEFAULT,'MIN');
 
--- insert into players values (NEXT VALUE FOR playerPK_seq,'Detroit','Lions','Defense',DEFAULT,'DET');
--- insert into players values (NEXT VALUE FOR playerPK_seq,'Minnesota','Vikings','Defense',DEFAULT,'MIN');
--- insert into players values (NEXT VALUE FOR playerPK_seq,'Green Bay','Packers','Defense',DEFAULT,'GB');
--- insert into players values (NEXT VALUE FOR playerPK_seq,'Tampa Bay','Buccaneers','Defense',DEFAULT,'TB');
--- insert into players values (NEXT VALUE FOR playerPK_seq,'Chicago','Bears','Defense',DEFAULT,'CHI');
+SET @seq_nflRanking = 0;
+INSERT INTO players (nflRanking, fname, lname, position, nflTeam) VALUES 
+  (@seq_nflRanking := @seq_nflRanking + 1,'Aaron','Rodgers','QB','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Matthew','Stafford','QB','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jay','Cutler','QB','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jordy','Nelson','WR','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Matt','Forte','RB','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Teddy','Bridgewater','QB','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Randall','Cobb','WR','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Eddie','Lacy','RB','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Golden','Tate','WR','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Alshon','Jeffery','WR','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Mike','Evans','WR','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Calvin','Johnson','WR','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Martellus','Bennett','TE','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Mike','Wallace','WR','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Joique','Bell','RB','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Vincent','Jackson','WR','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Eddie','Royal','WR','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Matt','Asiata','RB','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Shaun','Hill','QB','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Mason','Crosby','K','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jarius','Wright','WR','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Mike','Glennon','QB','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Blair','Walsh','K','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Patrick','Murray','K','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Cordarrelle','Patterson','WR','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jerick','McKinnon','RB','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Davante','Adams','WR','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Bobby','Rainey','RB','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Matt','Prater','K','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Charles','Johnson','WR','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Louis','Murphy','WR','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Doug','Martin','RB','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Andrew','Quarless','TE','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'James','Starks','RB','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Theo','Riddick','RB','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jacquizz','Rodgers','RB','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jeremy','Ross','WR','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Kyle','Rudolph','TE','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Eric','Ebron','TE','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Richard','Rodgers','TE','GB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Austin','Seferian-Jenkins','TE','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Rhett','Ellison','TE','MIN'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Charles','Sims','RB','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Brandon','Myers','TE','TB'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Corey','Fuller','WR','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Marquess','Wilson','WR','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Robbie','Gould','K','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'KaDeem','Carey','RB','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Dante','Rosario','TE','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Brandon','Pettigrew','TE','DET'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Jimmy','Clausen','QB','CHI'),
+  (@seq_nflRanking := @seq_nflRanking + 1,'Adrian','Peterson','RB','MIN');
+--   (@seq_nflRanking := @seq_nflRanking + 1,'Detroit','Lions','Defense','DET'),
+--   (@seq_nflRanking := @seq_nflRanking + 1,'Minnesota','Vikings','Defense','MIN'),
+--   (@seq_nflRanking := @seq_nflRanking + 1,'Green Bay','Packers','Defense','GB'),
+--   (@seq_nflRanking := @seq_nflRanking + 1,'Tampa Bay','Buccaneers','Defense','TB'),
+--   (@seq_nflRanking := @seq_nflRanking + 1,'Chicago','Bears','Defense','CHI'),
 
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('jOlson', '1.21 JJ Watts'); 
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('cJohnson', 'Kobayshi Maru');
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('amyR', 'Hufflepuff');
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('LAnn', 'Packers West');
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('jason', 'TitleTown USA');
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('jen', 'Undefeated');
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('AmyM', '2 Minute Drill');
-insert into fantasyTeams (USERNAME, FANTASYMASCOT) values ('matt', 'Hawkeyes');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('jOlson', '1.21 JJ Watts'); 
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('cJohnson', 'Kobayshi Maru');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('amyR', 'Hufflepuff');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('LAnn', 'Packers West');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('jason', 'TitleTown USA');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('jen', 'Undefeated');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('AmyM', '2 Minute Drill');
+INSERT INTO fantasyTeams (USERNAME, FANTASYMASCOT) VALUES ('matt', 'Hawkeyes');
 
-insert into weeklyTeams values (1, 1, 1);
-insert into weeklyTeams values (1, 2, 2);
-insert into weeklyTeams values (10, 1, 3);
-insert into weeklyTeams values (11, 2, 4);
-insert into weeklyTeams values (12, 1, 5);
-insert into weeklyTeams values (13, 2, 5);
+INSERT INTO weeklyTeams VALUES (1, 1, 1);
+INSERT INTO weeklyTeams VALUES (1, 2, 2);
+INSERT INTO weeklyTeams VALUES (10, 1, 3);
+INSERT INTO weeklyTeams VALUES (11, 2, 4);
+INSERT INTO weeklyTeams VALUES (12, 1, 5);
+INSERT INTO weeklyTeams VALUES (13, 2, 5);

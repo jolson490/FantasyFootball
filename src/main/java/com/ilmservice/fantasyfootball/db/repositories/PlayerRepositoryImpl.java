@@ -14,9 +14,6 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
   @Autowired
   private PlayerRepository playerRepository;
 
-  @Autowired
-  private PlayerDao playerDao;
-
   @Override
   public void deletePlayer(Integer playerPK) {
     logger.debug("in deletePlayer(): playerPK={}", playerPK);
@@ -49,17 +46,14 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
     logger.debug("in addPlayer(): newPlayer={}", newPlayer);
 
     final int requestedNflRanking = newPlayer.getNflRanking();
-
-    // Make sure the next nflRanking value is correct. (The db (call below to PlayerRepository.save) ignores the value of nflRanking in
-    // newPlayer - i.e. the db always uses next generated value; this matters when inserting a new player into the middle of the table.)
-    final int nextGeneratedValue = getActualNflRanking(requestedNflRanking);
-    playerDao.restartNflRanking(nextGeneratedValue); // don't need to bother also setting the nflRanking in 'newPlayer' to 'nextGeneratedValue'...
+    final int actualNflRanking = getActualNflRanking(requestedNflRanking);
+    newPlayer.setNflRanking(actualNflRanking);
 
     logger.debug("about to create/save new player: {}", newPlayer);
-    playerRepository.save(newPlayer); // ...ignores the value of nflRanking in 'newPlayer' - instead uses 'nextGeneratedValue'.
+    playerRepository.save(newPlayer);
 
-    // If the user did not specify a value for nflRanking, then the db (in the call above to PlayerRepository.save) will have generated the next
-    // highest value for 'nflRanking' (i.e. added the player to the end of the table) - in which case there's no need to tell the db to reorder the players.
+    // If the user did not specify a value for nflRanking, then 'getActualNflRanking' will have set it to the next
+    // highest value (i.e. added the player to the end of the table) - in which case there's no need to tell the db to reorder the players.
     // (Note that we also don't need to go into the following "if" check if the user happened to specify the next value that the db was going to
     // generate, but for simplicity don't bother checking for that.)
     if (requestedNflRanking > 0) {

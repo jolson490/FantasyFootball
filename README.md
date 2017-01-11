@@ -7,7 +7,7 @@ But this is a good example of a (relatively simple) Java EE web application, usi
 
 Pages:
  * "Choose Week" - just a simple proof-of-concept for a Spring MVC drop-down menu. (The idea is to eventually add functionality to allow a given user to specify which players they want to play (vs have on their bench) on their fantasy team for a given week of the season.)
- * "Show Fantasy Teams" - simply shows the pre-populated teams from the database. (Currently there is no way to create/edit/delete fantasy teams/users - nor is their any login/authentication.)
+ * "Show Fantasy Teams" - simply shows the pre-populated teams from the database. (Currently there is no way to create/edit/delete fantasy teams/users - nor is there any login/authentication.)
  * "NFL Players" - by far the most interesting of the 3 pages. Allows you to create/edit/delete NFL players in the database.
     * The nflRanking of each player is based on their 2014 fantasy points - e.g. the player with a value of 1 for this field had the highest total points, 2 had the 2nd highest, etc. And whenever the user creates/edits/deletes a player, the application updates the value of this field across all players accordingly (to ensure it is sort-ordered - the best player has a value of 1, and subsequent values increase by 1 per player). Currently there is no display of ranking within a given position - the ranking is across all players.
 
@@ -27,7 +27,6 @@ More info about ILM can be found at: http://ilmservice.com
 Note that this project was created:
  - on a machine running Windows
  - with the JAVA\_HOME environment variable set to: "C:\Program Files\Java\jdk1.8.0_65"
- - with the following in the PATH environment variable: "%JAVA\_HOME%\bin;%JAVA\_HOME%\db\bin;"
 
 ## Pre-requisites
 
@@ -35,6 +34,7 @@ Before you run this web application, you need to complete these pre-requisites.
 
 Have the following installed on your machine: 
 * JDK version 8.
+* A SQL database server.
 * eclipse, including the following plugins:
     * version 1.7.0.2 or later of: "Maven Integration for Eclipse" (AKA org.eclipse.m2e.core - from http://download.eclipse.org/technology/m2e/releases).
     * version 0.17.2 or later of: "m2e connector for the mavenarchiver and pom properties" (AKA org.sonatype.m2e.mavenarchiver - from http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/LATEST/).
@@ -51,9 +51,7 @@ Setup in Eclipse:
 * maven clean install. 
 * right-click this FantasyFootball project, Maven, Update Project.
 
-For all remaining steps, you need to have the derby database network server started - which is done via:
-* $ cd $DERBY_HOME/bin
-* $ ./startNetworkServer
+For all remaining steps, you need to have the SQL database server started.
 
 NOTE: to start the application (i.e. an uber jar - that includes Tomcat embedded): in eclipse, right-click this project, Run As, Spring Boot App.
 
