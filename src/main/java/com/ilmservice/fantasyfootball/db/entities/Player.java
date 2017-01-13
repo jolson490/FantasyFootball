@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "Players")
+@Table(name = "players")
 @NamedQuery(name = "Player.findAll", query = "select p from Player p order by p.nflRanking")
 public class Player {
 
