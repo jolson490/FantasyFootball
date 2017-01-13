@@ -2,7 +2,7 @@
 
 ## To try out this application in AWS (without setting it up on your own computer)
 
-** I have a copy/instance of this application/jar running at: http://lowcost-env.s8e6tc8cps.us-east-1.elasticbeanstalk.com/ILMServices-FantasyFootball/ **
+**I have a copy/instance of this application/jar running at: http://lowcost-env.s8e6tc8cps.us-east-1.elasticbeanstalk.com/ILMServices-FantasyFootball/**
 
 ## Current State
 
