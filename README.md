@@ -1,8 +1,8 @@
 # FantasyFootball
 
-## To try out this application (without setting it up on your own computer) in AWS
+## To try out this application in AWS (without setting it up on your own computer)
 
-I have a copy/instance of this application/jar running at: http://lowcost-env.s8e6tc8cps.us-east-1.elasticbeanstalk.com/ILMServices-FantasyFootball/
+** I have a copy/instance of this application/jar running at: http://lowcost-env.s8e6tc8cps.us-east-1.elasticbeanstalk.com/ILMServices-FantasyFootball/ **
 
 ## Current State
 
@@ -16,8 +16,8 @@ Pages:
     * The nflRanking of each player is based on their 2014 fantasy points - e.g. the player with a value of 1 for this field had the highest total points, 2 had the 2nd highest, etc. And whenever the user creates/edits/deletes a player, the application updates the value of this field across all players accordingly (to ensure it is sort-ordered - the best player has a value of 1, and subsequent values increase by 1 per player). Currently there is no display of ranking within a given position - the ranking is across all players.
 
 Info about data:
-* For simplicity, I used only the 5 teams that were part of the NFC Central Division (https://en.wikipedia.org/wiki/NFL_Central_Division). (Note that in 2002 the division was re-named to the NFC North.)
-* And for the NFL players data, I used a copy of http://www.scoresheet.com/FB_2015_num.xls (from http://www.scoresheet.com/FB_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
+* For simplicity, I used only the 5 teams that were part of the NFC Central Division (https://en.wikipedia.org/wiki/NFL\_Central\_Division). (Note that in 2002 the division was re-named to the NFC North.)
+* And for the NFL players data, I used a copy of http://www.scoresheet.com/FB\_2015\_num.xls (from http://www.scoresheet.com/FB\_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
     * the players who played in 2015, 
     * and their total fantasy points from 2014.
 
@@ -30,26 +30,29 @@ NOTE: The rest of this README is info for any developer interested in setting up
 * with your own AWS account, 
 * or on your own machine (e.g. to make code changes).
 
-## Developer - cloud: 
+## Developer - cloud (to run this application with your own AWS account): 
 
-To run this application with your own AWS account:
-  Do a git clone of this repository: 
-    git clone https://github.com/ILMServices/FantasyFootball
-  Build the application:
-    cd FantasyFootball
-    mvn package # creates ./target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar
-  Upload the uber jar (that you just built) into AWS Elastic Beanstalk
-  And then in AWS:
-    In RDS: I created a MySQL database, and then I did the following to populate it with data:
-      cd FantasyFootball/src/main/resources/
-      mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <schema.sql
-      mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <data.sql
-    In Beanstalk: I created an application environment:
-      I specified the Java 8 platform
-      I modified the configuration environment variables:
-        RDS_* - point to my RDS database
-        SERVER_PORT - set to 5000
-        SPRING_DATASOURCE_* - override a few properties from the application.properties in this repository
+Do a git clone of this repository: 
+* git clone https://github.com/ILMServices/FantasyFootball
+
+Build the application:
+* cd FantasyFootball
+* mvn package # creates ./target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar
+
+And then in AWS...
+
+...in RDS: I created a MySQL database, and then I did the following to populate it with data:
+* cd FantasyFootball/src/main/resources/
+* mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <schema.sql
+* mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <data.sql
+
+...in Elastic Beanstalk: I created an application environment:
+* I specified the Java 8 platform
+* Upload the uber jar (that you built with mvn)
+* I modified the configuration environment variables:
+    * RDS\_* - point to my RDS database
+    * SERVER\_PORT - set to 5000
+    * SPRING\_DATASOURCE\_* - override a few properties from the application.properties in this repository
 
 ## Developer - localhost: Info about this FantasyFootball eclipse project
 
