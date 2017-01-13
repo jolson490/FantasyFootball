@@ -1,5 +1,9 @@
 # FantasyFootball
 
+## To try out this application (without setting it up on your own computer) in AWS
+
+I have a copy/instance of this application/jar running at: http://lowcost-env.s8e6tc8cps.us-east-1.elasticbeanstalk.com/ILMServices-FantasyFootball/
+
 ## Current State
 
 This is not a fully fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :).
@@ -22,13 +26,38 @@ Info about data:
 This FantasyFootball application is hosted in the following repository: https://github.com/ILMServices/FantasyFootball
 More info about ILM can be found at: http://ilmservice.com
 
-## Info about this FantasyFootball eclipse project
+NOTE: The rest of this README is info for any developer interested in setting up & experimenting with this application - e.g. 
+* with your own AWS account, 
+* or on your own machine (e.g. to make code changes).
+
+## Developer - cloud: 
+
+To run this application with your own AWS account:
+  Do a git clone of this repository: 
+    git clone https://github.com/ILMServices/FantasyFootball
+  Build the application:
+    cd FantasyFootball
+    mvn package # creates ./target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar
+  Upload the uber jar (that you just built) into AWS Elastic Beanstalk
+  And then in AWS:
+    In RDS: I created a MySQL database, and then I did the following to populate it with data:
+      cd FantasyFootball/src/main/resources/
+      mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <schema.sql
+      mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <data.sql
+    In Beanstalk: I created an application environment:
+      I specified the Java 8 platform
+      I modified the configuration environment variables:
+        RDS_* - point to my RDS database
+        SERVER_PORT - set to 5000
+        SPRING_DATASOURCE_* - override a few properties from the application.properties in this repository
+
+## Developer - localhost: Info about this FantasyFootball eclipse project
 
 Note that this project was created:
  - on a machine running Windows
  - with the JAVA\_HOME environment variable set to: "C:\Program Files\Java\jdk1.8.0_65"
 
-## Pre-requisites
+## Developer - localhost: Pre-requisites (to setup & run this application on your own machine)
 
 Before you run this web application, you need to complete these pre-requisites.
 
@@ -42,7 +71,7 @@ Have the following installed on your machine:
 Setup in Eclipse:
 * Window, Preferences, Java, Installed JREs
     * Remove any existing JRE.
-    * Add jdk1.8.* - specify the value of JAVA\_HOME (e.g. C:\Program Files\Java\jdk1.8.0_101). Check the box next to this jdk, click Apply.
+    * Add jdk1.8.* - specify the value of JAVA\_HOME (e.g. C:\Program Files\Java\jdk1.8.0_101). Check the box next to this jdk, click Apply. 
 * Git stuff:
     * Window, Preferences, Team, Git, Configuration, create/specify the "user.email" and "user.name" Git settings in eclipse. (Reference info: https://wiki.eclipse.org/EGit/User_Guide)
     * Git Perspective, "Clone a Git repository", enter https://github.com/ILMServices/FantasyFootball.git as URI.
@@ -60,7 +89,7 @@ The first time you are going to run the application:
  * Then start the application.
  * (And then once the application initializes, terminate it and undo the change you made to application.properties.)
 
-## To Run this application
+## Developer - localhost: To Run this application
 
 Once you have completed the pre-requisites, then start the application.
 Then you can access the application via your browser at: http://localhost:8080/ILMServices-FantasyFootball/
