@@ -9,31 +9,18 @@
 </head>
 <body>
   <table border="1">
+    <%-- Print a table heading (the name of some of the fields within the model). --%>
+    <tr>
+      <th>Username</th>
+      <th>Mascot</th>
+    </tr>
+    
     <c:forEach var="currentTeam" items="${teamsAttribute}" varStatus="loop">
-      <%-- Using the first team in the list, print a table heading (the name of each field within the model). --%>
-      <c:if test="${loop.first}">
-          <tr>
-              <c:forEach var="field" items="${currentTeam['class'].declaredFields}">
-                  <th>${field.name}</th>
-              </c:forEach>
-          </tr>
-      </c:if>
-      <%-- For the current team, print the value of each of its fields. --%>
-      <c:if test="${not empty currentTeam['class'].declaredFields}">
-        <tr>
-          <c:forEach var="field" items="${currentTeam['class'].declaredFields}">
-            <c:catch var="catchException">
-              <td>${currentTeam[field.name]}</td>
-            </c:catch>
-            <%-- There is always an exception with serialVersionUID, so don't bother to print any exception(s). --%>
-            <%--
-            <c:if test="${catchException != null}">
-              <p>The exception is: ${catchException}</p><br>
-            </c:if>
-            --%>
-          </c:forEach>
-        </tr>
-      </c:if>
+      <%-- For the current team, print the value of some of its fields. --%>
+      <tr>
+        <td>${currentTeam.username}</td>
+        <td>${currentTeam.mascot}</td>
+      </tr>
     </c:forEach>
   </table>
   <br>

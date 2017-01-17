@@ -13,28 +13,29 @@
   <div class="row">
   <h1>Players</h1>
   <table border="1">
+    <%-- Print a table heading (the name of some of the fields within the model). --%>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Position</th>
+      <th>NFL Ranking</th>
+      <th>NFL Team</th>
+      <th></th> <%-- (Edit) --%>
+      <th></th> <%-- (Delete) --%>
+    </tr>
+
     <c:forEach var="currentPlayer" items="${playersAttribute}" varStatus="loop">
-      <%-- Using the first player in the list, print a table heading (the name of each field within the model). --%>
-      <c:if test="${loop.first}">
-          <tr>
-              <c:forEach var="field" items="${currentPlayer['class'].declaredFields}">
-                  <th>${field.name}</th>
-              </c:forEach>
-              <th></th> <%-- (Edit) --%>
-              <th></th> <%-- (Delete) --%>
-          </tr>
-      </c:if>
-      
-      <%-- For the current player, print the value of each of its fields. --%>
-      <c:if test="${not empty currentPlayer['class'].declaredFields}">
-        <tr>
-          <c:forEach var="field" items="${currentPlayer['class'].declaredFields}">
-            <td>${currentPlayer[field.name]}</td>            
-          </c:forEach>
-          <td><a href="${pageContext.request.contextPath}/editNFLPlayer/${currentPlayer.playerPK}/">Edit</a></td>
-          <td><a href="${pageContext.request.contextPath}/deleteNFLPlayer/${currentPlayer.playerPK}/">Delete</a></td>
-        </tr>
-      </c:if>
+      <tr>
+        <%-- For the current player, print the value of some of its fields. --%>
+        <td>${currentPlayer.firstName}</td>
+        <td>${currentPlayer.lastName}</td>
+        <td>${currentPlayer.position}</td>
+        <td>${currentPlayer.nflRanking}</td>
+        <td>${currentPlayer.nflTeam}</td>
+        
+        <td><a href="${pageContext.request.contextPath}/editNFLPlayer/${currentPlayer.playerPK}/">Edit</a></td>
+        <td><a href="${pageContext.request.contextPath}/deleteNFLPlayer/${currentPlayer.playerPK}/">Delete</a></td>
+      </tr>
     </c:forEach>
   </table>
   </div>
