@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Error - ILM Fantasy Football</title>
-<link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
+<link href="<c:url value="/css/main.css" />" rel="stylesheet">
 </head>
 
 <body>
