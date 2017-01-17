@@ -310,7 +310,7 @@ public class FantasyFootballController {
     logger.debug("number of NFL players: {}", numberPlayers);
 
     List<Player> nflPlayers = playerRepository.findAll();
-    nflPlayers.stream().forEach(nflPlayer -> logger.debug("NFL player: {}", nflPlayer.toString()));
+    nflPlayers.stream().forEach(nflPlayer -> logger.trace("NFL player: {}", nflPlayer.toString()));
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
