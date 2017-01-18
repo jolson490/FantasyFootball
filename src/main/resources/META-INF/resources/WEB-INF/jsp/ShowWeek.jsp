@@ -10,8 +10,6 @@
 
 Selected week: ${weekAttribute.week}<br/>
 
-<%-- TO-DO-data-weeklyTeams: show the players/teams for specified week. --%>
-
 <a href="${pageContext.request.contextPath}/">Main page</a>
 
 </body>

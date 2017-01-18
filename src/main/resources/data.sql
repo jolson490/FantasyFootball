@@ -10,9 +10,6 @@ INSERT INTO nflTeams (locationAbbreviation, location, mascot) VALUES ('TB', 'Tam
 
 -- To create the "INSERT INTO players" commands, a spreadsheet (described by the README.md) was used as a starting point. 
 --  * (As noted on http://www.scoresheet.com/FB_current.php, the columns in that spreadsheet are: SS Player Number, 2014 Total Points, Points Per Game, Age, Team and Bye, Name.)
---  * TO-DO: Instead of storing/maintaing a sort-ordered/unique nflRanking, perhaps:
---     ** the "2014 Total Points" column (from the spreadsheet) should be stored/used (in this 'players') table,
---     ** and derive the corresponding NFL Ranking if needed. 
 
 SET @seq_nflRanking = 0;
 INSERT INTO players (nflRanking, fname, lname, position, nflTeam) VALUES 

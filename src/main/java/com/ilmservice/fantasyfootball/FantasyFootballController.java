@@ -159,8 +159,6 @@ public class FantasyFootballController {
 
   // **
 
-  // TO-DO: move Aaron Rodgers to 52, then move back to 1 and actually ends up 2 (behind Matthew Stafford still at nflRanking 1).
-
   // e.g.:
   //  * http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/6/
   //  * curl -X GET http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/6/ -o EditNFLPlayer.html
@@ -183,7 +181,7 @@ public class FantasyFootballController {
   }
 
   // e.g.: curl http://localhost:8080/ILMServices-FantasyFootball/editNFLPlayer/6/saveEditedNFLPlayer --data "firstName=Teddy&lastName=Bridgewater&position=QB&nflRanking=46&nflTeam=DET"
-  @PostMapping("/editNFLPlayer/{playerPK}/saveEditedNFLPlayer") // TO-DO figure out why the mapping is not simply: "/saveEditedNFLPlayer"
+  @PostMapping("/editNFLPlayer/{playerPK}/saveEditedNFLPlayer")
   public String saveEditedNFLPlayer(@Valid @ModelAttribute("playerToEdit") Player theBoundPlayer, BindingResult result, Model model) {
     logger.debug("in saveEditedNFLPlayer(): result.hasErrors()={} theBoundPlayer={}", result.hasErrors(), theBoundPlayer);
 
@@ -219,7 +217,7 @@ public class FantasyFootballController {
   // e.g.:
   // * http://localhost:8080/ILMServices-FantasyFootball/deleteNFLPlayer/25/
   // * curl -X GET http://localhost:8080/ILMServices-FantasyFootball/deleteNFLPlayer/25/
-  @GetMapping("deleteNFLPlayer/{playerPK}") // TO-DO?: change to Post (add JavaScript to corresponding "a href"?).
+  @GetMapping("deleteNFLPlayer/{playerPK}")
   public String deleteNFLPlayer(@PathVariable Integer playerPK, Model model) {
     logger.debug("in deleteNFLPlayer(): playerPK={}", playerPK);
 
@@ -246,7 +244,6 @@ public class FantasyFootballController {
     logger.debug("in chooseWeek()");
 
     Map<Integer, String> weeks = new HashMap<Integer, String>();
-    // TO-DO-data-weeks: populate based on weeks stored in db
     weeks.put(1, "Week 1");
     weeks.put(2, "Week 2");
     weeks.put(3, "Week 3");
@@ -282,7 +279,6 @@ public class FantasyFootballController {
       return "ChooseWeek";
     }
 
-    // TO-DO-data-weeklyTeams get data from db for theBoundWeek, and have the view display/print it to browser.
     return "ShowWeek";
   }
   // ************************ ...END MAPPING METHODS ************************
@@ -324,7 +320,7 @@ public class FantasyFootballController {
     entities.stream().forEach(entity -> logger.debug("{}: {}", entityName, entity.toString()));
   }
 
-  // TODO: migrate the stuff in testPlayers to src/test/ (create automated unit tests).
+  // TODO: migrate the stuff in testPlayers to src/test/ (create automated unit tests - and perhaps use various curl commands (from commentary in this file) as starting point).
   @SuppressWarnings("unused")
   private void testPlayers() {
     logger.debug("in testPlayers()");
@@ -333,8 +329,6 @@ public class FantasyFootballController {
     deletePlayerIfExists("Charles", "J");
     deletePlayerIfExists("Char", "J");
     deletePlayerIfExists("Charles", "");
-
-    // TO-DO Test deleting 2 players at once.
 
     // Test deleting 1 player at once.
     deletePlayerIfExists("Josh", "Olson");

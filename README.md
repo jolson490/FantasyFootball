@@ -2,12 +2,26 @@
 
 ## To try out this application in AWS (without setting it up on your own computer)
 
-**I have an instance of this application running at: http://aws.ilmservice.com/poc/fantasy/**
+**I have an instance of this application running at: http://aws.ilmservice.com/poc/fantasy/ (please feel free to play around with it and check it out!)**
+
+## Summary
+
+This is a (relatively simple) Java EE web application, built with the Spring platform (e.g. Spring Boot and Spring MVC). 
+
+I created this application to experiment with and learn a bunch of new technologies.
+
+## Tech Stack
+
+Three-tier architecture:
+ * User Interface: JSP (JSTL & Jasper), HTML, and CSS.
+ * Middle Tier: Java 8. Spring Data JPA (and Hibernate).
+ * Back End: SQL database.
+
+Tools: Maven, Tomcat. (And Eclipse and Git.)
 
 ## Current State
 
-This is not a fully fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :).
-But this is a good example of a (relatively simple) Java EE web application, using: Spring (Boot & MVC & JPA), a SQL database, JSP, and a little CSS.
+This is not a fully fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :)
 
 Pages:
  * "Choose Week" - just a simple proof-of-concept for a Spring MVC drop-down menu. (The idea is to eventually add functionality to allow a given user to specify which players they want to play (vs have on their bench) on their fantasy team for a given week of the season.)
@@ -20,6 +34,21 @@ Info about data:
 * And for the NFL players data, I used a copy of http://www.scoresheet.com/FB\_2015\_num.xls (from http://www.scoresheet.com/FB\_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
     * the players who played in 2015, 
     * and their total fantasy points from 2014.
+
+## Future State (To-do List)
+
+ * Change the user interface code from JSP to something else - perhaps AngularJS or Thymeleaf.
+ * Change the controller code to REST services (with JSON).
+
+
+ * Add automated tests.
+ * Introduce CI/CD - so that each pushed commit (in Github) automatically kicks off a build, runs tests, and if successful then the updated application gets deployed; use AWS CodePipeline to setup/integrate the following:
+    * this GitHub repository
+    * a CI server (e.g. Jenkins) to do Maven builds - running in a stand-alone AWS EC2 instance
+    * Elastic Beanstalk
+
+
+ * Instead of a static copy of NFL player data (from scoresheet.com), consider utilizing a public API (e.g. http://api.fantasy.nfl.com/) so this application always has the latest player data.
 
 ## Reference Info
 
@@ -47,7 +76,7 @@ And then in AWS...
 * mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <data.sql
 
 ...in Elastic Beanstalk: I created an application environment:
-* I specified the Java 8 platform
+* I specified the Java 8 platform (on Linux)
 * Upload the uber jar (that you built with mvn)
 * I modified the configuration environment variables:
     * RDS\_* - point to my RDS database
