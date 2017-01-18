@@ -37,22 +37,21 @@ Info about data:
 
 ## Future State (To-do List)
 
- * Change the user interface code from JSP to something else - perhaps AngularJS or Thymeleaf.
- * Change the controller code to REST services (with JSON).
+Change the user interface code from JSP to something else - perhaps AngularJS or Thymeleaf.
+Change the controller code to REST services (with JSON).
 
+Add automated tests.
+Introduce CI/CD - so that each pushed commit (in Github) automatically kicks off a build, runs tests, and if successful then the updated application gets deployed; use AWS CodePipeline to setup/integrate the following:
+ * this GitHub repository
+ * a CI server (e.g. Jenkins) to do Maven builds - running in a stand-alone AWS EC2 instance
+ * Elastic Beanstalk
 
- * Add automated tests.
- * Introduce CI/CD - so that each pushed commit (in Github) automatically kicks off a build, runs tests, and if successful then the updated application gets deployed; use AWS CodePipeline to setup/integrate the following:
-    * this GitHub repository
-    * a CI server (e.g. Jenkins) to do Maven builds - running in a stand-alone AWS EC2 instance
-    * Elastic Beanstalk
-
-
- * Instead of a static copy of NFL player data (from scoresheet.com), consider utilizing a public API (e.g. http://api.fantasy.nfl.com/) so this application always has the latest player data.
+Instead of a static copy of NFL player data (from scoresheet.com), consider utilizing a public API (e.g. http://api.fantasy.nfl.com/) so this application always has the latest player data.
 
 ## Reference Info
 
 This FantasyFootball application is hosted in the following repository: https://github.com/ILMServices/FantasyFootball
+
 More info about ILM can be found at: http://ilmservice.com
 
 NOTE: The rest of this README is info for any developer interested in setting up & experimenting with this application - e.g. 
