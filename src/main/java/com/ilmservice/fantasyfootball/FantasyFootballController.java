@@ -142,6 +142,10 @@ public class FantasyFootballController {
     //   #1) SqlExceptionHelper: The check constraint 'POSITION_CONSTRAINT' was violated while performing an INSERT or UPDATE on table '"APP"."PLAYERS"'.
     //   #2) SqlExceptionHelper: Column 'NFLTEAM'  cannot accept a NULL value.
 
+    // Censor explicit/swear words from the player's name
+    theBoundPlayer.setFirstName(BadWordFilter.getCensoredText(theBoundPlayer.getFirstName()));
+    theBoundPlayer.setLastName(BadWordFilter.getCensoredText(theBoundPlayer.getLastName()));
+
     if (result.hasErrors()) {
       addNewPlayerLists(model);
 
