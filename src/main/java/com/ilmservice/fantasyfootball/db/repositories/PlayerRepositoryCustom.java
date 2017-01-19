@@ -11,5 +11,5 @@ public interface PlayerRepositoryCustom {
 
   public void editPlayer(Player player);
 
-  public void reorderPlayersRankings();
+  public void reorderPlayersRankings(Player updatedPlayer);
 }

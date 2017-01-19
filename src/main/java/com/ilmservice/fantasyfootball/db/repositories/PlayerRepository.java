@@ -12,6 +12,8 @@ public interface PlayerRepository extends CrudRepository<Player, Integer>, Playe
   // The underscores are included only for readability sake.
   List<Player> findByFirstName_AndLastName_AllIgnoreCase(String firstName, String lastName);
 
+  List<Player> findByNflRanking(Integer nflRanking);
+
   @Override
   @Query
   List<Player> findAll();

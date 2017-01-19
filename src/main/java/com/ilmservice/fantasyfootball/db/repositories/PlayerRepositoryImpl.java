@@ -38,7 +38,7 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
 
     // (For simplicity, don't bother to skip calling reorderPlayersRankings when the only deleted player
     // was the last one - i.e. the one with the worst nflRanking.)
-    reorderPlayersRankings();
+    reorderPlayersRankings(null);
   }
 
   @Override
@@ -57,7 +57,7 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
     // (Note that we also don't need to go into the following "if" check if the user happened to specify the next value that the db was going to
     // generate, but for simplicity don't bother checking for that.)
     if (requestedNflRanking > 0) {
-      reorderPlayersRankings();
+      reorderPlayersRankings(newPlayer);
     }
   }
 
@@ -85,16 +85,20 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
     playerRepository.save(player);
 
     // (For simplicity, don't bother to skip calling reorderPlayersRankings when the nflRanking was not edited.)
-    reorderPlayersRankings();
+    reorderPlayersRankings(player);
   }
 
+  // This method is not a no-op when a player has been inserted/removed somewhere from the middle (with regards to nflRanking).
+  // 'updatedPlayer' is the added or edited player.
   @Override
-  public void reorderPlayersRankings() {
-    logger.debug("in reorderPlayersRankings(): playerRepository.count()={}", playerRepository.count());
+  public void reorderPlayersRankings(Player updatedPlayer) {
+    final Integer updatedRanking = (updatedPlayer != null) ? updatedPlayer.getNflRanking() : 0;
+    logger.debug("in reorderPlayersRankings(): playerRepository.count()={} updatedPlayer={} updatedRanking={}",
+        playerRepository.count(), updatedPlayer, updatedRanking);
+
     // Go through all the players and update their ranking - might not be the
     // most efficient, but requires the least amount of code. :)
-    // This method is not a no-op when a player has been inserted/removed somewhere from the middle (with regards to nflRanking).
-    List<Player> nflPlayers = playerRepository.findAll();
+    List<Player> nflPlayers = playerRepository.findAll(); // gets players ordered by nflRanking
     for (int playerCounter = 0; playerCounter < nflPlayers.size(); playerCounter++) {
       final int newRanking = (playerCounter + 1);
       Player loopPlayer = nflPlayers.get(playerCounter);
@@ -103,5 +107,43 @@ public class PlayerRepositoryImpl implements PlayerRepositoryCustom {
       loopPlayer.setNflRanking(newRanking);
       playerRepository.save(loopPlayer);
     }
-  }
+
+    // The above for loop isn't perfect - need to check for & handle the
+    // situation where the actualNflRanking was already in use by an existing
+    // player, in which case the above call to findAll might not have returned
+    // the players in an order such that would continue to have 'updatedPlayer'
+    // have its ranking equal to actualNflRanking.
+    // e.g., before adding the following block of code, if (with the default
+    // data from data.sql) you edit Randall Cobb's ranking from 7 to 2, he will
+    // actually end up with 3 (and Matthew Stafford will stay at 2).
+    if (updatedPlayer != null) {
+      // Get the player whose ranking might've been set to a wrong value by the for loop above.
+      Player theReupdatedPlayer = playerRepository.findOne(updatedPlayer.getPlayerPK());
+
+      final int rankingAfterLoop = theReupdatedPlayer.getNflRanking();
+      logger.debug("theReupdatedPlayer={} rankingAfterLoop={}", theReupdatedPlayer, rankingAfterLoop);
+
+      // (At this point, 'updatedPlayer' can be used to retrieve anything except
+      // the ranking - so use 'updatedRanking'.)
+      // Check if the updated player did indeed get their ranking set to a wrong value.
+      if (updatedRanking != rankingAfterLoop) {
+        // Find the player who has the ranking that the updated player is supposed to have.
+        List<Player> otherPlayerList = playerRepository.findByNflRanking(updatedRanking);
+        if (otherPlayerList.size() != 1) {
+          logger.error("unexpected otherPlayerList: {}", otherPlayerList);
+        } else {
+          // Swap the ranking of the two players.
+
+          Player otherPlayer = otherPlayerList.get(0);
+          otherPlayer.setNflRanking(rankingAfterLoop);
+          playerRepository.save(otherPlayer);
+
+          theReupdatedPlayer.setNflRanking(updatedRanking);
+          playerRepository.save(theReupdatedPlayer);
+
+          logger.debug("after swap: otherPlayer={} theReupdatedPlayer={}", otherPlayer, theReupdatedPlayer);
+        }
+      }
+    } // end if not null
+  } // end reorderPlayersRankings
 }
