@@ -1,4 +1,4 @@
-package com.ilmservice.fantasyfootball;
+package com.ilmservice.fantasyfootball.startup;
 
 import java.io.BufferedReader;
 import java.io.IOException;

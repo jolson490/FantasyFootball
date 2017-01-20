@@ -32,7 +32,9 @@ import com.ilmservice.fantasyfootball.db.entities.Player;
 import com.ilmservice.fantasyfootball.db.repositories.FantasyTeamRepository;
 import com.ilmservice.fantasyfootball.db.repositories.NFLTeamRepository;
 import com.ilmservice.fantasyfootball.db.repositories.PlayerRepository;
-import com.ilmservice.fantasyfootball.model.WeekForm;;
+import com.ilmservice.fantasyfootball.model.WeekForm;
+import com.ilmservice.fantasyfootball.startup.AppModifiedTime;
+import com.ilmservice.fantasyfootball.startup.BadWordFilter;
 
 @Controller
 @EnableAutoConfiguration
@@ -67,11 +69,13 @@ public class FantasyFootballController {
 
   // http://localhost:8080/ILMServices-FantasyFootball/
   @RequestMapping("/")
-  public String home() {
+  public String home(Model model) {
     logger.debug("in home()");
 
     showData();
     // testPlayers();
+
+    model.addAttribute("lastUpdated", AppModifiedTime.getTime());
 
     return "index";
   }

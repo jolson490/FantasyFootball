@@ -29,6 +29,7 @@ public class FantasyFootballApplication {
     SpringApplication.run(FantasyFootballApplication.class, args);
   }
 
+  // just to try this out - get warm fuzzy relatively early on during initialization/startup of the application.
   @PostConstruct
   public void logSomething() {
     logger.debug("in logSomething()");

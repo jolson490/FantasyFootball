@@ -11,6 +11,9 @@
   <a href="${pageContext.request.contextPath}/showTeams">Show Fantasy Teams page</a><br>
   <a href="${pageContext.request.contextPath}/nflPlayers">NFL Players page</a><br>
   <a href="${pageContext.request.contextPath}/chooseWeek">Choose Week page</a><br><br>
+  
+  The version of this application that is deployed was last updated at: ${lastUpdated} <br><br>
+  
   <i>DISCLAIMER: This is a POC (Proof of Concept) application - for more info, see the <a target="_blank" href="https://github.com/ILMServices/FantasyFootball/blob/master/README.md">GitHub repository</a>.</i>
 </body>
 </html>
