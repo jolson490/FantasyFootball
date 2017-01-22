@@ -21,7 +21,7 @@ Tools: Maven, Tomcat. (And Eclipse and Git.)
 
 ## Current State
 
-This is not a fully fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :)
+This is not a fully-fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :)
 
 Pages:
  * "Choose Week" - just a simple proof-of-concept for a Spring MVC drop-down menu. (The idea is to eventually add functionality to allow a given user to specify which players they want to play (vs have on their bench) on their fantasy team for a given week of the season.)
@@ -30,8 +30,8 @@ Pages:
     * The nflRanking of each player is based on their 2014 fantasy points - e.g. the player with a value of 1 for this field had the highest total points, 2 had the 2nd highest, etc. And whenever the user creates/edits/deletes a player, the application updates the value of this field across all players accordingly (to ensure it is sort-ordered - the best player has a value of 1, and subsequent values increase by 1 per player). Currently there is no display of ranking within a given position - the ranking is across all players.
 
 Info about data:
-* For simplicity, I used only the 5 teams that were part of the NFC Central Division (https://en.wikipedia.org/wiki/NFL\_Central\_Division). (Note that in 2002 the division was re-named to the NFC North.)
-* And for the NFL players data, I used a copy of http://www.scoresheet.com/FB\_2015\_num.xls (from http://www.scoresheet.com/FB\_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
+* For simplicity, I used only the 5 teams that were part of the NFC Central Division (https://en.wikipedia.org/wiki/NFL_Central_Division). (Note that in 2002 the division was re-named to the NFC North.)
+* And for the NFL players' data, I used a copy of http://www.scoresheet.com/FB_2015_num.xls (from http://www.scoresheet.com/FB_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
     * the players who played in 2015, 
     * and their total fantasy points from 2014.
 
@@ -73,8 +73,8 @@ And then in AWS...
 
 ...in RDS: I created a MySQL database, and then I did the following to populate it with data:
 * cd FantasyFootball/src/main/resources/
-* mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <schema.sql
-* mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <data.sql
+* mysql -h \<endpoint\>.amazonaws.com -P \<port\> -u \<username\> -p <schema.sql
+* mysql -h \<endpoint\>.amazonaws.com -P \<port\> -u \<username\> -p <data.sql
 
 ...in Elastic Beanstalk: I created an application environment:
 * I specified the Java 8 platform (on Linux)
