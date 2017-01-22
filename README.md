@@ -19,6 +19,13 @@ Three-tier architecture:
 
 Tools: Maven, Tomcat. (And Eclipse and Git.)
 
+## CI/CD
+
+Via AWS CodePipeline, the following is setup/integrated:
+ * this GitHub repository is polled every minute (for each pushed commit, a build is automatically kicked off)...
+ * ...Jenkins (a CI server - running in a stand-alone AWS EC2 instance) does a build (via Maven)
+ * ...Elastic Beanstalk (also has an EC2 instance - for each successful build, the updated application gets deployed to this instance)
+
 ## Current State
 
 This is not a fully-fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :)
@@ -41,12 +48,7 @@ Change the...:
  * ...user interface code from JSP to something else - perhaps AngularJS or Thymeleaf.
  * ...controller code to REST services (with JSON).
 
-Add automated tests.
-
-Introduce CI/CD - so that each pushed commit (in Github) automatically kicks off a build, runs tests, and if successful then the updated application gets deployed; use AWS CodePipeline to setup/integrate the following:
- * this GitHub repository
- * a CI server (e.g. Jenkins) to do Maven builds - running in a stand-alone AWS EC2 instance
- * Elastic Beanstalk
+Add automated tests. (And make sure deployment doesn't happen when a test fails.)
 
 Instead of a static copy of NFL player data (from scoresheet.com), consider utilizing a public API (e.g. http://api.fantasy.nfl.com/) so this application always has the latest player data.
 
