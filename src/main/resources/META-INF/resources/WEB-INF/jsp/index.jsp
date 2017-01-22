@@ -7,7 +7,7 @@
 <title>ILM Fantasy Football</title>
 </head>
 <body>
-  <h2>ILM Fantasy Football</h2><br>
+  <h2>ILM's Fantasy Football</h2><br>
   <a href="${pageContext.request.contextPath}/showTeams">Show Fantasy Teams page</a><br>
   <a href="${pageContext.request.contextPath}/nflPlayers">NFL Players page</a><br>
   <a href="${pageContext.request.contextPath}/chooseWeek">Choose Week page</a><br><br>
