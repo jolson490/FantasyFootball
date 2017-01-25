@@ -17,18 +17,22 @@ Three-tier architecture:
  * Middle Tier: Java 8. Spring Data JPA (and Hibernate).
  * Back End: SQL database.
 
-Tools: Maven, Tomcat. (And Eclipse and Git.)
+Tools: Maven, Tomcat. AWS & Jenkins. (And Eclipse and Git.)
 
 ## CI/CD
 
-Via AWS CodePipeline, the following is setup/integrated:
+Via AWS CodePipeline, the following is setup/integrated (see [this AWS CI/CD blog] for more info):
  * this GitHub repository is polled every minute (for each pushed commit, a build is automatically kicked off)...
  * ...Jenkins (a CI server - running in a stand-alone AWS EC2 instance) does a build (via Maven)
  * ...Elastic Beanstalk (also has an EC2 instance - for each successful build, the updated application gets deployed to this instance)
 
 ## Current State
 
-This is not a fully-fledged fantasy football application that is ready to compete with http://www.espn.com/fantasy/football/ :)
+This is not a fully-fledged fantasy football application that is ready to compete with [ESPN's Fantasy Football](http://www.espn.com/fantasy/football/) ![smiley face](http://emojipedia-us.s3.amazonaws.com/cache/a7/0e/a70ed4d5e4062aab6c4ac24892ee6763.png) 
+
+
+<img src="http://emojipedia-us.s3.amazonaws.com/cache/a7/0e/a70ed4d5e4062aab6c4ac24892ee6763.png" alt="Smiley face" height="16" width="16">
+
 
 Pages:
  * "Choose Week" - just a simple proof-of-concept for a Spring MVC drop-down menu. (The idea is to eventually add functionality to allow a given user to specify which players they want to play (vs have on their bench) on their fantasy team for a given week of the season.)
@@ -37,7 +41,7 @@ Pages:
     * The nflRanking of each player is based on their 2014 fantasy points - e.g. the player with a value of 1 for this field had the highest total points, 2 had the 2nd highest, etc. And whenever the user creates/edits/deletes a player, the application updates the value of this field across all players accordingly (to ensure it is sort-ordered - the best player has a value of 1, and subsequent values increase by 1 per player). Currently there is no display of ranking within a given position - the ranking is across all players.
 
 Info about data:
-* For simplicity, I used only the 5 teams that were part of the NFC Central Division (https://en.wikipedia.org/wiki/NFL_Central_Division). (Note that in 2002 the division was re-named to the NFC North.)
+* For simplicity, I used only the 5 teams that were part of the <a target="_blank" href="https://en.wikipedia.org/wiki/NFL_Central_Division">NFC Central Division</a>. (Note that in 2002 the division was re-named to the NFC North.)
 * And for the NFL players' data, I used a copy of http://www.scoresheet.com/FB_2015_num.xls (from http://www.scoresheet.com/FB_map.php) and then I modified the data from that spreadsheet to create the SQL commands in data.sql - to summarize the player data:
     * the players who played in 2015, 
     * and their total fantasy points from 2014.
@@ -62,7 +66,9 @@ NOTE: The rest of this README is info for any developer interested in setting up
 * with your own AWS account, 
 * or on your own machine (e.g. to make code changes).
 
-## Developer - cloud (to run this application with your own AWS account): 
+## Developer - cloud, without CI/CD (to run this application with your own AWS account): 
+
+(Note that this section doesn't involve CI/CD - this section describes how to manually get a static/uploaded copy of the application running in Elastic Beanstalk, without CodePipeline.)
 
 Do a git clone of this repository: 
 * git clone https://github.com/ILMServices/FantasyFootball
@@ -101,7 +107,7 @@ Have the following installed on your machine:
 * A SQL database server.
 * eclipse, including the following plugins:
     * version 1.7.0.2 or later of: "Maven Integration for Eclipse" (AKA org.eclipse.m2e.core - from http://download.eclipse.org/technology/m2e/releases).
-    * version 0.17.2 or later of: "m2e connector for the mavenarchiver and pom properties" (AKA org.sonatype.m2e.mavenarchiver - from http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/LATEST/).
+    * version 0.17.2 or later of: "m2e connector for the mavenarchiver and pom properties" (AKA org.sonatype.m2e.mavenarchiver - from [this Maven repo](http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.2/N/LATEST/)).
 
 Setup in Eclipse:
 * Window, Preferences, Java, Installed JREs
@@ -128,3 +134,7 @@ The first time you are going to run the application:
 
 Once you have completed the pre-requisites, then start the application.
 Then you can access the application via your browser at: http://localhost:8080/ILMServices-FantasyFootball/
+
+[//]:
+
+[this AWS CI/CD blog]: <https://aws.amazon.com/blogs/devops/building-continuous-deployment-on-aws-with-aws-codepipeline-jenkins-and-aws-elastic-beanstalk/>
