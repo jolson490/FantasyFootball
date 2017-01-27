@@ -72,7 +72,7 @@ public class FantasyFootballController {
   public String home(Model model) {
     logger.debug("in home()");
 
-    showData();
+    // showData();
     // testPlayers();
 
     model.addAttribute("lastUpdated", AppModifiedTime.getTime());
@@ -292,6 +292,7 @@ public class FantasyFootballController {
   // ************************ ...END MAPPING METHODS ************************
 
   // ************************ BEGIN DEBUG/TESTING CODE... ************************
+  @SuppressWarnings("unused")
   private void showData() {
     logger.debug("in showData()");
     // showFantasyTeams();
