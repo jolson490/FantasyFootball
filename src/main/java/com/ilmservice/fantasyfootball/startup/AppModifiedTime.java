@@ -45,10 +45,17 @@ public class AppModifiedTime implements ApplicationListener<ApplicationReadyEven
 
     final String classPath = (getClass().getResource(className).toString());
     logger.debug("classPath=*{}*", classPath);
-    // e.g. values for 'classPath':
-    //  * localhost: jar:file:/C:/Users/Admin/git/FantasyFootball/target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/com/ilmservice/fantasyfootball/startup/AppModifiedTime.class 
-    //  * AWS: jar:file:/var/app/current/application.jar!/BOOT-INF/classes!/com/ilmservice/fantasyfootball/startup/AppModifiedTime.class
-
+    // e.g. values for 'classPath' (spaces added in middle for readability):
+    //  * localhost: jar:file:/C:/Users/Admin/git/FantasyFootball/target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar!  /BOOT-INF/classes!/com/ilmservice/fantasyfootball/startup/AppModifiedTime.class
+    //  * AWS:       jar:file:/var/app/current/application.jar!                                                           /BOOT-INF/classes!/com/ilmservice/fantasyfootball/startup/AppModifiedTime.class
+    //  * Docker:    jar:file:/app.jar!                                                                                   /BOOT-INF/classes!/com/ilmservice/fantasyfootball/startup/AppModifiedTime.class
+    // NOTE: This code makes an assumption that the application will be launched via "java -jar <filename>.jar" - e.g. when 
+    // running this (on your local machine) via Eclipse (right-click project, Run As, Spring Boot App), then the following (log output) occurs: 
+    //   DEBUG [main] AppModifiedTime: classPath=*file:/C:/Users/Admin/git/FantasyFootball/target/classes/com/ilmservice/fantasyfootball/startup/AppModifiedTime.class*
+    //   DEBUG [main] AppModifiedTime: jarPath=*f*
+    //   ERROR [main] AppModifiedTime: Error getting jar modified time
+    //   java.net.MalformedURLException: no protocol: f
+    
     String jarPath = null;
     try {
       // "indexOf will return -1 ... if the class is not loaded from the jar file"

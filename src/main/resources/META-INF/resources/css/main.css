@@ -11,3 +11,9 @@
   border: none;
   background: transparent;
 }
+
+.strongFont
+{
+  font-size: 24px;
+  font-weight: bold;
+}

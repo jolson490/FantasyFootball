@@ -1,0 +1,26 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+  <!-- For a Docker container in AWS Elastic Beanstalk, create a zip file that contains: Dockerfile, Docker.aws.json, & application assets (the jar file).
+       More info at: https://aws.amazon.com/blogs/aws/aws-elastic-beanstalk-for-docker/ -->
+
+  <id>myAssemblyId</id> <!-- a required field -->
+  
+  <includeBaseDirectory>false</includeBaseDirectory> 
+  
+  <formats>
+    <format>zip</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}/src/main/resources/docker/</directory> <!-- include all files in this directory -->
+      <outputDirectory>${file.separator}</outputDirectory> <!-- "relative to the root of the root directory of the assembly" (https://maven.apache.org/plugins/maven-assembly-plugin/assembly.html) -->
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory>${file.separator}</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet> 
+  </fileSets>
+</assembly>

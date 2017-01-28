@@ -73,7 +73,7 @@ Do a git clone of this repository:
 
 Build the application:
 * `cd FantasyFootball`
-* `mvn package` # (creates ./target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar)
+* `mvn install` # (creates ./target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar)
 
 And then in AWS...
 
