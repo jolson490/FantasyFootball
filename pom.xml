@@ -1,10 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   
+  <!-- This file creates both a jar and a zip - either of which can be used to run this application:
+        * uber jar: for running via "java -jar <filename>.jar"
+        * zip: specifically for running in a Docker container in AWS
+   -->
+  
   <groupId>com.ilmservice</groupId>
   <artifactId>ILMServices-FantasyFootball</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
   <packaging>jar</packaging>
   
   <parent>

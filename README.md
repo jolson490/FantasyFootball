@@ -17,14 +17,21 @@ Three-tier architecture:
  * Middle Tier: Java 8. Spring Data JPA (and Hibernate).
  * Back End: SQL database.
 
-Tools: Maven, Tomcat. AWS & Jenkins. (And Eclipse and Git.)
+Tools: AWS, Jenkins, Maven, Docker, & Tomcat.
 
 ## CI/CD
 
 Via AWS CodePipeline, the following is setup/integrated (see [this AWS CI/CD blog](https://aws.amazon.com/blogs/devops/building-continuous-deployment-on-aws-with-aws-codepipeline-jenkins-and-aws-elastic-beanstalk) for more info):
  * this GitHub repository is polled every minute (for each pushed commit, a build is automatically kicked off)...
  * ...Jenkins (a CI server - running in a stand-alone AWS EC2 instance) does a build (via Maven)
- * ...Elastic Beanstalk (also has an EC2 instance - for each successful build, the updated application gets deployed to this instance)
+ * ...Elastic Beanstalk (also has an EC2 instance - for each successful build, this application's updated zip gets deployed by CodePipeline to a Docker container in this instance)
+
+## Docker in AWS
+
+For simplicity:
+ * Instead of creating [2 containers](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html) (with an ECS cluster of 2 EC2 instances - 1 instance/container for this app and 1 for the database), I chose to: run the database in AWS RDS, and create a [single container](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/docker-singlecontainer-deploy.html) for this app.
+ * I chose to not use ECS, because I did not need its greater overall flexibility (compared to the [Docker functionality offered by Elastic Beanstalk](https://aws.amazon.com/blogs/aws/aws-elastic-beanstalk-for-docker/)).
+ * I did not utilize a Docker image repository (e.g. Docker Hub or AWS ECR). (So the image is simply/solely created & stored on the EC2 instance for my Elastic Beanstalk application/environment.)   
 
 ## Current State
 
@@ -43,8 +50,6 @@ Info about data:
     * and their total fantasy points from 2014.
 
 ## Future State (To-do List)
-
-In AWS, put this application inside a Docker container (e.g. perhaps using [this info](https://github.com/awslabs/aws-cicd-docker-containers)).
 
 Change the...:
  * ...user interface code from JSP to something else - perhaps AngularJS or Thymeleaf.
@@ -73,22 +78,22 @@ Do a git clone of this repository:
 
 Build the application:
 * `cd FantasyFootball`
-* `mvn install` # (creates ./target/ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar)
+* `mvn install` # (in ./target/ creates ILMServices-FantasyFootball-0.0.1-SNAPSHOT.jar and ILMServices-FantasyFootball-0.0.1-SNAPSHOT.zip)
 
 And then in AWS...
 
-...in RDS: I created a MySQL database, and then I did the following to populate it with data:
+...in RDS: create a MySQL database, and then do the following to populate it with data:
 * `cd FantasyFootball/src/main/resources/`
 * `mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <schema.sql`
 * `mysql -h <endpoint>.amazonaws.com -P <port> -u <username> -p <data.sql`
 
-...in Elastic Beanstalk: I created an application environment:
-* I specified the Java 8 platform (on Linux)
-* Upload the uber jar (that you built with mvn)
-* I modified the configuration environment variables:
+...in Elastic Beanstalk: create an application/environment:
+* Specify the (single container) Docker platform (on Linux).
+* Upload the zip (that was built with mvn)
+* I modified the configuration Environment Properties:
     * `RDS_*` - point to my RDS database
-    * `SERVER_PORT` - set to 5000
-    * `SPRING_DATASOURCE_*` - override a few properties from the `application.properties` in this repository
+    * `SERVER_PORT` - set to 8080
+    * `SPRING_DATASOURCE_URL` & `SPRING_DATASOURCE_USERNAME` & `SPRING_DATASOURCE_PASSWORD` - override these properties from the `application.properties` in this repository
 
 ## Developer - localhost: Info about this FantasyFootball eclipse project
 
