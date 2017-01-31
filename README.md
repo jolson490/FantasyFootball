@@ -24,7 +24,7 @@ Tools: AWS, Jenkins, Maven, Docker, & Tomcat.
 Via AWS CodePipeline, the following is setup/integrated (see [this AWS CI/CD blog](https://aws.amazon.com/blogs/devops/building-continuous-deployment-on-aws-with-aws-codepipeline-jenkins-and-aws-elastic-beanstalk) for more info):
  * this GitHub repository is polled every minute (for each pushed commit, a build is automatically kicked off)...
  * ...Jenkins (a CI server - running in a stand-alone AWS EC2 instance) does a build (via Maven)
- * ...Elastic Beanstalk (also has an EC2 instance - for each successful build, this application's updated zip gets deployed by CodePipeline to a Docker container in this instance)
+ * ...AWS Elastic Beanstalk (also has an EC2 instance - for each successful build, this application's updated zip gets deployed by CodePipeline to a Docker container in this instance)
 
 ## Docker in AWS
 

@@ -15,11 +15,11 @@
   <table border="1">
     <%-- Print a table heading (the name of some of the fields within the model). --%>
     <tr>
+      <th>Ranking</th>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Position</th>
-      <th>NFL Ranking</th>
-      <th>NFL Team</th>
+      <th>Team</th>
       <th></th> <%-- (Edit) --%>
       <th></th> <%-- (Delete) --%>
     </tr>
@@ -27,10 +27,10 @@
     <c:forEach var="currentPlayer" items="${playersAttribute}" varStatus="loop">
       <tr>
         <%-- For the current player, print the value of some of its fields. --%>
+        <td>${currentPlayer.nflRanking}</td>
         <td>${currentPlayer.firstName}</td>
         <td>${currentPlayer.lastName}</td>
         <td>${currentPlayer.position}</td>
-        <td>${currentPlayer.nflRanking}</td>
         <td>${currentPlayer.nflTeam}</td>
         
         <td><a href="${pageContext.request.contextPath}/editNFLPlayer/${currentPlayer.playerPK}/">Edit</a></td>
