@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>ILM Fantasy Football</title>
+<title>ILM's Fantasy Football</title>
 <link href="<c:url value="/css/main.css" />" rel="stylesheet">
 </head>
 <body>
