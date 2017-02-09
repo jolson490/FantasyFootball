@@ -113,10 +113,19 @@
     </plugins>
   </build>
 
+  <!-- More Project Information -->
   <name>ILM Professional Services - Fantasy Football</name>
-  
+  <description>A POC (Proof of Concept) Java web application: a mock fantasy football league site.</description>
+  <url>https://github.com/ILMServices/FantasyFootball</url> <!-- where the project lives -->
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
   <organization>
     <name>ILM Professional Services</name>
     <url>http://ilmservice.com/</url>
   </organization>
+
 </project>
