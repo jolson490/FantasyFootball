@@ -15,7 +15,7 @@
       <th>Mascot</th>
     </tr>
     
-    <c:forEach var="currentTeam" items="${teamsAttribute}" varStatus="loop">
+    <c:forEach var="currentTeam" items="${teamsAttribute}">
       <%-- For the current team, print the value of some of its fields. --%>
       <tr>
         <td>${currentTeam.username}</td>

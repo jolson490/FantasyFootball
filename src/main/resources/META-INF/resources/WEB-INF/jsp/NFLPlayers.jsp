@@ -24,7 +24,7 @@
       <th></th> <%-- (Delete) --%>
     </tr>
 
-    <c:forEach var="currentPlayer" items="${playersAttribute}" varStatus="loop">
+    <c:forEach var="currentPlayer" items="${playersAttribute}">
       <tr>
         <%-- For the current player, print the value of some of its fields. --%>
         <td>${currentPlayer.nflRanking}</td>
